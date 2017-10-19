@@ -1,3 +1,1 @@
-# eq2079
-yy
-# Install
+# EQ2079
