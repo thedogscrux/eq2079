@@ -1,5 +1,3 @@
 # eq2079
-x
-x
-xx
+y
 # Install
