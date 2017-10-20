@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 class Map extends Component {
   render(){
     return(
-      <div>
-        Map
+      <div className='component-wrapper'>
+        <h2>Map</h2>
       </div>
     )
   }

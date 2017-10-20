@@ -4,7 +4,7 @@ class PzStart extends Component {
   render(){
     return(
       <div>
-        Pz Start
+        <h1>Pz Start</h1>
       </div>
     )
   }

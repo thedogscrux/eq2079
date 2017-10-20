@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 class Status extends Component {
   render(){
     return(
-      <div>
-        Status
+      <div className='component-wrapper'>
+        <h2>Status</h2>
       </div>
     )
   }

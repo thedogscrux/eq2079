@@ -5,8 +5,8 @@ class Pz extends Component {
   render(){
     return(
       <div>
-        Pz<br/>
-        <Link to="/pzstart">Pz Start</Link>
+        <h1>Pz</h1>
+        <Link to='/pzstart'>Pz Start</Link>
       </div>
     )
   }

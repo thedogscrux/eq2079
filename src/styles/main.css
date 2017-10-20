@@ -1,5 +1,5 @@
 body {
-  background-color: #000;
+  background-color: black;
   color: white;
   font: 12px/20px Sans-serif;
   padding: 1%;
@@ -7,4 +7,25 @@ body {
 
 a {
   color: white;
-  margin-right: 10px; }
+  margin-right: 10px;
+  display: block; }
+
+input,
+button {
+  border: none;
+  border: solid 1px white;
+  display: block;
+  margin: 1% 0; }
+
+input[type='submit'],
+button {
+  background-color: black;
+  color: white; }
+
+.component-wrapper {
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 1% 0;
+  padding: 1%; }
+
+#nav a {
+  display: inline-block; }

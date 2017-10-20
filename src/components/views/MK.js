@@ -4,7 +4,7 @@ class MK extends Component {
   render(){
     return(
       <div>
-        Mission Kontrol
+        <h1>Mission Kontrol</h1>
       </div>
     )
   }

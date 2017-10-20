@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'reac
 class Nav extends Component {
   render(){
     return(
-      <div>
+      <div id='nav'>
         <Link to="/">Root</Link>
         <Link to="/welcome">Welcome</Link>
         <Link to="/login">Login</Link>
