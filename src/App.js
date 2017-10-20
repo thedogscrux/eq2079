@@ -9,7 +9,6 @@ import Start from './components/views/Start'
 
 import Dashboard from './components/views/Dashboard'
 import Pzs from './components/views/Pzs'
-import PzStart from './components/views/Pz/PzStart'
 
 import MK from './components/views/MK'
 import Projector from './components/views/Projector'
@@ -20,6 +19,7 @@ import './styles/main.css';
 const App = () => (
   <Router>
     <div>
+      Code Name: John Q. Public | logout
       <Nav />
 
       <Route path="/welcome" component={Welcome}/>

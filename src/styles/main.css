@@ -3,7 +3,8 @@ body {
   color: white;
   font: 12px/20px Sans-serif;
   padding: 1%;
-  margin: 0; }
+  margin: 0;
+  opacity: .5; }
 
 a {
   color: white;
@@ -26,6 +27,15 @@ button {
   background-color: rgba(255, 255, 255, 0.2);
   margin: 1% 0;
   padding: 1%; }
+  .component-wrapper.add {
+    background-color: rgba(255, 0, 0, 0.3); }
 
 #nav a {
   display: inline-block; }
+
+div.row {
+  display: flex;
+  border-top: solid 1px white;
+  margin-bottom: 20px; }
+  div.row div.col {
+    flex-grow: 1; }

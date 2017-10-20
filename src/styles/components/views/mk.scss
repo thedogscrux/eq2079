@@ -1,0 +1,8 @@
+div.row {
+  display: flex;
+  border-top: solid 1px $colorWhite;
+  margin-bottom: 20px;
+  div.col {
+    flex-grow: 1;
+  }
+}
