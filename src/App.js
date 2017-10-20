@@ -12,7 +12,7 @@ import Pzs from './components/views/Pzs'
 import PzStart from './components/views/Pz/PzStart'
 
 import MK from './components/views/MK'
-
+import Projector from './components/views/Projector'
 
 import './styles/main.css';
 
@@ -30,6 +30,7 @@ const App = () => (
       <Route path='/pzs' component={Pzs}/>
 
       <Route path="/mk" component={MK}/>
+      <Route path="/projector" component={Projector}/>
     </div>
   </Router>
 )

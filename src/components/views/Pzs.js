@@ -1,54 +1,48 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
-import PzStart from './Pz/PzStart'
-import PzScore from './Pz/PzScore'
+import Pz from './Pz/Pz'
 
-import pz1 from '../pzs/pz1/Pz1'
-import pz2 from '../pzs/pz2/Pz2'
-
-const pzMap = {
-  pz1,
-  pz2
-}
-
-class Pz extends Component {
+class Pzs extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      pzId: this.props.match.params.pzId
+      pzId: 'this.props.match.params.pzId',
+      checkPzId: ''
     }
+    this.handleChangeCheckPzId = this.handleChangeCheckPzId.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
       this.setState({
-        pzId: nextProps.match.params.pzId
+        pzId: 'nextProps.match.params.pzId'
       });
     }
   }
 
-  render(){
-    const PzId = pzMap[this.state.pzId]
+  handleChangeCheckPzId(event) {
+    this.setState({ checkPzId: event.target.value })
+  }
 
+  checkIfPzExists(pzId) {
+    this.props.history.push('pzs/' + pzId)
+  }
+
+  render(){
     return(
       <div>
-        <PzStart pzId={this.state.pzId} />
-        <PzScore pzId={this.state.pzId} />
-        <PzId />
+        <Route path={`${this.props.match.url}/:pzId`} component={Pz}/>
+        <Route exact path={this.props.match.url} render={() => (
+          <div>
+            <h1>Pzs</h1>
+            <input type='text' placeholder='Puzzle Code' value={this.state.checkPzId} onChange={this.handleChangeCheckPzId} />
+            <button onClick={() => this.checkIfPzExists(this.state.checkPzId)}>Check Code</button>
+          </div>
+        )}/>
       </div>
     )
   }
 }
 
-const Pzs = ({ match }) => (
-  <div>
-    <Route path={`${match.url}/:pzId`} component={Pz}/>
-  </div>
-)
-
 export default Pzs
-
-export {
-  Pz
-}
