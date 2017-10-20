@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class PzStart extends Component {
+class PzScore extends Component {
   constructor(props){
       super(props)
       this.state = {
@@ -19,13 +19,11 @@ class PzStart extends Component {
   render(){
     return(
       <div className='component-wrapper'>
-        <h1>Pz Start: {this.state.pzId}</h1>
-        <button>Start a New Game</button>
-        <button>Join Game</button>
-        <button disabled='disabled'>Game in Progress</button>
+        <h1>Pz Score: {this.state.pzId}</h1>
+        100
       </div>
     )
   }
 }
 
-export default PzStart
+export default PzScore

@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
+import {browserHistory, hashHistory} from 'react-router';
+
 class Nav extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
   render(){
     return(
       <div id='nav'>
@@ -11,9 +18,12 @@ class Nav extends Component {
         <Link to="/start">Start</Link>
         -------
         <Link to="/dashboard">Dashboard</Link>
-        <Link to="/pz">Pz</Link>
+        <Link to='/pzs'>Pzs</Link>
+        <Link to='/pzs/pz1'>Pz One</Link>
+        <Link to='/pzs/pz2'>Pz Two</Link>
+
         -------
-        <Link to="/mk">Mission Kontrol</Link>
+        <Link to="/mk">Mission Kontrol</Link>>
       </div>
     )
   }
