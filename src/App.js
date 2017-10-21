@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
+import Auth from './components/Auth'
 import Nav from './components/Nav'
 
 import Welcome from './components/views/Welcome'
@@ -15,11 +16,17 @@ import Projector from './components/views/Projector'
 
 import './styles/main.css';
 
+import firebase from 'firebase/app'
+import 'firebase/database'
+import 'firebase/storage'
+import firebaseConfig from './config/firebase.config.json'
+
+firebase.initializeApp(firebaseConfig)
 
 const App = () => (
   <Router>
     <div>
-      Code Name: John Q. Public | logout
+      <Auth display='userInfo'/>
       <Nav />
 
       <Route path="/welcome" component={Welcome}/>

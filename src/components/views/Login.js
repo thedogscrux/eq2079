@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+
+import Auth from '../Auth'
 
 class Login extends Component {
   render(){
     return(
       <div>
         <h1>Signup/Login</h1>
-        <input type='text' placeholder='Code Name' />
-        <input type='password' placeholder='Secret Pin' />
-        <Link to='./start'>Start</Link>
+        <Auth display='formLogin' />
       </div>
     )
   }
