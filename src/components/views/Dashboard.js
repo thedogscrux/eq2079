@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import Map from '../Map'
 import Status from '../Status'
 import Story from '../Story'
-import Pzs from './Pzs'
 
 class Dashboard extends Component {
   render(){

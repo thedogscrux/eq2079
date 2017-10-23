@@ -36,3 +36,18 @@ div.row {
   margin-bottom: 20px; }
   div.row div.col {
     flex-grow: 1; }
+
+#component-map .map-wrapper {
+  width: 100%;
+  padding-bottom: 100%;
+  border: solid 1px #fff;
+  position: relative; }
+  #component-map .map-wrapper .pz {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    position: absolute;
+    transition-duration: 1s; }
+    #component-map .map-wrapper .pz:hover {
+      background-color: white; }

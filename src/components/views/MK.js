@@ -1,160 +1,6 @@
 import React, { Component } from 'react'
 
-const staticUsers = [
-  {
-    name: 'jack',
-    job: 'engineer',
-    status: 'active',
-    timeLastCheckin: '00:00:00',
-    ip: '000.000.000.00',
-    agent: 'ios',
-    loc: {
-      lat: 0,
-      long: 0
-    },
-    pzs: [
-      {
-        name: 'pz1',
-        attempts: 0,
-        score: 0
-      },
-      {
-        name: 'pz2',
-        attempts: 0,
-        score: 0
-      },
-      {
-        name: 'pz3',
-        attempts: 0,
-        score: 0
-      }
-    ]
-  },
-
-  {
-    name: 'crack',
-    job: 'engineer',
-    status: 'innactive',
-    timeLastCheckin: '00:00:00',
-    ip: '000.000.000.00',
-    agent: 'ios',
-    loc: {
-      lat: 0,
-      long: 0
-    },
-    pzs: [
-      {
-        name: 'pz1',
-        attempts: 0,
-        score: 0
-      },
-      {
-        name: 'pz2',
-        attempts: 0,
-        score: 0
-      },
-      {
-        name: 'pz3',
-        attempts: 0,
-        score: 0
-      }
-    ]
-  },
-
-  {
-    name: 'mary',
-    job: 'engineer',
-    status: 'active',
-    timeLastCheckin: '00:00:00',
-    ip: '000.000.000.00',
-    agent: 'ios',
-    loc: {
-      lat: 0,
-      long: 0
-    },
-    pzs: [
-      {
-        name: 'pz1',
-        attempts: 0,
-        score: 0
-      },
-      {
-        name: 'pz2',
-        attempts: 0,
-        score: 0
-      },
-      {
-        name: 'pz3',
-        attempts: 0,
-        score: 0
-      }
-    ]
-  }
-
-]
-
-const staticPzs = [
-  {
-    name: 'Pz One',
-    players: 0,
-    status: 'inactive',
-    timeGameStarts: '00:00:00',
-    timeGameEnds: '00:00:00',
-    secTillNextRoundStarts: 0,
-    round: 0,
-    totalPlays: 0,
-    totalPlayers: 0
-  },
-  {
-    name: 'Pz Three',
-    players: 2,
-    status: 'inProgress',
-    timeGameStarts: '00:00:00',
-    timeGameEnds: '00:00:00',
-    secTillNextRoundStarts: 0,
-    round: 0,
-    totalPlays: 0,
-    totalPlayers: 0
-  },
-  {
-    name: 'Pz Two',
-    players: 3,
-    status: 'inactive',
-    timeGameStarts: '00:00:00',
-    timeGameEnds: '00:00:00',
-    secTillNextRoundStarts: 0,
-    round: 0,
-    totalPlays: 0,
-    totalPlayers: 0
-  }
-]
-
-const staticLaunches = [
-  {
-      start: '00:00:00',
-      end: '00:00:00',
-      players: 0,
-      totalScore: 0,
-      totalGamePlays: 0,
-      status: 'inactive'
-  },
-  {
-      start: '00:00:00',
-      end: '00:00:00',
-      players: 0,
-      totalScore: 0,
-      totalGamePlays: 0,
-      status: 'active'
-  },
-  {
-      start: '00:00:00',
-      end: '00:00:00',
-      players: 0,
-      totalScore: 0,
-      totalGamePlays: 0,
-      status: 'inactive'
-  }
-]
+import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
 
 class MK extends Component {
 
@@ -185,7 +31,7 @@ class MK extends Component {
 
   getUsers() {
     let html = ''
-    html = Object.keys(staticUsers).map( (key, userIndex) => {
+    html = Object.keys(staticUsers).map( (userIndex, key) => {
       let user = staticUsers[userIndex]
       return (
         <div key={key} className='row'>
@@ -200,8 +46,7 @@ class MK extends Component {
             <button>Block User IP</button>
           </div>
           <div className='col'>
-            { user.pzs.map( (key, pzIndex) => {
-              let pz = user.pzs[pzIndex]
+            { user.pzs.map( (pz, key) => {
               return(
                 <div key={key}>
                   Pz Name: {pz.name}<br/>
