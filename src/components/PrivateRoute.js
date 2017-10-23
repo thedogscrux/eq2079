@@ -8,7 +8,7 @@ import {
   withRouter
 } from 'react-router-dom'
 
-import Login, { AuthButton, fakeAuth } from './Auth'
+import { fakeAuth } from './Auth'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
@@ -16,7 +16,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       <Component {...props}/>
     ) : (
       <Redirect to={{
-        pathname: '/start',
+        pathname: '/login',
         state: { from: props.location }
       }}/>
     )

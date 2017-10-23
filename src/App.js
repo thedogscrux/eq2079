@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
+import PrivateRoute from './components/PrivateRoute'
 import Auth from './components/Auth'
 import Nav from './components/Nav'
 
@@ -31,13 +32,13 @@ const App = () => (
 
       <Route path="/welcome" component={Welcome}/>
       <Route path="/login" component={Login}/>
-      <Route path="/start" component={Start}/>
+      <PrivateRoute path="/start" component={Start}/>
 
-      <Route path="/dashboard" component={Dashboard}/>
-      <Route path='/pzs' component={Pzs}/>
+      <PrivateRoute path="/dashboard" component={Dashboard}/>
+      <PrivateRoute path='/pzs' component={Pzs}/>
 
-      <Route path="/mk" component={MK}/>
-      <Route path="/projector" component={Projector}/>
+      <PrivateRoute path="/mk" component={MK}/>
+      <PrivateRoute path="/projector" component={Projector}/>
     </div>
   </Router>
 )
