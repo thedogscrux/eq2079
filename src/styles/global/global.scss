@@ -8,7 +8,7 @@ body {
   font: 12px/20px Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8;
+  opacity: .4;
 }
 
 a {
@@ -37,14 +37,5 @@ button {
   padding: 1%;
   &.add {
     background-color: rgba(255, 0, 0, .3);
-  }
-}
-
-div.row {
-  display: flex;
-  border-top: solid 1px $colorWhite;
-  margin-bottom: 20px;
-  div.col {
-    flex-grow: 1;
   }
 }

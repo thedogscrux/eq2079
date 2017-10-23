@@ -114,7 +114,7 @@ class Auth extends Component {
             self.updateUser(userResults)
             break
           } else {
-            self.setMsg('Username already exists! Wrong pin.')
+            self.setMsg('Wrong pin.')
             return
           }
         }

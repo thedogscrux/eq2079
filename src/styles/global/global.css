@@ -4,7 +4,7 @@ body {
   font: 12px/20px Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8; }
+  opacity: .4; }
 
 a {
   color: white;
@@ -29,10 +29,3 @@ button {
   padding: 1%; }
   .component-wrapper.add {
     background-color: rgba(255, 0, 0, 0.3); }
-
-div.row {
-  display: flex;
-  border-top: solid 1px white;
-  margin-bottom: 20px; }
-  div.row div.col {
-    flex-grow: 1; }

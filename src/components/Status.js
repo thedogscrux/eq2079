@@ -8,17 +8,13 @@ class Status extends Component {
     let launch = staticLaunches.filter( launch => launch.status === 'active')
     launch = launch[0]
     return(
-      <div className='row'>
-        <div className='col'>
-          Status: {launch.status}<br/>
-          Start: {launch.start}<br/>
-          End: {launch.end}<br/>
-        </div>
-        <div className='col'>
-          Players: {launch.players}<br/>
-          Total Score: {launch.totalScore}<br/>
-          Total Game Plays: {launch.totalGamePlays}<br/>
-        </div>
+      <div>
+        Status: {launch.status}<br/>
+        Start: {launch.start}<br/>
+        End: {launch.end}<br/>
+        Players: {launch.players}<br/>
+        Total Score: {launch.totalScore}<br/>
+        Total Game Plays: {launch.totalGamePlays}<br/>
       </div>
     )
   }

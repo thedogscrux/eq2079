@@ -1,0 +1,44 @@
+body {
+  background-color: black;
+  color: white;
+  font: 12px/20px Sans-serif;
+  padding: 1%;
+  margin: 0;
+  opacity: .4; }
+
+a {
+  color: white;
+  margin-right: 10px;
+  display: block; }
+
+input,
+button {
+  border: none;
+  border: solid 1px white;
+  display: block;
+  margin: 1% 0; }
+
+input[type='submit'],
+button {
+  background-color: black;
+  color: white; }
+
+.component-wrapper {
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 1% 0;
+  padding: 1%; }
+  .component-wrapper.add {
+    background-color: rgba(255, 0, 0, 0.3); }
+
+#component-mk h2 {
+  color: black;
+  background-color: white; }
+
+#component-mk article {
+  border-bottom: solid 1px white; }
+
+#component-mk div.row {
+  display: flex;
+  margin-bottom: 20px; }
+  #component-mk div.row div.col {
+    flex-grow: 1; }
