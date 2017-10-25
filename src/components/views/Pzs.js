@@ -7,37 +7,37 @@ class Pzs extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      pzId: 'this.props.match.params.pzId',
-      checkPzId: ''
+      pzCode: 'this.props.match.params.pzCode',
+      checkPzCode: ''
     }
-    this.handleChangeCheckPzId = this.handleChangeCheckPzId.bind(this)
+    this.handleChangeCheckPzCode = this.handleChangeCheckPzCode.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
       this.setState({
-        pzId: 'nextProps.match.params.pzId'
+        pzCode: 'nextProps.match.params.pzCode'
       });
     }
   }
 
-  handleChangeCheckPzId(event) {
-    this.setState({ checkPzId: event.target.value })
+  handleChangeCheckPzCode(event) {
+    this.setState({ checkPzCode: event.target.value })
   }
 
-  checkIfPzExists(pzId) {
-    this.props.history.push('pzs/' + pzId)
+  checkIfPzExists(pzCode) {
+    this.props.history.push('pzs/' + pzCode)
   }
 
   render(){
     return(
       <div className='component-wrapper'>
-        <Route path={`${this.props.match.url}/:pzId`} component={Pz}/>
+        <Route path={`${this.props.match.url}/:pzCode`} component={Pz}/>
         <Route exact path={this.props.match.url} render={() => (
           <div>
             <h1>Pzs</h1>
-            <input type='text' placeholder='Puzzle Code' value={this.state.checkPzId} onChange={this.handleChangeCheckPzId} />
-            <button onClick={() => this.checkIfPzExists(this.state.checkPzId)}>Check Code</button>
+            <input type='text' placeholder='Puzzle Code' value={this.state.checkPzCode} onChange={this.handleChangeCheckPzCode} />
+            <button onClick={() => this.checkIfPzExists(this.state.checkPzCode)}>Check Code</button>
           </div>
         )}/>
       </div>

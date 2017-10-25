@@ -1,13 +1,41 @@
 import React, { Component } from 'react'
 
+import firebase from 'firebase/app'
+import 'firebase/database'
+import 'firebase/storage'
+
 import { staticLocMK, staticPzs } from '../data/static.js'
 
 class Map extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedPz: {}
+      selectedPz: {},
+      pzs: []
     }
+  }
+
+  componentDidMount() {
+    this.watchDB()
+  }
+
+  // WATCH
+
+  watchDB() {
+    var self = this
+    // watch launches
+    // TODO: maybe watch MK?
+    // watch pzs
+    firebase.database().ref('/pzs/').on('value', function(snapshot) {
+      if(snapshot.val()) {
+        let pzs = Object.keys(snapshot.val()).map( (pz, key) => snapshot.val()[pz] )
+        self.updateStatePzs(pzs)
+      }
+    })
+  }
+
+  updateStatePzs(pzs) {
+    this.setState({ pzs: pzs })
   }
 
   selectPz(pzId) {
@@ -21,7 +49,8 @@ class Map extends Component {
 
   getPzs() {
     let html = ''
-    html = staticPzs.map( (pz, key) => {
+    //html = staticPzs.map( (pz, key) => {
+    html = this.state.pzs.map( (pz, key) => {
       let posTop = pz.mapPos.top
       let posLeft = pz.mapPos.left
       //TODO make dynamic based on num of players

@@ -8,6 +8,8 @@ import 'firebase/storage'
 
 import { setUser } from '../actions/userActions'
 
+import { schemaUser } from '../data/schemas.js'
+
 const fakeAuth = {
   isAuthenticated: false,
   authenticate(cb) {
@@ -53,6 +55,7 @@ class Auth extends Component {
 
   componentDidMount() {
     // TODO: check if this elem exists
+    // TODO: exe login on 'enter' key
     // document.getElementById("login-name").addEventListener("keyup", function(event) {
     //     event.preventDefault()
     //     if (event.keyCode == 13) {
@@ -96,10 +99,16 @@ class Auth extends Component {
   }
 
   login() {
-    //{ name: 'Jack', pin: 1234 }
     let self = this
     let userNameAttempt = this.state.userNameInput
     let userPinAttempt = this.state.userPinInput
+    if(!userNameAttempt && !userPinAttempt) {
+      console.log('******************');
+      console.log('*** Goodbye Lx ***');
+      console.log('******************');
+      userNameAttempt = 'Lx'
+      userPinAttempt = '1111'
+    }
     // get all users from db
     let dbUsers = firebase.database().ref('/users').once('value').then(function(snapshot){
       //check if name matches
@@ -121,13 +130,28 @@ class Auth extends Component {
       }
       if(!userResults) {
         // create a new acct
-        let user = {
-          name: userNameAttempt,
-          games: {},
-          pin: userPinAttempt,
-          photo: 'defaultEngineer.png',
-          job: 'Engineer'
-        }
+        let user = schemaUser
+        user.name = userNameAttempt
+        user.pin = userPinAttempt
+        user.photo ='engineer.png'
+        user.job = 'Engineer'
+        user.status = 'active'
+        // TODO: loop and add games
+        user.pzs = [
+          {
+            code: 'pz1',
+            attempts: 0,
+            score: 0.00
+          },{
+            code: 'pz2',
+            attempts: 0,
+            score: 0.00
+          },{
+            code: 'pz3',
+            attempts: 0,
+            score: 0.00
+          }
+        ]
         firebase.database().ref('users/').push(user, function(error) {
           self.updateUser(user)
         })

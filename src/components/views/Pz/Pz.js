@@ -18,26 +18,26 @@ class Pz extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      pzId: this.props.match.params.pzId
+      pzCode: this.props.match.params.pzCode
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
       this.setState({
-        pzId: nextProps.match.params.pzId
+        pzCode: nextProps.match.params.pzCode
       });
     }
   }
 
   render(){
-    const PzId = pzMap[this.state.pzId]
+    const PzCode = pzMap[this.state.pzCode]
 
     return(
       <div>
-        <PzStart pzId={this.state.pzId} />
-        <PzScore pzId={this.state.pzId} />
-        <PzId />
+        <PzStart pzCode={this.state.pzCode} />
+        <PzScore pzCode={this.state.pzCode} />
+        <PzCode />
       </div>
     )
   }

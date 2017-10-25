@@ -1,13 +1,71 @@
 import React, { Component } from 'react'
 
+import firebase from 'firebase/app'
+import 'firebase/database'
+import 'firebase/storage'
+
 import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
+import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
+import { propsPzs } from '../../data/propsPzs.js'
 
 class MK extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      launches: [],
+      users: [],
+      pzs: []
+    }
+  }
 
-  getLaunchStatus(status) {
+  componentDidMount() {
+    this.watchDB()
+  }
+
+  // WATCH
+
+  watchDB() {
+    var self = this
+    // watch launches
+    firebase.database().ref('/launches/').on('value', function(snapshot) {
+      if(snapshot.val()) {
+        let launches = Object.keys(snapshot.val()).map( (launch, key) => snapshot.val()[launch] )
+        self.updateStateLaunches(launches)
+      }
+    })
+    // watch users
+    firebase.database().ref('/users/').on('value', function(snapshot) {
+      if(snapshot.val()) {
+        let users = Object.keys(snapshot.val()).map( (user, key) => snapshot.val()[user] )
+        self.updateStateUsers(users)
+      }
+    })
+    // watch pzs
+    firebase.database().ref('/pzs/').on('value', function(snapshot) {
+      if(snapshot.val()) {
+        let pzs = Object.keys(snapshot.val()).map( (pz, key) => snapshot.val()[pz] )
+        self.updateStatePzs(pzs)
+      }
+    })
+  }
+
+  updateStateLaunches(launches) {
+    this.setState({ launches: launches })
+  }
+
+  updateStateUsers(users) {
+    this.setState({ users: users })
+  }
+
+  updateStatePzs(pzs) {
+    this.setState({ pzs: pzs })
+  }
+
+  // GET HTML
+
+  htmlLaunchStatus(status) {
     let html = ''
-    html = Object.keys(staticLaunches).map( (key, launchIndex) => {
-      let launch = staticLaunches[launchIndex]
+    html = this.state.launches.map( (launch, key) => {
       if(launch.status != status) {
         return
       }
@@ -29,14 +87,13 @@ class MK extends Component {
     return html
   }
 
-  getUsers() {
+  htmlUsers() {
     let html = ''
-    html = Object.keys(staticUsers).map( (userIndex, key) => {
-      let user = staticUsers[userIndex]
+    html = this.state.users.map( (user, key) => {
       return (
-        <article>
+        <article key={key}>
           <h3>{user.name}</h3>
-          <div key={key} className='row'>
+          <div className='row'>
             <div className='col'>
               Job: {user.job}<br/>
               Status: {user.status}<br/>
@@ -60,7 +117,7 @@ class MK extends Component {
               })}
             </div>
             <div className='col'>
-
+              {/* placholder */}
             </div>
           </div>
         </article>
@@ -69,14 +126,13 @@ class MK extends Component {
     return html
   }
 
-  getPzs() {
+  htmlPzs() {
     let html = ''
-    html = Object.keys(staticPzs).map( (key, pzIndex) => {
-      let pz = staticPzs[pzIndex]
+    html = this.state.pzs.map( (pz, key) => {
       return (
-        <article>
+        <article key={key}>
           <h3>{pz.name}</h3>
-          <div key={key} className='row'>
+          <div className='row'>
             <div className='col'>
               players: {pz.players}<br/>
               status: {pz.status}<br/>
@@ -93,31 +149,80 @@ class MK extends Component {
               Total Players: {pz.totalPlayers}<br/>
             </div>
           </div>
-          </article>
+        </article>
       )
     })
     return html
   }
 
+  // SET
+
+  newGame() {
+    let newLaunch = schemaLaunch
+    newLaunch.status = 'active'
+    firebase.database().ref('launches/').push(newLaunch, function(error) {
+      console.log('New game started (callback)');
+    })
+  }
+
+  resetPzs() {
+    console.log('Reset Pzs.');
+    let pzs = []
+    pzs = propsPzs.map( (pzProps, key) => {
+      let pz = {
+        name: '',
+        code: '',
+        players: 0,
+        status: 'inactive|loading|active',
+        location: {
+          lat: 0,
+          long: 0
+        },
+        mapPos: {
+          floor: 'ground',
+          top: '0%',
+          left: '0%'
+        },
+        timeGameStarts: '00:00:00',
+        timeGameEnds: '00:00:00',
+        secTillNextRoundStarts: 0,
+        round: 0,
+        totalPlays: 0,
+        totalPlayers: 0
+      }
+      pz.name = pzProps.name
+      pz.code = pzProps.code
+      pz.location = pzProps.location
+      pz.mapPos = pzProps.mapPos
+      pz.status = 'inactive'
+      return pz
+    })
+    firebase.database().ref('pzs/').set(pzs)
+  }
+
   render(){
+    let test = ''
     return(
       <div id='component-mk'>
         <h1>Mission Kontrol</h1>
-        <button style={{display:'inline-block'}}>Reset Game</button>
+        <button style={{display:'inline-block'}} onClick={() => this.newGame()}>New Game</button>
+        <button style={{display:'inline-block'}} onClick={() => this.resetPzs()}>Reset Pzs</button>
+        <br/>
+        <button style={{display:'inline-block', backgroundColor: 'rgba(255,0,0,.4)'}}>Reset Game</button>
         <button style={{display:'inline-block'}}>Start/Pause Game</button>
         <button style={{display:'inline-block'}}>Stop Game</button>
 
         <h2>Active Launch</h2>
-        {this.getLaunchStatus('active')}
+        {this.htmlLaunchStatus('active')}
 
         <h2>Pzs</h2>
-        {this.getPzs()}
+        {this.htmlPzs()}
 
         <h2>Launches</h2>
-        {this.getLaunchStatus('inactive')}
+        {this.htmlLaunchStatus('complete')}
 
         <h2>Users</h2>
-        {this.getUsers()}
+        {this.htmlUsers()}
       </div>
     )
   }

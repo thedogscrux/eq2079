@@ -1,25 +1,86 @@
 import React, { Component } from 'react'
 
+import firebase from 'firebase/app'
+import 'firebase/database'
+import 'firebase/storage'
+
 import { staticLaunches, staticUsers } from '../../data/static.js'
 
 class Projector extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      launches: [],
+      users: [],
+      pzs: []
+    }
+  }
+
+  componentDidMount() {
+    this.watchDB()
+  }
+
+  // WATCH
+
+  watchDB() {
+    var self = this
+    // watch launches
+    firebase.database().ref('/launches/').on('value', function(snapshot) {
+      if(snapshot.val()) {
+        let launches = Object.keys(snapshot.val()).map( (launch, key) => snapshot.val()[launch] )
+        self.updateStateLaunches(launches)
+      }
+    })
+    // watch users
+    firebase.database().ref('/users/').orderByChild('status').equalTo('active').on('value', function(snapshot) {
+      if(snapshot.val()) {
+        let users = Object.keys(snapshot.val()).map( (user, key) => snapshot.val()[user] )
+        self.updateStateUsers(users)
+      }
+    })
+    // watch pzs
+    firebase.database().ref('/pzs/').on('value', function(snapshot) {
+      if(snapshot.val()) {
+        let pzs = Object.keys(snapshot.val()).map( (pz, key) => snapshot.val()[pz] )
+        self.updateStatePzs(pzs)
+      }
+    })
+  }
+
+  updateStateLaunches(launches) {
+    this.setState({ launches: launches })
+  }
+
+  updateStateUsers(users) {
+    this.setState({ users: users })
+  }
+
+  updateStatePzs(pzs) {
+    this.setState({ pzs: pzs })
+  }
+
+  // GET
 
   getLaunchStatus() {
     let html = ''
-    let launch = staticLaunches.filter( launch => launch.status === 'active')
+    let launch = this.state.launches.filter( launch => launch.status === 'active')
     launch = launch[0]
-    return(
-      <div>
-        Start: {launch.start}<br/>
-        Players: {launch.players}<br/>
-        Total Score: {launch.totalScore}<br/>
-      </div>
-    )
+    if(launch) {
+      return(
+        <div>
+          Start: {launch.start}<br/>
+          Players: {launch.players}<br/>
+          Total Score: {launch.totalScore}<br/>
+        </div>
+      )
+    }
+    return ''
   }
 
   getPastLaunches() {
     let html = ''
-    html = staticLaunches.filter( launch => launch.status == 'inactive').map( (launch, key) => {
+    let launches = this.state.launches.filter( launch => launch.status !== 'active')
+    html = launches.map( (launch, key) => {
       return (
         <div key={key}>
           End: {launch.end}<br/>
@@ -30,10 +91,10 @@ class Projector extends Component {
     return html
   }
 
-  getUsers() {
+  htmlUsers() {
     let html = ''
     // build array of active users
-    let users = staticUsers.filter( user => user.status == 'active').map( (user,key) => {
+    let users = this.state.users.map( (user,key) => {
       // calc total score
       let totalScore = 0
       for(let key in user.pzs) {
@@ -68,7 +129,7 @@ class Projector extends Component {
         {this.getLaunchStatus()}
 
         <h2>Active Players</h2>
-        {this.getUsers()}
+        {this.htmlUsers()}
 
         <h2>Past Launches</h2>
         {this.getPastLaunches()}
