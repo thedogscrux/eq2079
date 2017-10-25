@@ -11,6 +11,7 @@ const schemaUser = {
   name: '',
   job: 'engineer|scientist',
   status: 'active|offline|complete',
+  launchId: '',
   timeLastCheckin: '00:00:00',
   ip: '000.000.000.00',
   agent: '',

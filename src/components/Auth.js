@@ -129,31 +129,51 @@ class Auth extends Component {
         }
       }
       if(!userResults) {
-        // create a new acct
-        let user = schemaUser
-        user.name = userNameAttempt
-        user.pin = userPinAttempt
-        user.photo ='engineer.png'
-        user.job = 'Engineer'
-        user.status = 'active'
-        // TODO: loop and add games
-        user.pzs = [
-          {
-            code: 'pz1',
-            attempts: 0,
-            score: 0.00
-          },{
-            code: 'pz2',
-            attempts: 0,
-            score: 0.00
-          },{
-            code: 'pz3',
-            attempts: 0,
-            score: 0.00
+        firebase.database().ref('/launches/').orderByChild('status').equalTo('active').once('value', function(snapshot) {
+          let launchId = Object.keys(snapshot.val())[0]
+          // get total num of players in active launch
+          let totalPlayers = 1
+          for(let key in users){
+            if (users[key].launchId == launchId) {
+              totalPlayers++
+            }
           }
-        ]
-        firebase.database().ref('users/').push(user, function(error) {
-          self.updateUser(user)
+          //store active launch for update
+          let activeLaunch = snapshot.val()
+          activeLaunch.id = launchId
+          activeLaunch.players = totalPlayers
+          // create a new acct
+          let user = schemaUser
+          user.name = userNameAttempt
+          user.pin = userPinAttempt
+          user.photo ='engineer.png'
+          user.job = 'Engineer'
+          user.status = 'active'
+          user.launchId = launchId
+          // TODO: loop and add games
+          user.pzs = [
+            {
+              code: 'pz1',
+              attempts: 0,
+              score: 0.00
+            },{
+              code: 'pz2',
+              attempts: 0,
+              score: 0.00
+            },{
+              code: 'pz3',
+              attempts: 0,
+              score: 0.00
+            }
+          ]
+          return firebase.database().ref('/users/').push(user, function(error) {
+            // add new user to launch
+            self.updateUser(user)
+            // update total players
+            firebase.database().ref('/launches/' + launchId).update({
+              players: totalPlayers
+            })
+          })
         })
       }
     })

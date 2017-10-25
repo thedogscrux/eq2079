@@ -12,7 +12,8 @@ class MK extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      launches: [],
+      activeLaunch: {},
+      pastLaunches: [],
       users: [],
       pzs: []
     }
@@ -29,7 +30,11 @@ class MK extends Component {
     // watch launches
     firebase.database().ref('/launches/').on('value', function(snapshot) {
       if(snapshot.val()) {
-        let launches = Object.keys(snapshot.val()).map( (launch, key) => snapshot.val()[launch] )
+        let launches = Object.keys(snapshot.val()).map( (launch, key) => {
+          let launchObj = snapshot.val()[launch]
+          launchObj.id = Object.keys(snapshot.val())[key]
+          return launchObj
+        })
         self.updateStateLaunches(launches)
       }
     })
@@ -50,7 +55,12 @@ class MK extends Component {
   }
 
   updateStateLaunches(launches) {
-    this.setState({ launches: launches })
+    let activeLaunchKey = launches.findIndex(launch => launch.status === 'active')
+    let activeLaunch = launches[activeLaunchKey]
+    this.setState({
+      pastLaunches: launches,
+      activeLaunch: activeLaunch
+    })
   }
 
   updateStateUsers(users) {
@@ -62,10 +72,26 @@ class MK extends Component {
   }
 
   // GET HTML
+  htmlActiveLaunch() {
+    return(
+      <div className='row'>
+        <div className='col'>
+          Status: {this.state.activeLaunch.status}<br/>
+          Start: {this.state.activeLaunch.start}<br/>
+          End: {this.state.activeLaunch.end}<br/>
+        </div>
+        <div className='col'>
+          Players: {this.state.activeLaunch.players}<br/>
+          Total Score: {this.state.activeLaunch.totalScore}<br/>
+          Total Game Plays: {this.state.activeLaunch.totalGamePlays}<br/>
+        </div>
+      </div>
+    )
+  }
 
-  htmlLaunchStatus(status) {
+  htmlPastLaunches(status) {
     let html = ''
-    html = this.state.launches.map( (launch, key) => {
+    html = this.state.pastLaunches.map( (launch, key) => {
       if(launch.status != status) {
         return
       }
@@ -160,7 +186,7 @@ class MK extends Component {
   newGame() {
     let newLaunch = schemaLaunch
     newLaunch.status = 'active'
-    firebase.database().ref('launches/').push(newLaunch, function(error) {
+    firebase.database().ref('/launches/').push(newLaunch, function(error) {
       console.log('New game started (callback)');
     })
   }
@@ -197,7 +223,7 @@ class MK extends Component {
       pz.status = 'inactive'
       return pz
     })
-    firebase.database().ref('pzs/').set(pzs)
+    firebase.database().ref('/pzs/').set(pzs)
   }
 
   render(){
@@ -213,13 +239,13 @@ class MK extends Component {
         <button style={{display:'inline-block'}}>Stop Game</button>
 
         <h2>Active Launch</h2>
-        {this.htmlLaunchStatus('active')}
+        {this.htmlActiveLaunch()}
 
         <h2>Pzs</h2>
         {this.htmlPzs()}
 
-        <h2>Launches</h2>
-        {this.htmlLaunchStatus('complete')}
+        <h2>Past Launches</h2>
+        {this.htmlPastLaunches('complete')}
 
         <h2>Users</h2>
         {this.htmlUsers()}
