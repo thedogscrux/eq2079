@@ -146,8 +146,9 @@ class MK extends Component {
                 return(
                   <div key={key}>
                     Pz Name: {pz.name}<br/>
+                    Pz Code: {pz.code}<br/>
                     Pz Attempts: {pz.attempts}<br/>
-                    Pz Score: {pz.score}<br/><br/>
+                    Pz Max Score: {pz.score}<br/><br/>
                   </div>
                 )
               })}
@@ -165,6 +166,7 @@ class MK extends Component {
   htmlPzs() {
     let html = ''
     html = this.state.pzs.map( (pz, key) => {
+      let pzIndex = propsPzs.findIndex(pzProp => pzProp.code === pz.code)
       return (
         <article key={key}>
           <h3>{pz.name}</h3>
@@ -173,7 +175,8 @@ class MK extends Component {
               players: {pz.players}<br/>
               status: {pz.status}<br/>
               <button>Reset {pz.name}</button>
-              <button>Stop {pz.name}</button>
+              <button onClick={() => this.startGame(pzIndex)}>Start {pz.name}</button>
+              <button onClick={() => this.endGame(pzIndex)}>End {pz.name}</button>
             </div>
             <div className='col'>
               Round: {pz.round}<br/>
@@ -193,6 +196,22 @@ class MK extends Component {
   }
 
   // SET
+
+  startGame(pzIndex) {
+    if(this.state.pzs[pzIndex].status === 'loading') {
+      firebase.database().ref('/pzs/' + pzIndex).update({
+        status: 'active'
+      })
+    }
+  }
+
+  endGame(pzIndex) {
+    if(this.state.pzs[pzIndex].status === 'active') {
+      firebase.database().ref('/pzs/' + pzIndex).update({
+        status: 'inactive'
+      })
+    }
+  }
 
   newGame() {
     let newLaunch = schemaLaunch

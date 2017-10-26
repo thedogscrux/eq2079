@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
 import firebase from 'firebase/app'
@@ -18,6 +19,12 @@ const pzMap = {
   pz1,
   pz2,
   pz3
+}
+
+const mapStateToProps = (state, props) => {
+  return {
+    user: state.user
+  }
 }
 
 class Pz extends Component {
@@ -71,15 +78,26 @@ class Pz extends Component {
 
   render(){
     const PzCode = pzMap[this.state.pzCode]
+    let content = null
+    if(this.props.user.pzs[this.state.pzIndex].attempts >= 1) {
+      content = <PzScore pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayerIDs={this.state.pz.players} />
+    } else {
+      if(this.state.pz.status == 'active') {
+        content = <PzCode />
+      } else {
+        content = <PzStart pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayerIDs={this.state.pz.players}/>
+      }
+    }
     return(
       <div>
-        <PzStart pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayerIDs={this.state.pz.players}/>
-        <PzScore pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} />
-        <PzCode />
+        {content}
       </div>
     )
   }
 }
 
+const PzContainer = connect(
+  mapStateToProps
+)(Pz)
 
-export default Pz
+export default PzContainer

@@ -32,6 +32,16 @@ class PzStart extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.unwatchDB()
+  }
+
+  // WATCH
+
+  unwatchDB() {
+    firebase.database().ref('pzs/' + this.props.pzIndex + '/players').off()
+  }
+
   watchDB() {
     let self = this
     firebase.database().ref('pzs/' + this.props.pzIndex + '/players').on('value', function(snapshot) {
@@ -72,7 +82,8 @@ class PzStart extends Component {
   loadGame() {
     // start a new game by setting it to LOADING status
     firebase.database().ref('/pzs/' + this.props.pzIndex).update({
-      status: 'loading'
+      status: 'loading',
+      players: [this.props.user.id]
     })
   }
 

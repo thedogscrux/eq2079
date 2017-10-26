@@ -7,6 +7,8 @@ import 'firebase/storage'
 
 import { propsPzs } from '../../../data/propsPzs.js'
 
+import PzStart from './PzStart'
+
 const mapStateToProps = (state, props) => {
   return {
     userId: state.user.id
@@ -19,7 +21,8 @@ class PzScore extends Component {
       this.state = {
         pzCode: this.props.pzCode,
         pzIndex: propsPzs.findIndex(pz => pz.code === this.props.pzCode),
-        pz: {}
+        pz: {},
+        playAgain: false
       }
   }
 
@@ -58,12 +61,17 @@ class PzScore extends Component {
   }
 
   render(){
+    let playAgainStart = (this.state.playAgain) ?
+      <PzStart pzCode={this.props.pzCode} pzIndex={this.props.pzIndex} pzStatus={this.props.pzStatus} pzPlayerIDs={this.props.pzPlayerIDs}/>
+      :
+      <button onClick={() => this.setState({playAgain: true})}>Play Again? (add pzs to app state to control -app-state-pzs-0-playAgain: true)</button>
     return(
       <div className='component-wrapper'>
         <h1>Pz Score: {this.state.pzCode}</h1>
         index: {this.state.pzIndex}<br/>
-        score: {this.state.pz.score}<br/>
+        max score: {this.state.pz.score}<br/>
         attempts: {this.state.pz.attempts}
+        {playAgainStart}
       </div>
     )
   }
