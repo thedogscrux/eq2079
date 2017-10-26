@@ -18,7 +18,7 @@ class PzScore extends Component {
       super(props)
       this.state = {
         pzCode: this.props.pzCode,
-        pzKey: propsPzs.findIndex(pz => pz.code === this.props.pzCode),
+        pzIndex: propsPzs.findIndex(pz => pz.code === this.props.pzCode),
         pz: {}
       }
   }
@@ -29,22 +29,22 @@ class PzScore extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
-      let pzKey = propsPzs.findIndex(pz => pz.code === nextProps.pzCode)
+      let pzIndex = propsPzs.findIndex(pz => pz.code === nextProps.pzCode)
       this.setState({
         pzCode: nextProps.pzCode,
-        pzKey: pzKey
+        pzIndex: pzIndex
       })
-      if(pzKey==0) pzKey = '0' // workaround for firebase zero/null starting index
-      this.watchDB(pzKey)
+      if(pzIndex==0) pzIndex = '0' // workaround for firebase zero/null starting index
+      this.watchDB(pzIndex)
     }
   }
 
   // GET
-  watchDB(key) {
-    let pzKey = key
-    if(!pzKey) pzKey = this.state.pzKey
+  watchDB(index) {
+    let pzIndex = index
+    if(!pzIndex) pzIndex = this.state.pzIndex
     var self = this
-    firebase.database().ref('users/' + this.props.userId + '/pzs/' + pzKey).on('value', function(snapshot) {
+    firebase.database().ref('users/' + this.props.userId + '/pzs/' + pzIndex).on('value', function(snapshot) {
       self.updateStatePz(snapshot.val())
     })
 
@@ -60,7 +60,7 @@ class PzScore extends Component {
     return(
       <div className='component-wrapper'>
         <h1>Pz Score: {this.state.pzCode}</h1>
-        key: {this.state.pzKey}<br/>
+        index: {this.state.pzIndex}<br/>
         score: {this.state.pz.score}<br/>
         attempts: {this.state.pz.attempts}
       </div>
