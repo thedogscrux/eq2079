@@ -25,6 +25,10 @@ class Map extends Component {
 
   // WATCH
 
+  unwatchDB() {
+    firebase.database().ref('/pzs/').off()
+  }
+
   watchDB() {
     var self = this
     // watch launches
@@ -36,10 +40,6 @@ class Map extends Component {
         self.updateStatePzs(pzs)
       }
     })
-  }
-
-  unwatchDB() {
-    firebase.database().ref('/pzs/').off()
   }
 
   updateStatePzs(pzs) {
