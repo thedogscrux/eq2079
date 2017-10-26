@@ -34,12 +34,13 @@ class PzScore extends Component {
         pzCode: nextProps.pzCode,
         pzIndex: pzIndex
       })
-      if(pzIndex==0) pzIndex = '0' // workaround for firebase zero/null starting index
+      //if(pzIndex==0) pzIndex = '0' // workaround for firebase zero/null starting index
       this.watchDB(pzIndex)
     }
   }
 
-  // GET
+  // WATCH
+
   watchDB(index) {
     let pzIndex = index
     if(!pzIndex) pzIndex = this.state.pzIndex

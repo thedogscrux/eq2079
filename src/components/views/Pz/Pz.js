@@ -73,8 +73,8 @@ class Pz extends Component {
     const PzCode = pzMap[this.state.pzCode]
     return(
       <div>
-        <PzStart pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status}/>
-        <PzScore pzCode={this.state.pzCode} />
+        <PzStart pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayers={this.state.pz.players}/>
+        <PzScore pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} />
         <PzCode />
       </div>
     )

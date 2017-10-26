@@ -203,13 +203,13 @@ class MK extends Component {
   }
 
   resetPzs() {
-    console.log('Reset Pzs.');
+    console.log('*** Reset Pzs ***');
     let pzs = []
     pzs = propsPzs.map( (pzProps, key) => {
       let pz = {
         name: '',
         code: '',
-        players: 0,
+        players: [],
         status: 'inactive|loading|active',
         location: {
           lat: 0,

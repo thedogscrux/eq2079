@@ -18,7 +18,16 @@ class Status extends Component {
     this.watchDB()
   }
 
+  componentWillUnmount() {
+    this.unwatchDB()
+  }
+
   // GET
+
+  unwatchDB() {
+    firebase.database().ref('/launches/').off()
+  }
+
   watchDB() {
     var self = this
     firebase.database().ref('/launches/').orderByChild('status').equalTo('active').on('value', function(snapshot) {

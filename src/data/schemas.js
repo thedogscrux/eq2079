@@ -31,7 +31,7 @@ const schemaUser = {
 
 const schemaPz = {
   name: '',
-  players: 0,
+  players: [],
   status: 'inactive|loading|active',
   location: {
     lat: 0,

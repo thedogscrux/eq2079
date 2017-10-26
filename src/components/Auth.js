@@ -166,8 +166,9 @@ class Auth extends Component {
               score: 0.00
             }
           ]
-          return firebase.database().ref('/users/').push(user, function(error) {
-            // add new user to launch
+          var newUserId = firebase.database().ref('/users/').push().key // Get a key for a new Post.
+          return firebase.database().ref('/users/' + newUserId).set(user, function(error) {
+            user.id = newUserId
             self.updateUser(user)
             // update total players
             firebase.database().ref('/launches/' + launchId).update({
