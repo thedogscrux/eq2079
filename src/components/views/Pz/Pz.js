@@ -37,7 +37,7 @@ class Pz extends Component {
         pzCode: nextProps.match.params.pzCode,
         pzIndex: pzIndex
       });
-      //if(pzIndex==0) pzIndex = '0' // workaround for firebase zero/null starting index
+      if(pzIndex==0) pzIndex = '0' // workaround for firebase zero/null starting index
       this.watchDB(pzIndex)
     }
   }
@@ -73,7 +73,7 @@ class Pz extends Component {
     const PzCode = pzMap[this.state.pzCode]
     return(
       <div>
-        <PzStart pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayers={this.state.pz.players}/>
+        <PzStart pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayerIDs={this.state.pz.players}/>
         <PzScore pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} />
         <PzCode />
       </div>
