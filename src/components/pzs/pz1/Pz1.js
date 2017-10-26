@@ -1,15 +1,8 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 
 import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
-
-const mapStateToProps = (state, props) => {
-  return {
-    user: state.user
-  }
-}
 
 const pzIndex = 0
 
@@ -22,21 +15,10 @@ class Pz1 extends Component {
   }
 
   componentWillUnmount() {
-    console.log('*** END GAME ***');
-    this.endGame()
-  }
-
-  endGame() {
-    let ref = '/users/' + this.props.user.id + '/pzs/' + pzIndex
-    let attempts = 0
+    let self = this
     let score = this.state.points
-    firebase.database().ref(ref).once('value').then(function(snapshot){
-      attempts = (snapshot.val()) ? snapshot.val().attempts + 1 : 1
-      // upload score
-      firebase.database().ref(ref).update({
-        score: score,
-        attempts: attempts
-      });
+    firebase.database().ref('/pzs/' + pzIndex + '/status').once('value').then(function(snapshot){
+      if(snapshot.val() === 'inactive') self.props.endGame(score)
     })
   }
 
@@ -57,8 +39,4 @@ class Pz1 extends Component {
   }
 }
 
-const Pz1Container = connect(
-  mapStateToProps
-)(Pz1)
-
-export default Pz1Container
+export default Pz1

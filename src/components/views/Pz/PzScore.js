@@ -30,6 +30,10 @@ class PzScore extends Component {
     this.watchDB()
   }
 
+  componentWillUnmount() {
+    this.unwatchDB()
+  }
+
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
       let pzIndex = propsPzs.findIndex(pz => pz.code === nextProps.pzCode)
@@ -43,6 +47,10 @@ class PzScore extends Component {
   }
 
   // WATCH
+
+  unwatchDB() {
+    firebase.database().ref('users/' + this.props.userId + '/pzs/' + this.state.pzIndex).off()
+  }
 
   watchDB(index) {
     let pzIndex = index

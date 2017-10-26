@@ -208,7 +208,8 @@ class MK extends Component {
   endGame(pzIndex) {
     if(this.state.pzs[pzIndex].status === 'active') {
       firebase.database().ref('/pzs/' + pzIndex).update({
-        status: 'inactive'
+        status: 'inactive',
+        players: []
       })
     }
   }

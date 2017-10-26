@@ -6,6 +6,8 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
+import { setUserPz } from '../../../actions/userActions'
+
 import PzStart from './PzStart'
 import PzScore from './PzScore'
 
@@ -27,10 +29,19 @@ const mapStateToProps = (state, props) => {
   }
 }
 
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    setUserPz: (pz, val) => {
+      dispatch(setUserPz(pz, val))
+    }
+  }
+}
+
 class Pz extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      userID: this.props.user.id,
       pzCode: this.props.match.params.pzCode,
       pzIndex: propsPzs.findIndex(pz => pz.code === this.props.match.params.pzCode),
       pz: {}
@@ -76,6 +87,31 @@ class Pz extends Component {
     this.setState({ pz: value })
   }
 
+  // CHILD FUNCS
+
+  endGame(score) {
+    console.log('*** END GAME ***');
+    let attempts = this.props.user.pzs[this.state.pzIndex].attempts + 1
+    let pzCode = this.state.pzCode
+    let val = {
+      attempts: attempts,
+      code: pzCode,
+      score: score
+    }
+    let ref = '/users/' + this.props.user.id + '/pzs/' + this.state.pzIndex
+    this.props.setUserPz(this.state.pzIndex, val) // update app state for user pz
+    this.forceUpdate() // because new attempts value isnt recognized
+    firebase.database().ref(ref).once('value').then(function(snapshot){
+      attempts = (snapshot.val()) ? snapshot.val().attempts + 1 : 1
+      // upload score
+      firebase.database().ref(ref).update({
+        score: score,
+        code: pzCode,
+        attempts: attempts
+      })
+    })
+  }
+
   render(){
     const PzCode = pzMap[this.state.pzCode]
     let content = null
@@ -83,7 +119,7 @@ class Pz extends Component {
       content = <PzScore pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayerIDs={this.state.pz.players} />
     } else {
       if(this.state.pz.status == 'active') {
-        content = <PzCode />
+        content = <PzCode endGame={(score) => this.endGame(score)}/>
       } else {
         content = <PzStart pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayerIDs={this.state.pz.players}/>
       }
@@ -97,7 +133,8 @@ class Pz extends Component {
 }
 
 const PzContainer = connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Pz)
 
 export default PzContainer
