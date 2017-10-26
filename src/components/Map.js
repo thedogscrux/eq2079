@@ -19,6 +19,10 @@ class Map extends Component {
     this.watchDB()
   }
 
+  componentWillUnmount() {
+    this.unwatchDB()
+  }
+
   // WATCH
 
   watchDB() {
@@ -32,6 +36,10 @@ class Map extends Component {
         self.updateStatePzs(pzs)
       }
     })
+  }
+
+  unwatchDB() {
+    firebase.database().ref('/pzs/').off()
   }
 
   updateStatePzs(pzs) {

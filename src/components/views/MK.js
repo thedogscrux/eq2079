@@ -23,7 +23,17 @@ class MK extends Component {
     this.watchDB()
   }
 
+  componentWillUnmount() {
+    this.unwatchDB()
+  }
+
   // WATCH
+
+  unwatchDB() {
+    firebase.database().ref('/launches/').off()
+    firebase.database().ref('/users/').off()
+    firebase.database().ref('/pzs/').off()
+  }
 
   watchDB() {
     var self = this
@@ -163,6 +173,7 @@ class MK extends Component {
               players: {pz.players}<br/>
               status: {pz.status}<br/>
               <button>Reset {pz.name}</button>
+              <button>Stop {pz.name}</button>
             </div>
             <div className='col'>
               Round: {pz.round}<br/>
