@@ -79,7 +79,7 @@ class PzScore extends Component {
         index: {this.state.pzIndex}<br/>
         max score: {this.state.pz.score}<br/>
         attempts: {this.state.pz.attempts}
-        {playAgainStart}
+        {/*}{playAgainStart}*/}
       </div>
     )
   }

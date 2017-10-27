@@ -114,18 +114,33 @@ class Pz extends Component {
 
   render(){
     const PzCode = pzMap[this.state.pzCode]
+    let contentScore = null
     let content = null
-    if(this.props.user.pzs[this.state.pzIndex].attempts >= 1) {
-      content = <PzScore pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayerIDs={this.state.pz.players} />
+    let pzAttempts = this.props.user.pzs[this.state.pzIndex].attempts
+    if(pzAttempts >= 1 && this.state.pz.status != 'active') {
+      contentScore = <PzScore
+        pzCode={this.state.pzCode}
+        pzIndex={this.state.pzIndex}
+        pzStatus={this.state.pz.status}
+        pzPlayerIDs={this.state.pz.players}
+      />
+    }
+    if(this.state.pz.status == 'active') {
+      content = <PzCode
+        endGame={(score) => this.endGame(score)}
+      />
     } else {
-      if(this.state.pz.status == 'active') {
-        content = <PzCode endGame={(score) => this.endGame(score)}/>
-      } else {
-        content = <PzStart pzCode={this.state.pzCode} pzIndex={this.state.pzIndex} pzStatus={this.state.pz.status} pzPlayerIDs={this.state.pz.players}/>
-      }
+      content = <PzStart
+        pzCode={this.state.pzCode}
+        pzIndex={this.state.pzIndex}
+        pzStatus={this.state.pz.status}
+        pzPlayerIDs={this.state.pz.players}
+        pzAttempts={pzAttempts}
+      />
     }
     return(
       <div>
+        {contentScore}
         {content}
       </div>
     )

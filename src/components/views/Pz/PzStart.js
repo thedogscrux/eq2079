@@ -102,7 +102,7 @@ class PzStart extends Component {
     if(pzStatus === 'active') {
       content = <button disabled='disabled'>Game in Progress</button>
     } else if( pzStatus === 'inactive') {
-      content = <button onClick={() => this.requestNewGame() }>Start</button>
+      content = <button onClick={() => this.requestNewGame() }>{(this.props.pzAttempts >= 1) ? 'Play Again' : 'Start'}</button>
     } else if (pzStatus === 'loading') {
       content = <button onClick={() => this.joinGame() }>Join</button>
     }
@@ -112,6 +112,7 @@ class PzStart extends Component {
         <h1>Pz Start: {this.state.pzCode}</h1>
         pz code: {this.props.pzCode}<br/>
         pz index: {this.props.pzIndex}<br/>
+        pz attempts: {this.props.pzAttempts}<br/>
         pz players: { !(this.state.pzPlayers) ? '' : this.state.pzPlayers.map(player => player + ', ') }
         {content}
       </div>
