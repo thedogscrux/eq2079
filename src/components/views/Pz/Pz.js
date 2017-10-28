@@ -93,17 +93,18 @@ class Pz extends Component {
     console.log('*** END GAME ***');
     let attempts = this.props.user.pzs[this.state.pzIndex].attempts + 1
     let pzCode = this.state.pzCode
+    let ref = '/users/' + this.props.user.id + '/pzs/' + this.state.pzIndex
     let val = {
       attempts: attempts,
       code: pzCode,
       score: score
     }
-    let ref = '/users/' + this.props.user.id + '/pzs/' + this.state.pzIndex
     this.props.setUserPz(this.state.pzIndex, val) // update app state for user pz
     this.forceUpdate() // because new attempts value isnt recognized
+    // todo: i think i can just rely on the app state for user.pzs.attempts...
     firebase.database().ref(ref).once('value').then(function(snapshot){
       attempts = (snapshot.val()) ? snapshot.val().attempts + 1 : 1
-      // upload score
+      // update the user score
       firebase.database().ref(ref).update({
         score: score,
         code: pzCode,

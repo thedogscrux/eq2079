@@ -8,6 +8,8 @@ import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
 import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
 import { propsPzs } from '../../data/propsPzs.js'
 
+const launchAtTotalScore = 5
+
 class MK extends Component {
   constructor(props) {
     super(props)
@@ -46,12 +48,17 @@ class MK extends Component {
           return launchObj
         })
         self.updateStateLaunches(launches)
+        self.calcActiveLaunchTotalScore()
       }
     })
     // watch users
     firebase.database().ref('/users/').on('value', function(snapshot) {
       if(snapshot.val()) {
-        let users = Object.keys(snapshot.val()).map( (user, key) => snapshot.val()[user] )
+        let users = Object.keys(snapshot.val()).map( (user, key) => {
+          let newUser = snapshot.val()[user]
+          newUser.userID = user
+          return newUser
+        })
         self.updateStateUsers(users)
       }
     })
@@ -74,29 +81,84 @@ class MK extends Component {
   }
 
   updateStateUsers(users) {
+    let oldNumOfUsers = this.state.users.length
     this.setState({ users: users })
+    if(oldNumOfUsers == 0 || oldNumOfUsers == users.length) {
+      // existing users update
+      this.calcActiveLaunchTotalScore()
+    }
   }
 
   updateStatePzs(pzs) {
     this.setState({ pzs: pzs })
   }
 
+  // CALC
+  calcActiveLaunchTotalScore() {
+    let totalLaunchScore = 0
+    this.state.users.map((user,key) => {
+      if(this.state.activeLaunch && (user.launchId == this.state.activeLaunch.id) && user.status == 'active') {
+        user.pzs.map(pz => {
+          totalLaunchScore += pz.score
+        })
+      }
+    })
+    this.setState({
+      activeLaunch: {
+        ...this.state.activeLaunch,
+        totalScore: totalLaunchScore
+      }
+    })
+    // check if mission complete?
+    if(totalLaunchScore >= launchAtTotalScore) {
+      this.launchRocket()
+    }
+  }
+
+  launchRocket() {
+    console.log('*** END GAME! launch rocket! ***');
+    let self = this
+    // get all active players
+    let deactivateLaunchUsers = {}
+    this.state.users.map( (user, key) => {
+      let launchUser = {}
+      if(user.launchId == this.state.activeLaunch.id) {
+        launchUser = user
+        launchUser.status = 'inactive'
+        deactivateLaunchUsers[user.userID] = launchUser
+        deactivateLaunchUsers[user.userID].userID = null
+      }
+    })
+    // end current game
+    firebase.database().ref('/launches/' + this.state.activeLaunch.id).update({
+      status: 'complete'
+    }).then(function(){
+      // deactivate current launch players
+      firebase.database().ref('/users/').update(deactivateLaunchUsers).then(function(){
+        // start new game
+        self.newGame()
+      })
+    })
+  }
+
   // GET HTML
   htmlActiveLaunch() {
-    return(
-      <div className='row'>
-        <div className='col'>
-          Status: {this.state.activeLaunch.status}<br/>
-          Start: {this.state.activeLaunch.start}<br/>
-          End: {this.state.activeLaunch.end}<br/>
+    if(this.state.activeLaunch){
+      return(
+        <div className='row'>
+          <div className='col'>
+            Status: {this.state.activeLaunch.status}<br/>
+            Start: {this.state.activeLaunch.start}<br/>
+            End: {this.state.activeLaunch.end}<br/>
+          </div>
+          <div className='col'>
+            Players: {this.state.activeLaunch.players}<br/>
+            Total Score: {this.state.activeLaunch.totalScore} / {launchAtTotalScore}<br/>
+            Total Game Plays: {this.state.activeLaunch.totalGamePlays}<br/>
+          </div>
         </div>
-        <div className='col'>
-          Players: {this.state.activeLaunch.players}<br/>
-          Total Score: {this.state.activeLaunch.totalScore}<br/>
-          Total Game Plays: {this.state.activeLaunch.totalGamePlays}<br/>
-        </div>
-      </div>
-    )
+      )
+    }
   }
 
   htmlPastLaunches(status) {
@@ -123,42 +185,44 @@ class MK extends Component {
     return html
   }
 
-  htmlUsers() {
+  htmlUsers(status) {
     let html = ''
     html = this.state.users.map( (user, key) => {
-      return (
-        <article key={key}>
-          <h3>{user.name}</h3>
-          <div className='row'>
-            <div className='col'>
-              Job: {user.job}<br/>
-              Status: {user.status}<br/>
-              Time Last Checkin: {user.timeLastCheckin}<br/>
-              IP: {user.ip}<br/>
-              Agent: {user.agent}<br/>
-              Location: {user.loc.lat}, {user.loc.long}<br/>
-              <button>Block User IP</button>
-              <button>Delete User</button>
-              <button>Reset User</button>
+      if(user.status == status) {
+        return (
+          <article key={key}>
+            <h3>{user.name}</h3>
+            <div className='row'>
+              <div className='col'>
+                Job: {user.job}<br/>
+                Status: {user.status}<br/>
+                Time Last Checkin: {user.timeLastCheckin}<br/>
+                IP: {user.ip}<br/>
+                Agent: {user.agent}<br/>
+                Location: {user.loc.lat}, {user.loc.long}<br/>
+                <button>Block User IP</button>
+                <button>Delete User</button>
+                <button>Reset User</button>
+              </div>
+              <div className='col'>
+                { user.pzs.map( (pz, key) => {
+                  return(
+                    <div key={key}>
+                      Pz Name: {pz.name}<br/>
+                      Pz Code: {pz.code}<br/>
+                      Pz Attempts: {pz.attempts}<br/>
+                      Pz Max Score: {pz.score}<br/><br/>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className='col'>
+                {/* placholder */}
+              </div>
             </div>
-            <div className='col'>
-              { user.pzs.map( (pz, key) => {
-                return(
-                  <div key={key}>
-                    Pz Name: {pz.name}<br/>
-                    Pz Code: {pz.code}<br/>
-                    Pz Attempts: {pz.attempts}<br/>
-                    Pz Max Score: {pz.score}<br/><br/>
-                  </div>
-                )
-              })}
-            </div>
-            <div className='col'>
-              {/* placholder */}
-            </div>
-          </div>
-        </article>
-      )
+          </article>
+        )
+      }
     })
     return html
   }
@@ -278,8 +342,11 @@ class MK extends Component {
         <h2>Past Launches</h2>
         {this.htmlPastLaunches('complete')}
 
-        <h2>Users</h2>
-        {this.htmlUsers()}
+        <h2>Active Users</h2>
+        {this.htmlUsers('active')}
+
+        <h2>Inactive Users</h2>
+        {this.htmlUsers('inactive')}
       </div>
     )
   }
