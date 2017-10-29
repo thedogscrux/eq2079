@@ -4,32 +4,47 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
+import moment from 'moment'
+import tz from 'moment-timezone'
+
 import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
 import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
 import { propsPzs } from '../../data/propsPzs.js'
 
+// Game Settings
 const launchAtTotalScore = 20
+
+// Clock
+const pzLoadingSec = 10
+const clockOn = true
 
 class MK extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      timeNow: 0,
       activeLaunch: {},
       pastLaunches: [],
       users: [],
       pzs: []
     }
+    this.clock = this.clock.bind(this);
   }
 
   componentDidMount() {
     this.watchDB()
+    this.timer = setTimeout(() => {
+      this.clock()
+    }, 2000);
   }
 
   componentWillUnmount() {
     this.unwatchDB()
   }
 
+  // -----------------------------------------------------------------
   // WATCH
+  // -----------------------------------------------------------------
 
   unwatchDB() {
     firebase.database().ref('/launches/').off()
@@ -89,11 +104,86 @@ class MK extends Component {
     }
   }
 
-  updateStatePzs(pzs) {
-    this.setState({ pzs: pzs })
+  updateStatePzs(newPzs) {
+    let oldPzs = this.state.pzs
+    // check pz state, and update if needed (not sure if this comparison is working..)
+    if(JSON.stringify(this.state.pzs) != JSON.stringify(newPzs)) {
+      this.setState({ pzs: newPzs })
+      oldPzs.map((oldPz, key) => {
+        let newPz = newPzs[key]
+        if(oldPz.status != newPz.status) console.log('DEBUG UPDATE PZ 1/2: updateStatePzs: ' + oldPz.name + ' old status: ', oldPz.status, ' new satus:', newPz.status)
+        if(oldPz.status != newPz.status && newPz.status == 'loading') {
+          // start the loading process
+          this.pzStartLoding(key)
+        } else if(oldPz.status != newPz.status && newPz.status == 'inactive') {
+          console.log('puzzle just ended:', oldPz.name);
+        } else if(oldPz.status != newPz.status && newPz.status == 'active') {
+          console.log('puzzle just started:', oldPz.name);
+        }
+      })
+    }
   }
 
+  updateStatePz(pzIndex, pzUpdates) {
+    let pzs = this.state.pzs
+    let pz = Object.assign({}, this.state.pzs[pzIndex], pzUpdates);
+    if(JSON.stringify(this.state.pzs[pzIndex]) != JSON.stringify(pz)) {
+      pzs[pzIndex] = pz
+      // aparently above line is the same as update state?
+      // this.setState({
+      //   pzs: pzs
+      // })
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // CLOCK
+  // -----------------------------------------------------------------
+
+  clock () {
+    let timeNow = moment().tz('America/Los_Angeles')
+    // ........
+    this.setState({
+      timeNow: timeNow.format('kk:mm:ss')
+    }, () => {
+      this.timeout = window.setTimeout(this.clock, 1000)
+    });
+  }
+
+  clearTimeout = () => {
+    // use clearTimeout on the stored timeout in the class property "timeout"
+    window.clearTimeout(this.timeout);
+    clearTimeout(this.timer);
+  }
+
+  // -----------------------------------------------------------------
+  // PZS (possibly move to new file)
+  // -----------------------------------------------------------------
+
+  pzStartLoding(pzIndex) {
+    let self = this
+    // set the timeGameStarts and timeGameEnds
+    let roundTotalSec = propsPzs[pzIndex].rounds.numOfRounds * propsPzs[pzIndex].rounds.roundSec
+    let timeGameStarts = moment().tz('America/Los_Angeles')
+    timeGameStarts.add(pzLoadingSec, 's')
+    let timeGameEnds = moment().tz('America/Los_Angeles')
+    timeGameEnds.add(pzLoadingSec + roundTotalSec, 's')
+    // set the secTillNextRoundStarts
+    // TODO is this needed?
+    let update = {
+      status: 'loading',
+      timeGameStarts: timeGameStarts.format("kk:mm:ss"),
+      timeGameEnds: timeGameEnds.format("kk:mm:ss")
+    }
+    firebase.database().ref('/pzs/' + pzIndex).update(update).then(function() {
+      self.updateStatePz(pzIndex, update) // update state manually, because watch is not seeing firebase update for some reason
+    })
+  }
+
+  // -----------------------------------------------------------------
   // CALC
+  // -----------------------------------------------------------------
+
   calcActiveLaunchTotalScore() {
     let totalLaunchScore = 0
     this.state.users.map((user,key) => {
@@ -141,7 +231,10 @@ class MK extends Component {
     })
   }
 
+  // -----------------------------------------------------------------
   // GET HTML
+  // -----------------------------------------------------------------
+
   htmlActiveLaunch() {
     if(this.state.activeLaunch){
       return(
@@ -259,7 +352,9 @@ class MK extends Component {
     return html
   }
 
+  // -----------------------------------------------------------------
   // SET
+  // -----------------------------------------------------------------
 
   startGame(pzIndex) {
     if(this.state.pzs[pzIndex].status === 'loading') {
@@ -289,7 +384,6 @@ class MK extends Component {
   resetGame() {
     console.log(('*** Reset Game ***'))
     if(window.confirm('Are you sure? This will delete all Launches, Users and reset all Pzs')) {
-    //if(confirm('Are you sure? This will delete all Launches, Users and reset all Pzs')){
       firebase.database().ref('/launches').remove()
       firebase.database().ref('/users').remove()
       this.resetPzs()
@@ -315,6 +409,10 @@ class MK extends Component {
           top: '0%',
           left: '0%'
         },
+        rounds: {
+          numOfRounds: 0,
+          roundSec: 0
+        },
         timeGameStarts: '00:00:00',
         timeGameEnds: '00:00:00',
         secTillNextRoundStarts: 0,
@@ -337,6 +435,7 @@ class MK extends Component {
     return(
       <div id='component-mk'>
         <h1>Mission Kontrol</h1>
+        <h3>{this.state.timeNow}</h3>
         <button onClick={() => this.newGame()} style={{display:'inline-block'}}>New Game</button>
         <button onClick={() => this.resetPzs()} style={{display:'inline-block'}}>Reset Pzs</button>
         <br/>

@@ -10,6 +10,10 @@ const propsPzs = [
       floor: 'ground',
       top: '50%',
       left: '50%'
+    },
+    rounds: {
+      numOfRounds: 1,
+      roundSec: 10
     }
   },
   {
@@ -23,6 +27,10 @@ const propsPzs = [
       floor: 'ground',
       top: '40%',
       left: '25%'
+    },
+    rounds: {
+      numOfRounds: 1,
+      roundSec: 10
     }
   },
   {
@@ -36,6 +44,10 @@ const propsPzs = [
       floor: 'ground',
       top: '70%',
       left: '80%'
+    },
+    rounds: {
+      numOfRounds: 1,
+      roundSec: 10
     }
   }
 ]
