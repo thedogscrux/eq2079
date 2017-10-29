@@ -8,7 +8,7 @@ import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
 import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
 import { propsPzs } from '../../data/propsPzs.js'
 
-const launchAtTotalScore = 5
+const launchAtTotalScore = 20
 
 class MK extends Component {
   constructor(props) {
@@ -293,6 +293,7 @@ class MK extends Component {
       firebase.database().ref('/launches').remove()
       firebase.database().ref('/users').remove()
       this.resetPzs()
+      this.newGame()
     }
   }
 

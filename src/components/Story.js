@@ -24,10 +24,6 @@ class Story extends Component {
 
   }
 
-  componentDidMount() {
-    this.watchDB()
-  }
-
   // componentWillReceiveProps(nextProps) {
   //   if(this.props != nextProps) {
   //     this.setState({
@@ -37,7 +33,19 @@ class Story extends Component {
   //   }
   // }
 
+  componentDidMount() {
+    this.watchDB()
+  }
+
+  componentWillUnmount() {
+    this.unwatchDB()
+  }
+
   // WATCH
+
+  unwatchDB() {
+    firebase.database().ref('users/' + this.props.userId + '/chapter').off()
+  }
 
   watchDB() {
     let self = this

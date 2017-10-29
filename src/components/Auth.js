@@ -192,7 +192,7 @@ class Auth extends Component {
       case 'userInfo':
         html =
           <div>
-            Code Name: {this.state.user.name}&nbsp;&nbsp;
+            Code Name: {this.state.user.name} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}&nbsp;&nbsp;
             <button style={{display: 'inline-block'}} onClick={() => this.updateUser('')}>Logout</button>
           </div>
         break

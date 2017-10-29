@@ -17,7 +17,8 @@ class PzStart extends Component {
     this.state = {
       pzCode: this.props.pzCode,
       pzPlayerIDs: [],
-      pzPlayers: []
+      pzPlayers: [],
+      userJoined: false
     }
   }
 
@@ -60,6 +61,12 @@ class PzStart extends Component {
     }
   }
 
+  updateUserJoined(joined){
+    this.setState({
+      userJoined: joined
+    })
+  }
+
   // FUNCS
 
   requestNewGame() {
@@ -81,17 +88,31 @@ class PzStart extends Component {
 
   loadGame() {
     // start a new game by setting it to LOADING status
+    let self = this
     firebase.database().ref('/pzs/' + this.props.pzIndex).update({
       status: 'loading',
       players: [this.props.user.id]
+    }).then(function(){
+      self.updateUserJoined(true)
     })
   }
 
   joinGame() {
-    let newPlayers = this.props.pzPlayerIDs || []
-    newPlayers.push(this.props.user.id)
-    firebase.database().ref('/pzs/' + this.props.pzIndex).update({
-      players: newPlayers
+    let self = this
+    let pzPlayerIDs = this.props.pzPlayerIDs
+    let userID = this.props.user.id
+    let pzIndex = this.props.pzIndex
+    firebase.database().ref('/pzs/' + this.props.pzIndex + '/players/').once('value').then(function(snapshot){
+      let userCount = snapshot.val().filter(playerID => playerID == userID)
+      if(userCount < 1) {
+        let newPlayers = pzPlayerIDs || []
+        newPlayers.push(userID)
+        firebase.database().ref('/pzs/' + pzIndex).update({
+          players: newPlayers
+        }).then(function(){
+          self.updateUserJoined(true)
+        })
+      }
     })
   }
 
@@ -103,7 +124,7 @@ class PzStart extends Component {
       content = <button disabled='disabled'>Game in Progress</button>
     } else if( pzStatus === 'inactive') {
       content = <button onClick={() => this.requestNewGame() }>{(this.props.pzAttempts >= 1) ? 'Play Again' : 'Start'}</button>
-    } else if (pzStatus === 'loading') {
+    } else if (pzStatus === 'loading' && !this.state.userJoined) {
       content = <button onClick={() => this.joinGame() }>Join</button>
     }
 
