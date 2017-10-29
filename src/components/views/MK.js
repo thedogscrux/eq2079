@@ -286,6 +286,16 @@ class MK extends Component {
     })
   }
 
+  resetGame() {
+    console.log(('*** Reset Game ***'))
+    if(window.confirm('Are you sure? This will delete all Launches, Users and reset all Pzs')) {
+    //if(confirm('Are you sure? This will delete all Launches, Users and reset all Pzs')){
+      firebase.database().ref('/launches').remove()
+      firebase.database().ref('/users').remove()
+      this.resetPzs()
+    }
+  }
+
   resetPzs() {
     console.log('*** Reset Pzs ***');
     let pzs = []
@@ -326,10 +336,10 @@ class MK extends Component {
     return(
       <div id='component-mk'>
         <h1>Mission Kontrol</h1>
-        <button style={{display:'inline-block'}} onClick={() => this.newGame()}>New Game</button>
-        <button style={{display:'inline-block'}} onClick={() => this.resetPzs()}>Reset Pzs</button>
+        <button onClick={() => this.newGame()} style={{display:'inline-block'}}>New Game</button>
+        <button onClick={() => this.resetPzs()} style={{display:'inline-block'}}>Reset Pzs</button>
         <br/>
-        <button style={{display:'inline-block', backgroundColor: 'rgba(255,0,0,.4)'}}>Reset Game</button>
+        <button onClick={() => this.resetGame() } style={{display:'inline-block', backgroundColor: 'rgba(255,0,0,.4)'}}>Reset Game</button>
         <button style={{display:'inline-block'}}>Start/Pause Game</button>
         <button style={{display:'inline-block'}}>Stop Game</button>
 

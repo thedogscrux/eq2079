@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
 import PrivateRoute from './components/PrivateRoute'
-//import User from './components/User'
+import User from './components/User'
 import Auth from './components/Auth'
 import Nav from './components/Nav'
 
@@ -28,6 +28,7 @@ firebase.initializeApp(firebaseConfig)
 const App = () => (
   <Router>
     <div>
+      <User />
       <Auth display='userInfo'/>
       <Nav />
 
@@ -38,7 +39,7 @@ const App = () => (
       <PrivateRoute path="/dashboard" component={Dashboard}/>
       <PrivateRoute path='/pzs' component={Pzs}/>
 
-      <PrivateRoute path="/mk" component={MK}/>
+      <Route path="/mk" component={MK}/>
       <PrivateRoute path="/projector" component={Projector}/>
     </div>
   </Router>

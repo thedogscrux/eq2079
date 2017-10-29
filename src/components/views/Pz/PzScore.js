@@ -77,8 +77,8 @@ class PzScore extends Component {
       <div className='component-wrapper'>
         <h1>Pz Score: {this.state.pzCode}</h1>
         index: {this.state.pzIndex}<br/>
-        max score: {this.state.pz.score}<br/>
-        attempts: {this.state.pz.attempts}
+        max score: {(this.state.pz) ? this.state.pz.score : ''}<br/>
+        attempts: {(this.state.pz) ? this.state.pz.attempts : ''}
         {/*}{playAgainStart}*/}
       </div>
     )
