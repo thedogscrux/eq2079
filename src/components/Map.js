@@ -15,13 +15,14 @@ class Map extends Component {
       geoLoc: {
         latitude: 0,
         longitude: 0
-      }
+      },
+      selectedPzID: null
     }
   }
 
   componentDidMount() {
     this.watchDB()
-    this.geoLoc()
+    this.watchGeoLoc()
   }
 
   componentWillUnmount() {
@@ -37,7 +38,6 @@ class Map extends Component {
 
   watchDB() {
     var self = this
-    // watch launches
     // TODO: maybe watch MK?
     // watch pzs
     firebase.database().ref('/pzs/').on('value', function(snapshot) {
@@ -52,14 +52,29 @@ class Map extends Component {
     this.setState({ pzs: pzs })
   }
 
-  selectPz(pzId) {
-    let pz = staticPzs[pzId]
-    let html =
-    `<div>Name: ${pz.name}</div>
-    <div>Status: ${pz.status}</div>
-    <div>Players: ${pz.players}</div>`
-    document.getElementById('selected-pz').innerHTML = html
+  watchGeoLoc() {
+    let config = {
+      enableHighAccuracy: true,
+      timeout: 20000,
+      maximumAge: 1000,
+      distanceFilter: 10
+    }
+    this.watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        this.setState({
+          geoLoc: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null
+          }
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      config
+    );
   }
+
+  // HTML
 
   getMyPos() {
     // EQ
@@ -86,9 +101,7 @@ class Map extends Component {
       // convert my XY to percent and find relative pos on map
       myMapX = parseInt((myMapX / lngX100) * 100)
       myMapY = parseInt((myMapY / latY100) * 100)
-      console.log('myMapX',myMapX);
-      console.log('myMapY',myMapY);
-
+      // TODO add my coords to firebase for MK to see
       let sizePx = 10
       let translateCenter = `translate(-${sizePx/2}px,-${sizePx/2}px)`
       return(
@@ -100,7 +113,7 @@ class Map extends Component {
               height: sizePx + 'px',
               width: sizePx + 'px',
               transform: translateCenter,
-              backgroundColor: 'rgba(255, 0, 0, .5)'
+              backgroundColor: 'rgba(0, 0, 255, .5)'
             }}
           >
         </div>
@@ -117,9 +130,16 @@ class Map extends Component {
     html = this.state.pzs.map( (pz, key) => {
       let posBottom = pz.mapPos.bottom
       let posLeft = pz.mapPos.left
-      //TODO make dynamic based on num of players
-      let sizePx = (20 + (pz.players * 1.9))
+      let sizePx = (pz.players) ? (20 + (pz.players.length * 2.9)) : 10
       let translateCenter = `translate(-${sizePx/2}px,-${sizePx/2}px)`
+      let bgColor = null
+      if(pz.status === 'active') {
+        bgColor = 'rgba(255, 0, 0, .5)'
+      } else if(pz.status === 'loading') {
+        bgColor = 'rgba(255, 255, 0, .5)'
+      } else {
+        bgColor = 'rgba(0, 255, 0, .5)'
+      }
       return(
         <div key={key}>
           <button
@@ -129,9 +149,11 @@ class Map extends Component {
               left: posLeft,
               height: sizePx + 'px',
               width: sizePx + 'px',
-              transform: translateCenter
+              transform: translateCenter,
+              WebkitTransform: translateCenter,
+              backgroundColor: bgColor
             }}
-            onClick={() => this.selectPz(key)}
+            onClick={ () => this.setState({selectedPzID: key}) }
           ></button>
         </div>
       )
@@ -139,29 +161,18 @@ class Map extends Component {
     return html
   }
 
-  geoLoc() {
-    let config = {
-      enableHighAccuracy: true,
-      timeout: 20000,
-      maximumAge: 1000,
-      distanceFilter: 10
-    }
-    this.watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        this.setState({
-          geoLoc: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            error: null
-          }
-        });
-      },
-      (error) => this.setState({ error: error.message }),
-      config
-    );
-  }
-
   render(){
+    // show info for selected Pz
+    let selectedPz = (this.state.pzs && this.state.selectedPzID) ? this.state.pzs[this.state.selectedPzID] : null
+    let htmlSelectedPz = null
+    if(selectedPz) {
+      htmlSelectedPz = <div>
+        <div>Name: {selectedPz.name}</div>
+        <div>Status: {selectedPz.status}</div>
+        <div>Players: {selectedPz.players}</div>
+      </div>
+    }
+
     return(
       <div id='component-map' className='component-wrapper'>
         <h2>Map</h2>
@@ -169,7 +180,7 @@ class Map extends Component {
           {this.getPzs()}
           {this.getMyPos()}
         </div>
-        <div id='selected-pz'></div>
+        <div id='selected-pz'>{htmlSelectedPz}</div>
       </div>
     )
   }
