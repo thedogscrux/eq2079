@@ -44,6 +44,7 @@ class Pz extends Component {
       userID: this.props.user.id,
       pzCode: this.props.match.params.pzCode,
       pzIndex: propsPzs.findIndex(pz => pz.code === this.props.match.params.pzCode),
+      round: 0,
       pz: {}
     }
   }
@@ -98,7 +99,7 @@ class Pz extends Component {
     let refPz = '/users/' + this.props.user.id + '/pzs/' + this.state.pzIndex
     let refUser = '/users/' + this.props.user.id
     if(attempts > 1 && score <= oldScore) {
-      alert('You didnt beat your last score of: ' + oldScore)
+      console.log('You didnt beat your last score of: ' + oldScore)
       score = oldScore
     }
     let val = {
@@ -136,6 +137,7 @@ class Pz extends Component {
     if(this.state.pz.status == 'active') {
       content = <PzCode
         endGame={(score) => this.endGame(score)}
+        round={this.state.pz.round}
       />
     } else {
       content = <PzStart
@@ -148,6 +150,7 @@ class Pz extends Component {
     }
     return(
       <div>
+        <h1>round: {this.state.pz.round}</h1>
         {contentScore}
         {content}
       </div>

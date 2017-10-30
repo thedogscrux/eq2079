@@ -39,7 +39,7 @@ class Pz2 extends Component {
   render(){
     return(
       <div className='component-wrapper'>
-        <h1>Pz One</h1>
+        <h1>Pz Two</h1>
         <button onClick={() => this.getPoint()}>Points {this.state.points}</button>
       </div>
     )

@@ -12,7 +12,7 @@ const propsPzs = [
       left: '50%'
     },
     rounds: {
-      numOfRounds: 1,
+      numOfRounds: 3,
       roundSec: 10
     }
   },

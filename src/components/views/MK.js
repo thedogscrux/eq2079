@@ -6,6 +6,7 @@ import 'firebase/storage'
 
 import moment from 'moment'
 import tz from 'moment-timezone'
+import Random from 'random-js'
 
 import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
 import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
@@ -111,30 +112,28 @@ class MK extends Component {
       this.setState({ pzs: newPzs })
       oldPzs.map((oldPz, key) => {
         let newPz = newPzs[key]
-        if(oldPz.status != newPz.status) console.log('DEBUG UPDATE PZ 1/2: updateStatePzs: ' + oldPz.name + ' old status: ', oldPz.status, ' new satus:', newPz.status)
         if(oldPz.status != newPz.status && newPz.status == 'loading') {
-          // start the loading process
           this.pzStartLoding(key)
         } else if(oldPz.status != newPz.status && newPz.status == 'inactive') {
-          console.log('puzzle just ended:', oldPz.name);
+          console.log('pz just ended:', oldPz.name);
         } else if(oldPz.status != newPz.status && newPz.status == 'active') {
-          console.log('puzzle just started:', oldPz.name);
+          console.log('pz just started:', oldPz.name);
         }
       })
     }
   }
 
-  updateStatePz(pzIndex, pzUpdates) {
-    let pzs = this.state.pzs
-    let pz = Object.assign({}, this.state.pzs[pzIndex], pzUpdates);
-    if(JSON.stringify(this.state.pzs[pzIndex]) != JSON.stringify(pz)) {
-      pzs[pzIndex] = pz
-      // aparently above line is the same as update state?
-      // this.setState({
-      //   pzs: pzs
-      // })
-    }
-  }
+  // updateStatePz(pzIndex, pzUpdates) {
+  //   let pzs = this.state.pzs
+  //   let pz = Object.assign({}, this.state.pzs[pzIndex], pzUpdates);
+  //   if(JSON.stringify(this.state.pzs[pzIndex]) != JSON.stringify(pz)) {
+  //     pzs[pzIndex] = pz
+  //     // aparently above line is the same as update state?
+  //     // this.setState({
+  //     //   pzs: pzs
+  //     // })
+  //   }
+  // }
 
   // -----------------------------------------------------------------
   // CLOCK
@@ -142,11 +141,29 @@ class MK extends Component {
 
   clock () {
     let timeNow = moment().tz('America/Los_Angeles')
-    // ........
+    // Check each pz to see if action needs to be taken
+    this.state.pzs.map((pz, key) => {
+      if(pz.status === 'loading') {
+        // start time is reached and changes status of pz
+        if(timeNow.diff(moment(pz.timeGameStarts, 'kk:mm:ss'), 'seconds') >= 0) this.pzStart(key)
+      } else if(pz.status === 'active' && timeNow.diff(moment(pz.timeGameEnds, 'kk:mm:ss'), 'seconds') >= 0) {
+        // end time is reached, end the Pz
+        this.pzEnd(key)
+      } else if(pz.status === 'active' && pz.round != pz.rounds.numOfRounds) {
+        // end of round detected, start next round
+        if(timeNow.diff(moment(pz.timeNextRound, 'kk:mm:ss'), 'seconds') >= 0) this.pzNextRound(key)
+      }
+    })
+
+    // for debugging set timer to randomly update for realism
+    // let random = new Random(Random.engines.mt19937().autoSeed())
+    // let delay = (random.integer(1, 10) >= 5) ? 3000 : 1000
+    let delay = 1000
+
     this.setState({
       timeNow: timeNow.format('kk:mm:ss')
     }, () => {
-      this.timeout = window.setTimeout(this.clock, 1000)
+      this.timeout = window.setTimeout(this.clock, delay)
     });
   }
 
@@ -168,7 +185,7 @@ class MK extends Component {
     timeGameStarts.add(pzLoadingSec, 's')
     let timeGameEnds = moment().tz('America/Los_Angeles')
     timeGameEnds.add(pzLoadingSec + roundTotalSec, 's')
-    // set the secTillNextRoundStarts
+    // set the timeNextRound
     // TODO is this needed?
     let update = {
       status: 'loading',
@@ -176,8 +193,49 @@ class MK extends Component {
       timeGameEnds: timeGameEnds.format("kk:mm:ss")
     }
     firebase.database().ref('/pzs/' + pzIndex).update(update).then(function() {
-      self.updateStatePz(pzIndex, update) // update state manually, because watch is not seeing firebase update for some reason
+      // self.updateStatePz(pzIndex, update) // update state manually, because watch is not seeing firebase update for some reason
     })
+  }
+
+  pzStart(pzIndex) {
+    //set the status, round 1 and time of next round (if any)
+    let timeNextRound = moment().tz('America/Los_Angeles')
+    timeNextRound.add(propsPzs[pzIndex].rounds.roundSec, 's')
+    let update = {
+      status: 'active',
+      round: 1,
+      timeNextRound: (propsPzs[pzIndex].rounds.numOfRounds > 1) ? timeNextRound.format("kk:mm:ss") : '00:00:00'
+    }
+    firebase.database().ref('/pzs/' + pzIndex).update(update)
+  }
+
+  pzNextRound(pzIndex) {
+    //set the round # and time of next round (if any)
+    let newRoundNum = this.state.pzs[pzIndex].round + 1
+    let timeNextRound = moment().tz('America/Los_Angeles')
+    timeNextRound.add(propsPzs[pzIndex].rounds.roundSec, 's')
+    let update = {
+      round: newRoundNum,
+      timeNextRound: timeNextRound.format("kk:mm:ss")
+    }
+    firebase.database().ref('/pzs/' + pzIndex).update(update)
+  }
+
+  pzEnd(pzIndex) {
+    //set the status, reset players to empty
+    let newTotalPlays = this.state.pzs[pzIndex].totalPlays + 1
+    let newTotalPlayers = this.state.pzs[pzIndex].totalPlayers + this.state.pzs[pzIndex].players.length
+    let update = {
+      players: [],
+      status: 'inactive',
+      timeGameStarts: '00:00:00',
+      timeGameEnds: '00:00:00',
+      timeNextRound: '00:00:00',
+      round: 0,
+      totalPlays: newTotalPlays,
+      totalPlayers: newTotalPlayers
+    }
+    firebase.database().ref('/pzs/' + pzIndex).update(update)
   }
 
   // -----------------------------------------------------------------
@@ -332,14 +390,12 @@ class MK extends Component {
               players: {pz.players}<br/>
               status: {pz.status}<br/>
               <button>Reset {pz.name}</button>
-              <button onClick={() => this.startGame(pzIndex)}>Start {pz.name}</button>
-              <button onClick={() => this.endGame(pzIndex)}>End {pz.name}</button>
             </div>
             <div className='col'>
               Round: {pz.round}<br/>
               Game Starts: {pz.timeGameStarts}<br/>
               Game Ends: {pz.timeGameEnds}<br/>
-              Seconds Till Next Round: {pz.secTillNextRoundStarts}<br/>
+              Time next Round: {pz.timeNextRound}<br/>
             </div>
             <div className='col'>
               Total Plays: {pz.totalPlays}<br/>
@@ -355,23 +411,6 @@ class MK extends Component {
   // -----------------------------------------------------------------
   // SET
   // -----------------------------------------------------------------
-
-  startGame(pzIndex) {
-    if(this.state.pzs[pzIndex].status === 'loading') {
-      firebase.database().ref('/pzs/' + pzIndex).update({
-        status: 'active'
-      })
-    }
-  }
-
-  endGame(pzIndex) {
-    if(this.state.pzs[pzIndex].status === 'active') {
-      firebase.database().ref('/pzs/' + pzIndex).update({
-        status: 'inactive',
-        players: []
-      })
-    }
-  }
 
   newGame() {
     let newLaunch = schemaLaunch
@@ -415,7 +454,7 @@ class MK extends Component {
         },
         timeGameStarts: '00:00:00',
         timeGameEnds: '00:00:00',
-        secTillNextRoundStarts: 0,
+        timeNextRound: '00:00:00',
         round: 0,
         totalPlays: 0,
         totalPlayers: 0

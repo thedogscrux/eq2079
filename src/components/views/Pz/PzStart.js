@@ -56,7 +56,8 @@ class PzStart extends Component {
     if(this.props.pzPlayerIDs) {
       let players = this.state.pzPlayerIDs.map(player => users[player].name)
       this.setState({
-        pzPlayers: players
+        pzPlayers: players,
+        userJoined: (this.state.pzPlayerIDs.indexOf(this.props.user.id) > -1) ? true : false
       })
     }
   }

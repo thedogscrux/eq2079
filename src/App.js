@@ -5,6 +5,7 @@ import PrivateRoute from './components/PrivateRoute'
 import User from './components/User'
 import Auth from './components/Auth'
 import Nav from './components/Nav'
+import InactiveUser from './components/views/InactiveUser'
 
 import Welcome from './components/views/Welcome'
 import Login from './components/views/Login'
@@ -28,6 +29,8 @@ firebase.initializeApp(firebaseConfig)
 const App = () => (
   <Router>
     <div>
+      <InactiveUser />
+
       <User />
       <Auth display='userInfo'/>
       <Nav />

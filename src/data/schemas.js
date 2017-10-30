@@ -44,8 +44,11 @@ const schemaPz = {
   },
   timeGameStarts: '00:00:00',
   timeGameEnds: '00:00:00',
-  secTillNextRoundStarts: 0,
-  round: 0,
+  timeNextRound: '00:00:00',
+  rounds: {
+    numOfRounds: 0,
+    roundSec: 0
+  },
   totalPlays: 0,
   totalPlayers: 0
 }

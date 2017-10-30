@@ -130,7 +130,7 @@ const staticPzs = [
     },
     timeGameStarts: '00:00:00',
     timeGameEnds: '00:00:00',
-    secTillNextRoundStarts: 0,
+    timeNextRound: '00:00:00',
     round: 0,
     totalPlays: 0,
     totalPlayers: 0
@@ -150,7 +150,7 @@ const staticPzs = [
     },
     timeGameStarts: '00:00:00',
     timeGameEnds: '00:00:00',
-    secTillNextRoundStarts: 0,
+    timeNextRound: '00:00:00',
     round: 0,
     totalPlays: 0,
     totalPlayers: 0
@@ -170,7 +170,7 @@ const staticPzs = [
     },
     timeGameStarts: '00:00:00',
     timeGameEnds: '00:00:00',
-    secTillNextRoundStarts: 0,
+    timeNextRound: '00:00:00',
     round: 0,
     totalPlays: 0,
     totalPlayers: 0
