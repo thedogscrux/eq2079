@@ -3,21 +3,16 @@ import React, { Component } from 'react'
 import Map from '../Map'
 import Status from '../Status'
 import Story from '../Story'
+import CheckPzCode from '../CheckPzCode'
 
 class Dashboard extends Component {
   render(){
     return(
       <div>
         <h1>Dashboard</h1>
-        <hr/>
         <Story />
         <Status />
-
-        <div className='component-wrapper add'>
-          <input type='text' placeholder='Puzzle Code' />
-          <button>Check Code</button>
-        </div>
-
+        <CheckPzCode history={this.props.history} />
         <Map />
       </div>
     )

@@ -16,7 +16,7 @@ import { propsPzs } from '../../data/propsPzs.js'
 const launchAtTotalScore = 20
 
 // Clock
-const pzLoadingSec = 10
+const pzLoadingSec = 5
 const clockOn = true
 
 class MK extends Component {
@@ -121,6 +121,15 @@ class MK extends Component {
         }
       })
     }
+  }
+
+  updateStateLaunchTotalScore(score) {
+    this.setState({
+      activeLaunch: {
+        ...this.state.activeLaunch,
+        totalScore: score
+      }
+    })
   }
 
   // updateStatePz(pzIndex, pzUpdates) {
@@ -243,6 +252,7 @@ class MK extends Component {
   // -----------------------------------------------------------------
 
   calcActiveLaunchTotalScore() {
+    let self = this
     let totalLaunchScore = 0
     this.state.users.map((user,key) => {
       if(this.state.activeLaunch && (user.launchId == this.state.activeLaunch.id) && user.status == 'active') {
@@ -251,16 +261,21 @@ class MK extends Component {
         })
       }
     })
-    this.setState({
-      activeLaunch: {
-        ...this.state.activeLaunch,
-        totalScore: totalLaunchScore
+    // this.setState({
+    //   activeLaunch: {
+    //     ...this.state.activeLaunch,
+    //     totalScore: totalLaunchScore
+    //   }
+    // })
+    firebase.database().ref('/launches/' + this.state.activeLaunch.id).update({
+      totalScore: totalLaunchScore
+    }).then(function(){
+      self.updateStateLaunchTotalScore(totalLaunchScore)
+      // check if mission complete?
+      if(totalLaunchScore >= launchAtTotalScore) {
+        self.launchRocket()
       }
     })
-    // check if mission complete?
-    if(totalLaunchScore >= launchAtTotalScore) {
-      this.launchRocket()
-    }
   }
 
   launchRocket() {

@@ -8,12 +8,12 @@ const propsPzs = [
     },
     mapPos: {
       floor: 'ground',
-      top: '50%',
+      bottom: '50%',
       left: '50%'
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 10
+      roundSec: 5
     }
   },
   {
@@ -25,7 +25,7 @@ const propsPzs = [
     },
     mapPos: {
       floor: 'ground',
-      top: '40%',
+      bottom: '40%',
       left: '25%'
     },
     rounds: {
@@ -42,7 +42,7 @@ const propsPzs = [
     },
     mapPos: {
       floor: 'ground',
-      top: '70%',
+      bottom: '70%',
       left: '80%'
     },
     rounds: {
