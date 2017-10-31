@@ -13,7 +13,7 @@ import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
 import { propsPzs } from '../../data/propsPzs.js'
 
 // Game Settings
-const launchAtTotalScore = 20
+const launchAtTotalScore = 2
 
 // Clock
 const pzLoadingSec = 5
@@ -27,7 +27,8 @@ class MK extends Component {
       activeLaunch: {},
       pastLaunches: [],
       users: [],
-      pzs: []
+      pzs: [],
+      launching: false
     }
     this.clock = this.clock.bind(this);
   }
@@ -64,7 +65,7 @@ class MK extends Component {
           return launchObj
         })
         self.updateStateLaunches(launches)
-        self.calcActiveLaunchTotalScore()
+        //self.calcActiveLaunchTotalScore()
       }
     })
     // watch users
@@ -93,6 +94,12 @@ class MK extends Component {
     this.setState({
       pastLaunches: launches,
       activeLaunch: activeLaunch
+    })
+  }
+
+  updateStateLaunching(launching) {
+    this.setState({
+      launching: launching
     })
   }
 
@@ -252,34 +259,42 @@ class MK extends Component {
   // -----------------------------------------------------------------
 
   calcActiveLaunchTotalScore() {
+    if (!this.state.activeLaunch || !this.state.activeLaunch.id) return
     let self = this
-    let totalLaunchScore = 0
+    let newScore = 0
+    let oldScore = this.state.activeLaunch.totalScore || 0
     this.state.users.map((user,key) => {
       if(this.state.activeLaunch && (user.launchId == this.state.activeLaunch.id) && user.status == 'active') {
         user.pzs.map(pz => {
-          totalLaunchScore += pz.score
+          newScore += pz.score
         })
       }
     })
+    //console.log(this.state.activeLaunch.id, ' newScore:', newScore, ' - oldScore: ', oldScore);
     // this.setState({
     //   activeLaunch: {
     //     ...this.state.activeLaunch,
-    //     totalScore: totalLaunchScore
+    //     totalScore: newScore
     //   }
     // })
-    firebase.database().ref('/launches/' + this.state.activeLaunch.id).update({
-      totalScore: totalLaunchScore
-    }).then(function(){
-      self.updateStateLaunchTotalScore(totalLaunchScore)
-      // check if mission complete?
-      if(totalLaunchScore >= launchAtTotalScore) {
-        self.launchRocket()
-      }
-    })
+    // check if mission complete?
+    if(newScore >= launchAtTotalScore && this.state.launching === false) {
+      this.setState({ launching: true })
+      this.launchRocket(newScore)
+    } else if(newScore > oldScore && this.state.launching === false) {
+      firebase.database().ref('/launches/' + this.state.activeLaunch.id).update({
+        totalScore: newScore
+      }).then(function(){
+        self.updateStateLaunchTotalScore(newScore)
+        // if(newScore >= launchAtTotalScore) {
+        //   self.launchRocket(newScore)
+        // }
+      })
+    }
   }
 
   launchRocket() {
-    console.log('*** END GAME! launch rocket! ***');
+    console.log('*** END GAME! launch rocket! ***')
     let self = this
     // get all active players
     let deactivateLaunchUsers = {}
@@ -294,7 +309,8 @@ class MK extends Component {
     })
     // end current game
     firebase.database().ref('/launches/' + this.state.activeLaunch.id).update({
-      status: 'complete'
+      status: 'complete',
+      totalScore: launchAtTotalScore
     }).then(function(){
       // deactivate current launch players
       firebase.database().ref('/users/').update(deactivateLaunchUsers).then(function(){
@@ -428,10 +444,12 @@ class MK extends Component {
   // -----------------------------------------------------------------
 
   newGame() {
+    let self = this
     let newLaunch = schemaLaunch
     newLaunch.status = 'active'
     firebase.database().ref('/launches/').push(newLaunch, function(error) {
-      console.log('New game started (callback)');
+      console.log('*** New game started ***');
+      self.updateStateLaunching(false)
     })
   }
 

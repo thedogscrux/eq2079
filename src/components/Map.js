@@ -78,7 +78,8 @@ class Map extends Component {
 
   getMyPos() {
     // EQ
-
+    // BL 47.543736, -122.328962
+    // TR 47.545308, -122.327849
     // PSquare
 
     //launch
@@ -87,10 +88,10 @@ class Map extends Component {
     // get map X/Y
     if(this.state.geoLoc.latitude != 0) {
       // make all coords whole numbers
-      let bottomLeftLngXOffset = parseInt((-122.184317 + 122) * 1000000)
-      let bottomLeftLatYOffset = parseInt((47.607082 - 47) * 1000000)
-      let topRightLngX = parseInt((-122.183145 + 122) * 1000000)
-      let topRightLatY = parseInt((47.608731 - 47) * 1000000)
+      let bottomLeftLngXOffset = parseInt((-122.328962 + 122) * 1000000)
+      let bottomLeftLatYOffset = parseInt((47.543736 - 47) * 1000000)
+      let topRightLngX = parseInt((-122.327849 + 122) * 1000000)
+      let topRightLatY = parseInt((47.545308 - 47) * 1000000)
       let myLngX = parseInt((this.state.geoLoc.longitude + 122) * 1000000)
       let myLatY = parseInt((this.state.geoLoc.latitude - 47) * 1000000)
       // offset coords
@@ -101,6 +102,11 @@ class Map extends Component {
       // convert my XY to percent and find relative pos on map
       myMapX = parseInt((myMapX / lngX100) * 100)
       myMapY = parseInt((myMapY / latY100) * 100)
+      // in case my pos is off map
+      myMapX = (myMapX <= 0) ? 2 : myMapX
+      myMapX = (myMapX >= 100) ? 98 : myMapX
+      myMapY = (myMapY <= 0) ? 2 : myMapY
+      myMapY = (myMapY >= 100) ? 98 : myMapY
       // TODO add my coords to firebase for MK to see
       let sizePx = 10
       let translateCenter = `translate(-${sizePx/2}px,-${sizePx/2}px)`
@@ -176,6 +182,7 @@ class Map extends Component {
     return(
       <div id='component-map' className='component-wrapper'>
         <h2>Map</h2>
+        My location: {this.state.geoLoc.latitude}, {this.state.geoLoc.longitude}
         <div className='map-wrapper'>
           {this.getPzs()}
           {this.getMyPos()}

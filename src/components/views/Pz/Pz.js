@@ -134,7 +134,8 @@ class Pz extends Component {
         pzPlayerIDs={this.state.pz.players}
       />
     }
-    if(this.state.pz.status == 'active') {
+    // see if you are in players list
+    if(this.state.pz.status == 'active' && this.state.pz.players && this.state.pz.players.indexOf(this.state.userID) >= 0) {
       content = <PzCode
         endGame={(score) => this.endGame(score)}
         round={this.state.pz.round}

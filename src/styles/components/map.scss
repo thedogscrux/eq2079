@@ -1,12 +1,13 @@
 @import "../global/global.scss";
 #component-map {
   .map-wrapper {
-    width: 50%;
-    padding-bottom: 100%;
+    width: 95%;
+    padding-bottom: 190%;
+    margin: auto;
     border: solid 1px #fff;
     position: relative;
     transition-duration: 0.3s;
-    background: url('../images/global/map-launch.png') top left no-repeat transparent;
+    background: url('../images/global/map.png') top left no-repeat transparent;
     background-size: contain;
     &:hover {
       background-color: rgba(255, 255, 255, .04);
