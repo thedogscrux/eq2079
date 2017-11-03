@@ -110,7 +110,7 @@ class Auth extends Component {
     let self = this
     let userNameAttempt = this.state.userNameInput
     let userPinAttempt = this.state.userPinInput
-    if(!userNameAttempt && !userPinAttempt) {
+    if(!userNameAttempt && !userPinAttempt || userNameAttempt.toLowerCase() === 'lx') {
       console.log('******************');
       console.log('*** Goodbye Lx ***');
       console.log('******************');

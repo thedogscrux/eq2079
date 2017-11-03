@@ -1,7 +1,19 @@
 const staticStory = [
-  'We choose to go to the moon in this decade and do the other things, not because they are easy, but because they are hard...',
-  '..because that goal will serve to organize and measure the best of our energies and skills...',
-  '..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.'
+  [
+    'good: We choose to go to the moon in this decade and do the other things, not because they are easy, but because they are hard...',
+    'med: We choose to go to the moon in this decade and do the other things, not because they are easy, but because they are hard...',
+    'bad: We choose to go to the moon in this decade and do the other things, not because they are easy, but because they are hard...'
+  ],
+  [
+    'good: ..because that goal will serve to organize and measure the best of our energies and skills...',
+    'med: ..because that goal will serve to organize and measure the best of our energies and skills...',
+    'bad: ..because that goal will serve to organize and measure the best of our energies and skills...'
+  ],
+  [
+    'good: ..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.',
+    'med: ..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.',
+    'bad: ..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.'
+  ]
 ]
 
 const staticLocMK = {

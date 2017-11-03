@@ -11,7 +11,8 @@ class Pz1 extends Component {
     super(props)
     this.state = {
       points: 0,
-      round: 0
+      round: 0,
+      totalScore: 10
     }
   }
 
@@ -26,8 +27,9 @@ class Pz1 extends Component {
   componentWillUnmount() {
     let self = this
     let score = this.state.points
+    let totalScore = this.state.totalScore
     firebase.database().ref('/pzs/' + pzIndex + '/status').once('value').then(function(snapshot){
-      if(snapshot.val() === 'inactive') self.props.endGame(score)
+      if(snapshot.val() === 'inactive') self.props.endGame(score, totalScore)
     })
   }
 

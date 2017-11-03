@@ -10,7 +10,8 @@ import { staticStory } from '../data/static.js'
 const mapStateToProps = (state, props) => {
   return {
     userId: state.user.id,
-    chapter: state.user.chapter
+    chapter: state.user.chapter,
+    chapterRank: state.user.chapterRank
   }
 }
 
@@ -19,6 +20,7 @@ class Story extends Component {
     super(props)
     this.state = {
       chapter: this.props.chapter,
+      chapterRank: this.props.chapterRank,
       dbaseChapter: 0
     }
 
@@ -69,7 +71,7 @@ class Story extends Component {
         Sate Chapter {this.state.chapter}<br/>
         Props Chapter {this.props.chapter}<br/>
         Dbase Chapter {this.state.dbaseChapter}<br/>
-        {staticStory[this.state.chapter]}
+        {staticStory[this.state.chapter][this.state.chapterRank]}
       </div>
     )
   }

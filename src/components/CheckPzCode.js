@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
+import { propsPzs } from '../data/propsPzs'
+
 class CheckPzCode extends Component {
   constructor(props) {
     super(props)
@@ -24,7 +26,12 @@ class CheckPzCode extends Component {
   }
 
   checkIfPzExists(pzCode) {
-    this.props.history.push('pzs/' + pzCode)
+    let pzExists = propsPzs.filter( pz => pz.code === pzCode)
+    if (pzExists.length >= 1) {
+      this.props.history.push('pzs/' + pzCode)
+    } else {
+      console.log('Pz doesnt exists.')
+    }
   }
 
   render(){
