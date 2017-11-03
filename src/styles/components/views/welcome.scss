@@ -1,0 +1,77 @@
+
+//@import "../../global/global.scss";
+
+$j: 0;
+
+// ans Intro
+$ansIntroClassSlug: ansIntroFadeIn !default;
+$ansIntroCount: 3;
+
+// ans Main
+$ansMainClassSlug: ansMainFadeIn !default;
+$ansMainCount: 7;
+
+// ans CTAs
+
+#component-welcome {
+  color: #3a9bc7;
+  .ans-show-wrapper {
+    &.hide {
+      display: none;
+    }
+    .ans {
+      animation-iteration-count: 1;
+    }
+    // ans Main
+    &.intro.play {
+      @for $i from 1 through $ansIntroCount {
+        .ans.show-#{$i} {
+          animation-duration: 5s;
+          animation-name: #{$ansIntroClassSlug}-#{$i};
+        }
+      }
+    }
+    // ans Main
+    &.main.play {
+      @for $i from 1 through $ansMainCount {
+        .ans.show-#{$i} {
+          animation-duration: 5s;
+          animation-name: #{$ansMainClassSlug}-#{$i};
+        }
+      }
+    }
+  }
+}
+
+// ans Main
+@for $i from 1 through $ansIntroCount {
+  @keyframes #{$ansIntroClassSlug}-#{$i} {
+    @for $i from 0 through $ansIntroCount {
+      #{ $i * 100 / $ansIntroCount }% {
+        @if $i <= $j {
+          opacity: 0;
+        } @else {
+          opacity: 1;
+        }
+      }
+    }
+    $j: $j + 1;
+  }
+}
+
+// ans Main
+$j: 0;
+@for $i from 1 through $ansMainCount {
+  @keyframes #{$ansMainClassSlug}-#{$i} {
+    @for $i from 0 through $ansMainCount {
+      #{ $i * 100 / $ansMainCount }% {
+        @if $i <= $j {
+          opacity: 0;
+        } @else {
+          opacity: 1;
+        }
+      }
+    }
+    $j: $j + 1;
+  }
+}

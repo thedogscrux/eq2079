@@ -119,7 +119,7 @@ class Map extends Component {
               height: sizePx + 'px',
               width: sizePx + 'px',
               transform: translateCenter,
-              backgroundColor: 'rgba(0, 0, 255, .5)'
+              backgroundColor: 'rgba(100, 100, 255, .8)'
             }}
           >
         </div>

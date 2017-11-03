@@ -35,7 +35,7 @@ const App = () => (
       <Auth display='userInfo'/>
       <Nav />
 
-      <Route path="/welcome" component={Welcome}/>
+      <Route path="/" component={Welcome}/>
       <Route path="/login" component={Login}/>
       <PrivateRoute path="/start" component={Start}/>
 

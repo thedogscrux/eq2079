@@ -6,6 +6,8 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
+import Cookies from 'js-cookie'
+
 import { setUser } from '../actions/userActions'
 
 import { schemaUser } from '../data/schemas.js'
@@ -40,7 +42,7 @@ class Auth extends Component {
   constructor(props){
     super(props)
     this.state = {
-      userNameInput: '',
+      userNameInput: Cookies.get('eq2079') || '',
       userPinInput: '',
       user: this.props.user,
       display: this.props.display,
@@ -98,6 +100,12 @@ class Auth extends Component {
     })
   }
 
+  setCookieUser(userName) {
+    let min = 60; //minutes to expire
+    var minExp = new Date(new Date().getTime() + min * 60 * 1000);
+    Cookies.set('eq2079', userName, { expires: minExp });
+  }
+
   login() {
     let self = this
     let userNameAttempt = this.state.userNameInput
@@ -121,6 +129,7 @@ class Auth extends Component {
             userResults = users[key]
             userResults.id = key
             self.updateUser(userResults)
+            self.setCookieUser(userNameAttempt)
             break
           } else {
             self.setMsg('Wrong pin.')
@@ -170,6 +179,7 @@ class Auth extends Component {
           return firebase.database().ref('/users/' + newUserId).set(user, function(error) {
             user.id = newUserId
             self.updateUser(user)
+            self.setCookieUser(userNameAttempt)
             // update total players
             firebase.database().ref('/launches/' + launchId).update({
               players: totalPlayers
@@ -181,10 +191,22 @@ class Auth extends Component {
   }
 
   render(){
+    // either send the user to the dashboard or the start screen
     if(this.state.user && this.state.redirect && this.state.display === 'formLogin') {
-      return (
-        <Redirect to='dashboard'/>
-      )
+      let totalScore = 0
+      this.state.user.pzs.map( (pz,key) => {
+        totalScore += pz.score
+      })
+      if(totalScore <= 0) {
+        // user either hasnt passed a puzzle or has just created a new account.
+        return (
+          <Redirect to='start'/>
+        )
+      } else {
+        return (
+          <Redirect to='dashboard'/>
+        )
+      }
     }
 
     let html = ''

@@ -6,7 +6,10 @@ class Start extends Component {
     return(
       <div>
         <h1>Start</h1>
-        <Link to='./dashboard'>Dashboard</Link>
+        <p>Instructions on how to play</p>
+        <p>Instructions on how to play</p>
+        <p>Instructions on how to play</p>
+        <Link to='./dashboard'>Ready to start?</Link>
       </div>
     )
   }
