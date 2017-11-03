@@ -11,7 +11,7 @@ class Pz1 extends Component {
     super(props)
     this.state = {
       points: 0,
-      round: 0,
+      round: props.round,
       totalScore: 10
     }
   }

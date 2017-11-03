@@ -161,13 +161,13 @@ class MK extends Component {
     this.state.pzs.map((pz, key) => {
       if(pz.status === 'loading') {
         // start time is reached and changes status of pz
-        if(timeNow.diff(moment(pz.timeGameStarts, 'kk:mm:ss'), 'seconds') >= 0) this.pzStart(key)
-      } else if(pz.status === 'active' && timeNow.diff(moment(pz.timeGameEnds, 'kk:mm:ss'), 'seconds') >= 0) {
+        if(timeNow.diff(moment(pz.timeGameStarts, 'kk:mm:ss'), 'seconds') > 0) this.pzStart(key)
+      } else if(pz.status === 'active' && timeNow.diff(moment(pz.timeGameEnds, 'kk:mm:ss'), 'seconds') > 0) {
         // end time is reached, end the Pz
         this.pzEnd(key)
-      } else if(pz.status === 'active' && pz.round != pz.rounds.numOfRounds) {
+      } else if(pz.status === 'active' && pz.round <= propsPzs[key].rounds.numOfRounds) {
         // end of round detected, start next round
-        if(timeNow.diff(moment(pz.timeNextRound, 'kk:mm:ss'), 'seconds') >= 0) this.pzNextRound(key)
+        if(timeNow.diff(moment(pz.timeNextRound, 'kk:mm:ss'), 'seconds') > 0) this.pzNextRound(key)
       }
     })
 
@@ -497,6 +497,8 @@ class MK extends Component {
       pz.location = pzProps.location
       pz.mapPos = pzProps.mapPos
       pz.status = 'inactive'
+      pz.rounds.numOfRounds = pzProps.rounds.numOfRounds
+      pz.rounds.roundSec = pzProps.rounds.roundSec
       return pz
     })
     firebase.database().ref('/pzs/').set(pzs)
