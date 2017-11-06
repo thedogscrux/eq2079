@@ -13,7 +13,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 5
+      roundSec: 15
     }
   },
   {

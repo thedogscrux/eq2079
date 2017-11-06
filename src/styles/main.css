@@ -30,6 +30,11 @@ button {
   .component-wrapper.add {
     background-color: rgba(255, 0, 0, 0.3); }
 
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 #component-nav a {
   display: inline-block; }
 
@@ -64,6 +69,11 @@ button {
   padding: 1%; }
   .component-wrapper.add {
     background-color: rgba(255, 0, 0, 0.3); }
+
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
 
 #component-map .map-wrapper {
   width: 95%;
@@ -313,6 +323,11 @@ button {
   .component-wrapper.add {
     background-color: rgba(255, 0, 0, 0.3); }
 
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 #component-mk h2 {
   color: black;
   background-color: white; }
@@ -325,3 +340,34 @@ button {
   margin-bottom: 20px; }
   #component-mk div.row div.col {
     flex-grow: 1; }
+
+#pipe-board-wrapper {
+  font: 16px/20px Courier, monospace;
+  width: 100%;
+  margin: auto;
+  max-width: 330px; }
+
+.pipe-round {
+  float: left;
+  width: 33%;
+  max-width: 110px; }
+
+.pipe-item {
+  display: block;
+  margin: 1%;
+  max-width: 100%; }
+  .pipe-item.solved button {
+    background-color: rgba(0, 255, 0, 0.7);
+    border-color: lime; }
+  .pipe-item button {
+    min-width: 0px;
+    font-size: 12px;
+    padding: 0; }
+    .pipe-item button img {
+      max-width: 100%; }
+
+.pipe-item:hover button {
+  background-color: #640a0a;
+  border: solid red 4px;
+  color: #fff;
+  cursor: pointer; }

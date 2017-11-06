@@ -90,11 +90,12 @@ class Pz extends Component {
 
   // CHILD FUNCS
 
-  endGame(score, totalScore) {
+  endGame(score) {
     console.log('*** END GAME ***');
     let attempts = this.props.user.pzs[this.state.pzIndex].attempts + 1
     let oldScore = this.props.user.pzs[this.state.pzIndex].score
-    let rank = (score/totalScore > .50) ? ( (score/totalScore > .85) ? 0 : 1 ) : 2
+    let totalScore = this.state.pz.totalScore
+    let rank = (score/totalScore > .50) ? ( (score/totalScore > .85) ? 1 : 2 ) : 3
     let chapter = (attempts === 1) ? this.props.user.chapter + 1 : this.props.user.chapter
     let pzCode = this.state.pzCode
     let refPz = '/users/' + this.props.user.id + '/pzs/' + this.state.pzIndex
@@ -106,7 +107,7 @@ class Pz extends Component {
     let val = {
       attempts: attempts,
       code: pzCode,
-      score: score,
+      score: score/totalScore,
       rank: rank
     }
     this.props.setUserPz(this.state.pzIndex, val) // update app state for user pz
@@ -141,8 +142,9 @@ class Pz extends Component {
     // see if you are in players list
     if(this.state.pz.status == 'active' && this.state.pz.players && this.state.pz.players.indexOf(this.state.userID) >= 0) {
       content = <PzCode
-        endGame={(score, totalScore) => this.endGame(score, totalScore)}
+        endGame={(score) => this.endGame(score)}
         round={this.state.pz.round}
+        user={this.props.user}
       />
     } else {
       content = <PzStart

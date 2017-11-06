@@ -12,11 +12,14 @@ import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
 import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
 import { propsPzs } from '../../data/propsPzs.js'
 
+import { genSettings } from '../pzs/pz1/Pz1'
+
+
 // Game Settings
-const launchAtTotalScore = 2
+const launchAtTotalScore = 20
 
 // Clock
-const pzLoadingSec = 5
+const pzLoadingSec = 10
 const clockOn = true
 
 class MK extends Component {
@@ -214,6 +217,7 @@ class MK extends Component {
   }
 
   pzStart(pzIndex) {
+    console.log('** start pz **')
     //set the status, round 1 and time of next round (if any)
     let timeNextRound = moment().tz('America/Los_Angeles')
     timeNextRound.add(propsPzs[pzIndex].rounds.roundSec, 's')
@@ -222,7 +226,13 @@ class MK extends Component {
       round: 1,
       timeNextRound: (propsPzs[pzIndex].rounds.numOfRounds > 1) ? timeNextRound.format("kk:mm:ss") : '00:00:00'
     }
-    firebase.database().ref('/pzs/' + pzIndex).update(update)
+    firebase.database().ref('/pzs/' + pzIndex + '/players').once('value').then(function(snapshot){
+      let totalScore = genSettings({
+        players: snapshot.val()
+      })
+      update.totalScore = totalScore
+      firebase.database().ref('/pzs/' + pzIndex).update(update)
+    })
   }
 
   pzNextRound(pzIndex) {
@@ -278,6 +288,7 @@ class MK extends Component {
     //   }
     // })
     // check if mission complete?
+    newScore = parseInt(newScore)
     if(newScore >= launchAtTotalScore && this.state.launching === false) {
       this.setState({ launching: true })
       this.launchRocket(newScore)
@@ -490,7 +501,8 @@ class MK extends Component {
         timeNextRound: '00:00:00',
         round: 0,
         totalPlays: 0,
-        totalPlayers: 0
+        totalPlayers: 0,
+        totalScore: 0
       }
       pz.name = pzProps.name
       pz.code = pzProps.code

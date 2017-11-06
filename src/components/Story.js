@@ -71,7 +71,7 @@ class Story extends Component {
         Sate Chapter {this.state.chapter}<br/>
         Props Chapter {this.props.chapter}<br/>
         Dbase Chapter {this.state.dbaseChapter}<br/>
-        {staticStory[this.state.chapter][this.state.chapterRank]}
+        {staticStory[this.state.chapter][this.state.chapterRank-1]}
       </div>
     )
   }

@@ -18,7 +18,8 @@ class Pz2 extends Component {
     super(props)
     this.state = {
       points: 0,
-      totalScore: 10
+      totalScore: 10,
+      round: props.round
     }
   }
 
