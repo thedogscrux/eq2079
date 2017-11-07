@@ -17,10 +17,20 @@ import pz1 from '../../pzs/pz1/Pz1'
 import pz2 from '../../pzs/pz2/Pz2'
 import pz3 from '../../pzs/pz3/Pz3'
 
+import clock0 from '../../../images/pz/clock/clock-0.svg'
+import clock1 from '../../../images/pz/clock/clock-1.svg'
+import clock2 from '../../../images/pz/clock/clock-2.svg'
+import clock3 from '../../../images/pz/clock/clock-3.svg'
+import clock4 from '../../../images/pz/clock/clock-4.svg'
+
 const pzMap = {
   pz1,
   pz2,
   pz3
+}
+
+const clockMap = {
+  clock0, clock1, clock2, clock3, clock4
 }
 
 const mapStateToProps = (state, props) => {
@@ -141,10 +151,12 @@ class Pz extends Component {
     }
     // see if you are in players list
     if(this.state.pz.status == 'active' && this.state.pz.players && this.state.pz.players.indexOf(this.state.userID) >= 0) {
+      let clockImg = clockMap['clock' +  this.state.pz.clock]
       content = <PzCode
         endGame={(score) => this.endGame(score)}
         round={this.state.pz.round}
         user={this.props.user}
+        clock={clockImg}
       />
     } else {
       content = <PzStart

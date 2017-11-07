@@ -6,6 +6,9 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 
+import clock0 from '../../../images/pz/clock/clock-0.svg'
+import clock4 from '../../../images/pz/clock/clock-4.svg'
+
 import item00 from './images/0-0.jpg'
 import item01 from './images/0-1.jpg'
 import item02 from './images/0-2.jpg'
@@ -41,7 +44,8 @@ class Pz1 extends Component {
       points: 0,
       round: props.round,
       totalScore: 0,
-      user: props.user
+      user: props.user,
+      clock: props.clock
     }
     this.state = {
       ...baseSate,
@@ -71,7 +75,8 @@ class Pz1 extends Component {
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
       this.setState({
-        round: nextProps.round
+        round: nextProps.round,
+        clock: nextProps.clock,
       })
     }
   }
@@ -271,8 +276,18 @@ class Pz1 extends Component {
               </div>)
 
             })
+
+            let clock = this.state.clock
+            if(this.state.round > rowIndex + 1) {
+              clock = clock4
+            } else if(this.state.round < rowIndex + 1) {
+              clock = clock0
+            }
             return (
-              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex+1) ? {border: 'solid 1px red'} : {border: 'none', pointerEvents: 'none'}}>{inner}</div>
+              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex+1) ? {border: 'solid 1px red'} : {border: 'none', pointerEvents: 'none'}}>
+                <img src={clock} width="50px" />
+                {inner}
+              </div>
             )
           })}
         </div>

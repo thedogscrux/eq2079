@@ -19,7 +19,7 @@ import { genSettings } from '../pzs/pz1/Pz1'
 const launchAtTotalScore = 20
 
 // Clock
-const pzLoadingSec = 10
+const pzLoadingSec = 5
 const clockOn = true
 
 class MK extends Component {
@@ -169,8 +169,16 @@ class MK extends Component {
         // end time is reached, end the Pz
         this.pzEnd(key)
       } else if(pz.status === 'active' && pz.round <= propsPzs[key].rounds.numOfRounds) {
-        // end of round detected, start next round
-        if(timeNow.diff(moment(pz.timeNextRound, 'kk:mm:ss'), 'seconds') > 0) this.pzNextRound(key)
+        if(timeNow.diff(moment(pz.timeNextRound, 'kk:mm:ss'), 'seconds') > 0) {
+          // end of round detected, start next round
+          this.pzNextRound(key)
+        } else {
+          if ( timeNow.diff(moment(pz.timeGameStarts, 'kk:mm:ss'), 'seconds') >
+            ( (pz.round * pz.rounds.roundSec) - (pz.rounds.roundSec - (pz.rounds.clockInterval*pz.clock)) ) ) {
+            // basically: if NOW is after the END of the round, minus the amount of seconds in an interval
+            this.pzUpdateClock(key)
+          }
+        }
       }
     })
 
@@ -206,6 +214,7 @@ class MK extends Component {
     timeGameEnds.add(pzLoadingSec + roundTotalSec, 's')
     // set the timeNextRound
     // TODO is this needed?
+    // TODO clean up clock. calculate all roundEndTimes and place in array at beggining of game
     let update = {
       status: 'loading',
       timeGameStarts: timeGameStarts.format("kk:mm:ss"),
@@ -224,6 +233,7 @@ class MK extends Component {
     let update = {
       status: 'active',
       round: 1,
+      clock: 0,
       timeNextRound: (propsPzs[pzIndex].rounds.numOfRounds > 1) ? timeNextRound.format("kk:mm:ss") : '00:00:00'
     }
     firebase.database().ref('/pzs/' + pzIndex + '/players').once('value').then(function(snapshot){
@@ -235,6 +245,14 @@ class MK extends Component {
     })
   }
 
+  pzUpdateClock(pzIndex) {
+    // TODO fix hack of forcing it to be 4
+    let clock = (this.state.pzs[pzIndex].clock >= 4) ? 4 : this.state.pzs[pzIndex].clock + 1
+    firebase.database().ref('/pzs/' + pzIndex).update({
+      clock: clock
+    })
+  }
+
   pzNextRound(pzIndex) {
     //set the round # and time of next round (if any)
     let newRoundNum = this.state.pzs[pzIndex].round + 1
@@ -242,7 +260,8 @@ class MK extends Component {
     timeNextRound.add(propsPzs[pzIndex].rounds.roundSec, 's')
     let update = {
       round: newRoundNum,
-      timeNextRound: timeNextRound.format("kk:mm:ss")
+      timeNextRound: timeNextRound.format("kk:mm:ss"),
+      clock: 0
     }
     firebase.database().ref('/pzs/' + pzIndex).update(update)
   }
@@ -258,6 +277,7 @@ class MK extends Component {
       timeGameEnds: '00:00:00',
       timeNextRound: '00:00:00',
       round: 0,
+      clock: 0,
       totalPlays: newTotalPlays,
       totalPlayers: newTotalPlayers
     }
@@ -500,6 +520,7 @@ class MK extends Component {
         timeGameEnds: '00:00:00',
         timeNextRound: '00:00:00',
         round: 0,
+        clock: 0,
         totalPlays: 0,
         totalPlayers: 0,
         totalScore: 0
@@ -511,6 +532,7 @@ class MK extends Component {
       pz.status = 'inactive'
       pz.rounds.numOfRounds = pzProps.rounds.numOfRounds
       pz.rounds.roundSec = pzProps.rounds.roundSec
+      pz.rounds.clockInterval = pzProps.rounds.clockInterval
       return pz
     })
     firebase.database().ref('/pzs/').set(pzs)
