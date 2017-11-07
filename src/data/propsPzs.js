@@ -13,8 +13,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 10,
-      clockInterval: 10/4
+      roundSec: 30
     }
   },
   {
@@ -31,8 +30,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 1,
-      roundSec: 10,
-      clockInterval: 10/4
+      roundSec: 10
     }
   },
   {
@@ -49,8 +47,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 1,
-      roundSec: 10,
-      clockInterval: 10/4
+      roundSec: 10
     }
   }
 ]

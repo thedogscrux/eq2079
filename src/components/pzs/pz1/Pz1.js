@@ -241,9 +241,11 @@ class Pz1 extends Component {
               let userId = this.state.rounds[rowIndex][colIndex].user
               let userCode = this.state.rounds[rowIndex][colIndex].code
               const itemImage = itemMap['item' + rowIndex + colIndex]
-              // console.log('------');
-              // console.log('userId',userId);
-              // console.log('this.props.user.id',this.props.user.id);
+              let ansCode = ''
+              let myCode = (this.state.myItemPos[rowIndex]) ?this.state.myItemPos[rowIndex].code : ''
+              if( ( this.state.myItemPos[this.state.round-1] && (userCode == myCode) ) || this.state.rounds[rowIndex][colIndex].ans ) {
+                ansCode = userCode
+              }
 
               return (
                 <div key={key} className={(this.state.rounds[rowIndex][colIndex].ans) ? 'pipe-item solved' : 'pipe-item'}>
@@ -268,6 +270,7 @@ class Pz1 extends Component {
                   data-ans={userCode}
                   >
                     <img src={itemImage} /><br/>
+                      {ansCode}
                       {/*item{rowIndex}{colIndex}.jpg<br/>
                       {userId.substr(userId.length - 5)}*/}
                     {/*}<input type='text' placeholder='Item Code' value={this.state.guessCode} onChange={this.handleChangeGuessCode} /><br/>
@@ -284,7 +287,7 @@ class Pz1 extends Component {
               clock = clock0
             }
             return (
-              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex+1) ? {border: 'solid 1px red'} : {border: 'none', pointerEvents: 'none'}}>
+              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex+1) ? {border: 'solid 1px red', opacity: '1'} : {border: 'none', pointerEvents: 'none', opacity: '.2'}}>
                 <img src={clock} width="50px" />
                 {inner}
               </div>
@@ -293,10 +296,10 @@ class Pz1 extends Component {
         </div>
           <hr/>
           <br/><br/>
-          <div style={{float: 'left', width: '45%', border: 'solid 1px gray', padding: '1%', textAlign: 'center'}}>
+          {/*}<div style={{float: 'left', width: '45%', border: 'solid 1px gray', padding: '1%', textAlign: 'center'}}>
             <img src={(typeof this.state.myItemPos[this.state.round-1] !== 'undefined') ? this.state.myItemPos[this.state.round-1].src : ''} /><br/>
             <h2>{(typeof this.state.myItemPos[this.state.round-1] !== 'undefined') ? this.state.myItemPos[this.state.round-1].code : ''}</h2>
-          </div>
+          </div>*/}
           <div style={{float: 'left', width: '45%', border: 'solid 1px gray', padding: '1%', textAlign: 'center'}}>
             <img src={this.state.selectedImgSrc} /><br/>
             <input type='text' id='itemCode' placeholder='Item Code' value={this.state.guessCode} onChange={this.handleChangeGuessCode} /><br/>

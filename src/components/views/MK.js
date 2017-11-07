@@ -173,8 +173,9 @@ class MK extends Component {
           // end of round detected, start next round
           this.pzNextRound(key)
         } else {
+          let clockInterval = pz.rounds.roundSec / 4
           if ( timeNow.diff(moment(pz.timeGameStarts, 'kk:mm:ss'), 'seconds') >
-            ( (pz.round * pz.rounds.roundSec) - (pz.rounds.roundSec - (pz.rounds.clockInterval*pz.clock)) ) ) {
+            ( (pz.round * pz.rounds.roundSec) - (pz.rounds.roundSec - (clockInterval*pz.clock)) ) ) {
             // basically: if NOW is after the END of the round, minus the amount of seconds in an interval
             this.pzUpdateClock(key)
           }
@@ -532,7 +533,6 @@ class MK extends Component {
       pz.status = 'inactive'
       pz.rounds.numOfRounds = pzProps.rounds.numOfRounds
       pz.rounds.roundSec = pzProps.rounds.roundSec
-      pz.rounds.clockInterval = pzProps.rounds.clockInterval
       return pz
     })
     firebase.database().ref('/pzs/').set(pzs)
