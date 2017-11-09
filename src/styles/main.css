@@ -4,7 +4,7 @@ body {
   font: 12px/20px Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8; }
+  opacity: .5; }
 
 a {
   color: white;
@@ -44,7 +44,7 @@ body {
   font: 12px/20px Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8; }
+  opacity: .5; }
 
 a {
   color: white;
@@ -297,7 +297,7 @@ body {
   font: 12px/20px Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8; }
+  opacity: .5; }
 
 a {
   color: white;
@@ -371,3 +371,17 @@ button {
   border: solid red 4px;
   color: #fff;
   cursor: pointer; }
+
+#shape-board-wrapper .bar {
+  height: 20px;
+  margin: 10px 0; }
+  #shape-board-wrapper .bar button {
+    width: 20%;
+    margin: 0;
+    border: solid #fff 1px;
+    height: 20px;
+    display: inline-block;
+    background-color: transparent;
+    border: none; }
+    #shape-board-wrapper .bar button.active {
+      background-color: #000; }

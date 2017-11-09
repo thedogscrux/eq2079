@@ -49,6 +49,40 @@ const propsPzs = [
       numOfRounds: 1,
       roundSec: 10
     }
+  },
+  {
+    name: 'Pz 4 Shape',
+    code: 'pz4',
+    location: {
+      lat: 0,
+      long: 0
+    },
+    mapPos: {
+      floor: 'ground',
+      bottom: '10%',
+      left: '20%'
+    },
+    rounds: {
+      numOfRounds: 2,
+      roundSec: 300
+    }
+  },
+  {
+    name: 'Pz 5',
+    code: 'pz5',
+    location: {
+      lat: 0,
+      long: 0
+    },
+    mapPos: {
+      floor: 'ground',
+      bottom: '10%',
+      left: '20%'
+    },
+    rounds: {
+      numOfRounds: 2,
+      roundSec: 20
+    }
   }
 ]
 

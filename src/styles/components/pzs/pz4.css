@@ -1,0 +1,13 @@
+#shape-board-wrapper .bar {
+  height: 20px;
+  margin: 10px 0; }
+  #shape-board-wrapper .bar button {
+    width: 20%;
+    margin: 0;
+    border: solid #fff 1px;
+    height: 20px;
+    display: inline-block;
+    background-color: transparent;
+    border: none; }
+    #shape-board-wrapper .bar button.active {
+      background-color: #000; }

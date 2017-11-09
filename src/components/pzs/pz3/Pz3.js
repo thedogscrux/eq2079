@@ -43,7 +43,7 @@ class Pz3 extends Component {
   render(){
     return(
       <div className='component-wrapper'>
-        <h1>Pz One</h1>
+        <h1>Pz Three</h1>
         Round: {this.state.round}<br/>
         <button onClick={() => this.getPoint()}>Points {this.state.points}</button>
       </div>
@@ -51,4 +51,12 @@ class Pz3 extends Component {
   }
 }
 
+const genSettingsPz3 = (props) => {
+  return 100
+}
+
 export default Pz3
+
+export {
+  genSettingsPz3
+}

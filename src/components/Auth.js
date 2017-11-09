@@ -173,6 +173,14 @@ class Auth extends Component {
               code: 'pz3',
               attempts: 0,
               score: 0.00
+            },{
+              code: 'pz4',
+              attempts: 0,
+              score: 0.00
+            },{
+              code: 'pz5',
+              attempts: 0,
+              score: 0.00
             }
           ]
           var newUserId = firebase.database().ref('/users/').push().key // Get a key for a new Post.

@@ -12,8 +12,19 @@ import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
 import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
 import { propsPzs } from '../../data/propsPzs.js'
 
-import { genSettings } from '../pzs/pz1/Pz1'
+import { genSettingsPz1 } from '../pzs/pz1/Pz1'
+import { genSettingsPz2 } from '../pzs/pz2/Pz2'
+import { genSettingsPz3} from '../pzs/pz3/Pz3'
+import { genSettingsPz4 } from '../pzs/pz4/Pz4'
+import { genSettingsPz5 } from '../pzs/pz5/Pz5'
 
+const pzSettingsMap = {
+  genSettingsPz1,
+  genSettingsPz2,
+  genSettingsPz3,
+  genSettingsPz4,
+  genSettingsPz5
+}
 
 // Game Settings
 const launchAtTotalScore = 20
@@ -238,7 +249,7 @@ class MK extends Component {
       timeNextRound: (propsPzs[pzIndex].rounds.numOfRounds > 1) ? timeNextRound.format("kk:mm:ss") : '00:00:00'
     }
     firebase.database().ref('/pzs/' + pzIndex + '/players').once('value').then(function(snapshot){
-      let totalScore = genSettings({
+      let totalScore = pzSettingsMap['genSettingsPz' + (pzIndex+1)]({
         players: snapshot.val()
       })
       update.totalScore = totalScore

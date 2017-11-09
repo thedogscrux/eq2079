@@ -6,6 +6,9 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
+import moment from 'moment'
+import tz from 'moment-timezone'
+
 import { setUserPz } from '../../../actions/userActions'
 
 import PzStart from './PzStart'
@@ -16,6 +19,8 @@ import { propsPzs } from '../../../data/propsPzs.js'
 import pz1 from '../../pzs/pz1/Pz1'
 import pz2 from '../../pzs/pz2/Pz2'
 import pz3 from '../../pzs/pz3/Pz3'
+import pz4 from '../../pzs/pz4/Pz4'
+import pz5 from '../../pzs/pz5/Pz5'
 
 import clock0 from '../../../images/pz/clock/clock-0.svg'
 import clock1 from '../../../images/pz/clock/clock-1.svg'
@@ -26,7 +31,9 @@ import clock4 from '../../../images/pz/clock/clock-4.svg'
 const pzMap = {
   pz1,
   pz2,
-  pz3
+  pz3,
+  pz4,
+  pz5
 }
 
 const clockMap = {
@@ -100,6 +107,32 @@ class Pz extends Component {
 
   // CHILD FUNCS
 
+  endRound() {
+    //set the round # and time of next round (if any)
+    let newRoundNum = this.state.pz.round + 1
+    if (newRoundNum <= propsPzs[this.state.pzIndex].rounds.numOfRounds) {
+      console.log('*** END ROUND ***');
+      // go to next round
+      let timeNextRound = moment().tz('America/Los_Angeles')
+      timeNextRound.add(propsPzs[this.state.pzIndex].rounds.roundSec, 's')
+      let update = {
+        round: newRoundNum,
+        timeNextRound: timeNextRound.format("kk:mm:ss"),
+        clock: 0
+      }
+      firebase.database().ref('/pzs/' + this.state.pzIndex).update(update)
+    } else {
+      console.log('*** END GAME ***');
+      // end the game
+      // hack job: end the game by setting end time to past to let MK do the job
+      let timeInPast = moment().tz('America/Los_Angeles')
+      timeInPast.subtract(1, 's')
+      firebase.database().ref('/pzs/' + this.state.pzIndex).update({
+        timeGameEnds: timeInPast.format("kk:mm:ss")
+      })
+    }
+  }
+
   endGame(score) {
     console.log('*** END GAME ***');
     let attempts = this.props.user.pzs[this.state.pzIndex].attempts + 1
@@ -154,6 +187,7 @@ class Pz extends Component {
       let clockImg = clockMap['clock' +  this.state.pz.clock]
       content = <PzCode
         endGame={(score) => this.endGame(score)}
+        endRound={() => this.endRound()}
         round={this.state.pz.round}
         user={this.props.user}
         clock={clockImg}

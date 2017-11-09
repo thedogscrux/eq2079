@@ -49,8 +49,16 @@ class Pz2 extends Component {
   }
 }
 
+const genSettingsPz2 = (props) => {
+  return 100
+}
+
 const Pz2Container = connect(
   mapStateToProps
 )(Pz2)
 
 export default Pz2Container
+
+export {
+  genSettingsPz2
+}

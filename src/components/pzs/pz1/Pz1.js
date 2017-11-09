@@ -98,8 +98,7 @@ class Pz1 extends Component {
   // TODO is this func necessary? redunant of setStateBoard()
   getSettings() {
     var self = this
-    let once = firebase.database().ref('/boards/pz1/').once('value')
-    .then(function(snapshot){
+    let once = firebase.database().ref('/boards/pz1/').once('value').then(function(snapshot){
       if(self._ismounted) {
         self.setStateBoard(snapshot.val())
       } else {
@@ -316,7 +315,7 @@ class Pz1 extends Component {
 
 // FUNCS
 
-const genSettings = (props) => {
+const genSettingsPz1 = (props) => {
   console.log('** generate settings **')
   // generate user items
   let settings = []
@@ -365,5 +364,5 @@ const shuffle = (array) => {
 export default Pz1
 
 export {
-  genSettings
+  genSettingsPz1
 }
