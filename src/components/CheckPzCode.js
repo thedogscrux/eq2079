@@ -26,10 +26,11 @@ class CheckPzCode extends Component {
   }
 
   checkIfPzExists(pzCode) {
-    let pzExists = propsPzs.filter( pz => pz.code === pzCode)
+    let pzExists = propsPzs.filter( pz => pz.code.toLowerCase() === pzCode.toLowerCase())
     if (pzExists.length >= 1) {
-      this.props.history.push('pzs/' + pzCode)
+      this.props.history.push('pzs/' + pzCode.toLowerCase())
     } else {
+      alert('Invalid Code')
       console.log('Pz doesnt exists.')
     }
   }

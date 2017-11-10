@@ -10,7 +10,7 @@ body {
   font: 12px/20px Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .5;
+  opacity: .8;
 }
 
 a {
@@ -25,6 +25,7 @@ button {
   border: solid 1px $colorWhite;
   display: block;
   margin: 1% 0;
+  padding: 10px 30px;
 }
 
 input[type='submit'],

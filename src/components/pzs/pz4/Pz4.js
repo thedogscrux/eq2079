@@ -10,15 +10,16 @@ import clock0 from '../../../images/pz/clock/clock-0.svg'
 import clock4 from '../../../images/pz/clock/clock-4.svg'
 
 import shape01 from './images/PzShape01.svg'
+import shape02 from './images/PzShape02.svg'
 
 import { propsPzs } from '../../../data/propsPzs.js'
 
 const pzIndex = 3
 const pzProps = propsPzs[pzIndex]
 
-const shapeMap = {
-  shape01
-}
+const shapeMap = [
+  shape01, shape02
+]
 
 class Pz4 extends Component {
   constructor(props){
@@ -233,41 +234,42 @@ class Pz4 extends Component {
       let bgColor = 'gray'
       switch (bar.index) {
         case 0:
-          bgColor = 'rgb(40,20,80)'
+          bgColor = 'rgb(204,0,0)'
           break;
         case 1:
-          bgColor = 'rgb(80,40,0)'
+          bgColor = 'rgb(204,204,0)'
           break;
         case 2:
-          bgColor = 'rgb(120,80,40)'
+          bgColor = 'rgb(0,102,204)'
           break;
         case 3:
-          bgColor = 'rgb(160,120,80)'
+          bgColor = 'rgb(0,153,0)'
           break;
         case 4:
-          bgColor = 'rgb(20,80,40)'
+          bgColor = 'rgb(153,0,204)'
           break;
         case 5:
-          bgColor = 'rgb(40,80,120)'
+          bgColor = 'rgb(204,102,0)'
           break;
       }
       // check position of bar
       let position = this.state.board.bars[barKey].position
       return (
         <div key={barKey} style={{ backgroundColor: bgColor }} className='bar'>
-          <button onClick={() => this.updateBarPos(barKey, bar.index, 0)} className={(position === 0) ? 'active' : ''}>index: {bar.index} , pos: {bar.position} , {bar.solution}</button>
-          <button onClick={() => this.updateBarPos(barKey, bar.index, 1)} className={(position === 1) ? 'active' : ''}>pos: {bar.position} , {bar.solution}</button>
-          <button onClick={() => this.updateBarPos(barKey, bar.index, 2)} className={(position === 2) ? 'active' : ''}>pos: {bar.position} , {bar.solution}</button>
-          <button onClick={() => this.updateBarPos(barKey, bar.index, 3)} className={(position === 3) ? 'active' : ''}>pos: {bar.position} , {bar.solution}</button>
-          <button onClick={() => this.updateBarPos(barKey, bar.index, 4)} className={(position === 4) ? 'active' : ''}>pos: {bar.position} , {bar.solution}</button>
+          <button onClick={() => this.updateBarPos(barKey, bar.index, 0)} className={(position === 0) ? 'active' : ''}>{/*index: {bar.index} , pos: {bar.position} , {bar.solution}*/}</button>
+          <button onClick={() => this.updateBarPos(barKey, bar.index, 1)} className={(position === 1) ? 'active' : ''}>{/*index: {bar.index} , pos: {bar.position} , {bar.solution}*/}</button>
+          <button onClick={() => this.updateBarPos(barKey, bar.index, 2)} className={(position === 2) ? 'active' : ''}>{/*index: {bar.index} , pos: {bar.position} , {bar.solution}*/}</button>
+          <button onClick={() => this.updateBarPos(barKey, bar.index, 3)} className={(position === 3) ? 'active' : ''}>{/*index: {bar.index} , pos: {bar.position} , {bar.solution}*/}</button>
+          <button onClick={() => this.updateBarPos(barKey, bar.index, 4)} className={(position === 4) ? 'active' : ''}>{/*index: {bar.index} , pos: {bar.position} , {bar.solution}*/}</button>
         </div>
       )
     })
+    let shape = shapeMap[this.state.round-1]
     return(
       <div id="shape-board-wrapper" className='component-wrapper'>
         <img src={this.state.clock} width="50px" />
         {htmlBars}
-        <img src={shape01} />
+        {/*}<img src={shape} />*/}
       </div>
     )
   }
@@ -295,7 +297,11 @@ const genSettingsPz4 = (props) => {
     // settings = rounds[#][users][#] (without user data)
     // SHUFFLE BARS and determine solution
     let shuffledBars = shuffle([0, 1, 2, 3, 4, 5])
-    let solution = [ 1, 1, 2, 2, 3, 3 ]
+    let solutions = [
+      [ 1, 1, 1, 2, 2, 2 ],
+      [ 3, 4, 0, 1, 4, 1 ]
+    ]
+    let solution = solutions[round]
     // DEAL BARS to users
     let userIndex = 0
     shuffledBars.forEach(index => {

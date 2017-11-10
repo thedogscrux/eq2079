@@ -123,7 +123,7 @@ class Auth extends Component {
       let users = snapshot.val()
       let userResults = null
       for (var key in users) {
-        if(users[key].name.toLowerCase() === userNameAttempt.toLowerCase()) {
+        if(users[key].name && users[key].name.toLowerCase() === userNameAttempt.toLowerCase()) {
           if(parseInt(users[key].pin) === parseInt(userPinAttempt)) {
             //if name matches, login and load user data
             userResults = users[key]
