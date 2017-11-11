@@ -16,15 +16,15 @@ class Nav extends Component {
         <Link to="/welcome">Welcome</Link>
         <Link to="/login">Login</Link>
         <Link to="/start">Start</Link>
-        -------
+        <br/>
         <Link to="/dashboard">Dashboard</Link>
         <Link to='/pzs'>Pzs</Link>
-        <Link to='/pzs/pz1'>Pz One</Link>
-        <Link to='/pzs/pz2'>Pz Two</Link>
-        <Link to='/pzs/pz3'>Pz Three</Link>
+        <Link to='/pzs/pz1'>Pz 1 (pipes)</Link>
+        <Link to='/pzs/pz2'>Pz 2 (jigsaw)</Link>
+        <Link to='/pzs/pz3'>Pz 3</Link>
         <Link to='/pzs/pz4'>Pz 4 (shape)</Link>
         <Link to='/pzs/pz5'>Pz 5</Link>
-        -------
+        <br/>
         <Link to="/mk">Mission Kontrol</Link>
         <Link to="/projector">Projector</Link>
       </div>

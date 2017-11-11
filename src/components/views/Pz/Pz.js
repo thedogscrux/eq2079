@@ -109,7 +109,7 @@ class Pz extends Component {
 
   endRound() {
     //set the round # and time of next round (if any)
-    let newRoundNum = this.state.pz.round + 1
+    let newRoundNum = this.state.pz.round+1
     if (newRoundNum <= propsPzs[this.state.pzIndex].rounds.numOfRounds) {
       console.log('*** END ROUND ***');
       // go to next round

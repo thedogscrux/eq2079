@@ -169,12 +169,12 @@ class Pz5 extends Component {
     console.log('BUILD BOARD',this.state.rounds);
     let userId = this.props.user.id
     //let userBars = {}
-    //let roundUsers = this.state.rounds[this.state.round-1].users
+    //let roundUsers = this.state.rounds[this.state.round-0].users
     // filter 1
-    let roundKey = (round) ? round-1 : this.state.round-1
+    let roundKey = (round) ? round-0 : this.state.round-0
     let roundUser = this.state.rounds[roundKey].users.filter( user => user.user == userId )
     // filter 2
-    // let roundUsers = this.state.rounds[this.state.round-1].users
+    // let roundUsers = this.state.rounds[this.state.round-0].users
     // let roundUser = roundUsers.filter( user => user.user == userId )
     let userBars = roundUser[0].bars.map( bar => {
       return {
@@ -361,7 +361,7 @@ class Pz5 extends Component {
     // const html = Object.keys(this.state.rounds).map( (key, roundIndex) => {
     //   let htmlBars = ''
     //   let round = this.state.rounds[roundIndex]
-    //   if(roundIndex == this.state.round-1) {
+    //   if(roundIndex == this.state.round-0) {
     //     // get the users for this round
     //     htmlBars = Object.keys(round).map( (key, userIndex) => {
     //       // loop thru the user

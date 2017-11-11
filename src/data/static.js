@@ -13,6 +13,11 @@ const staticStory = [
     'good: ..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.',
     'med: ..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.',
     'bad: ..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.'
+  ],
+  [
+    'good: ..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.',
+    'med: ..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.',
+    'bad: ..because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win.'
   ]
 ]
 

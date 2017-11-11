@@ -244,7 +244,7 @@ class MK extends Component {
     timeNextRound.add(propsPzs[pzIndex].rounds.roundSec, 's')
     let update = {
       status: 'active',
-      round: 1,
+      round: 0,
       clock: 0,
       timeNextRound: (propsPzs[pzIndex].rounds.numOfRounds > 1) ? timeNextRound.format("kk:mm:ss") : '00:00:00'
     }
@@ -267,7 +267,7 @@ class MK extends Component {
 
   pzNextRound(pzIndex) {
     //set the round # and time of next round (if any)
-    let newRoundNum = this.state.pzs[pzIndex].round + 1
+    let newRoundNum = this.state.pzs[pzIndex].round+1
     let timeNextRound = moment().tz('America/Los_Angeles')
     timeNextRound.add(propsPzs[pzIndex].rounds.roundSec, 's')
     let update = {
@@ -288,7 +288,7 @@ class MK extends Component {
       timeGameStarts: '00:00:00',
       timeGameEnds: '00:00:00',
       timeNextRound: '00:00:00',
-      round: 0,
+      round: -1,
       clock: 0,
       totalPlays: newTotalPlays,
       totalPlayers: newTotalPlayers
@@ -531,7 +531,7 @@ class MK extends Component {
         timeGameStarts: '00:00:00',
         timeGameEnds: '00:00:00',
         timeNextRound: '00:00:00',
-        round: 0,
+        round: -1,
         clock: 0,
         totalPlays: 0,
         totalPlayers: 0,

@@ -97,8 +97,8 @@ class Pz4 extends Component {
     var self = this
     let once = firebase.database().ref('/boards/pz4').once('value').then(function(snapshot){
       if(self._ismounted) {
-        console.log('1 - SET settings');
-        self.setStateRounds(snapshot.val())
+        // console.log('1 - SET settings');
+        // self.setStateRounds(snapshot.val())
       } else {
         console.log('2 - SET settings');
         self.setStateRounds(snapshot.val())
@@ -112,10 +112,10 @@ class Pz4 extends Component {
 
   setStateRounds(settings){
     if(this._ismounted) {
-      console.log('3 - SET settings');
-      this.setState({
-        rounds: settings.rounds
-      })
+      // console.log('3 - SET settings');
+      // this.setState({
+      //   rounds: settings.rounds
+      // })
       //this.getMyItemPos()
     } else {
       console.log('4 - SET settings');
@@ -129,7 +129,7 @@ class Pz4 extends Component {
   buildStateBoard(round) {
     console.log('* build board *');
     let userId = this.props.user.id
-    let roundKey = (round) ? round-1 : this.state.round-1
+    let roundKey = (round) ? round-0 : this.state.round-0
     let roundUser = this.state.rounds[roundKey].users.filter( user => user.userId == userId )
     let userBars = roundUser[0].bars.map( bar => {
       return {
@@ -149,7 +149,7 @@ class Pz4 extends Component {
     // loop thru all users in round to find me
     let userKey = -1
     let userId = this.props.user.id
-    this.state.rounds[this.state.round-1].users.filter((user,key) => {
+    this.state.rounds[this.state.round-0].users.filter((user,key) => {
       if (user.userId == userId) userKey = key
       return
     })
@@ -200,7 +200,7 @@ class Pz4 extends Component {
       if (newBars[barKey].solution !== newBars[barKey].position) valid = false
     })
     if (this.state.valid != valid) {
-      let refUsers = '/boards/pz4/rounds/' + (this.state.round-1) + '/users/'
+      let refUsers = '/boards/pz4/rounds/' + (this.state.round-0) + '/users/'
       if (valid) {
         console.log('*** user items all valid! ***');
         this.setState({ valid: true })
@@ -263,7 +263,7 @@ class Pz4 extends Component {
         </div>
       )
     })
-    let shape = shapeMap[this.state.round-1]
+    let shape = shapeMap[this.state.round-0]
     return(
       <div id="shape-board-wrapper" className='component-wrapper'>
         <img src={this.state.clock} width="50px" />

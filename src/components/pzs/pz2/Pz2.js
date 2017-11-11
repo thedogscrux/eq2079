@@ -118,7 +118,7 @@ class Pz2 extends Component {
   }
 
   updateStatePz(value) {
-    let tableNew = value.rounds[this.state.round-1].table
+    let tableNew = value.rounds[this.state.round-0].table
     if (tableNew != this.state.board.table) {
       this.setState({
         board: {
@@ -135,8 +135,8 @@ class Pz2 extends Component {
     var self = this
     let once = firebase.database().ref('/boards/' + pzProps.code).once('value').then(function(snapshot){
       if(self._ismounted) {
-        console.log('1 - SET settings');
-        self.setStateRounds(snapshot.val())
+        // console.log('1 - SET settings');
+        // self.setStateRounds(snapshot.val())
       } else {
         console.log('2 - SET settings');
         self.setStateRounds(snapshot.val())
@@ -150,10 +150,10 @@ class Pz2 extends Component {
 
   setStateRounds(settings){
     if(this._ismounted) {
-      console.log('3 - SET settings');
-      this.setState({
-        rounds: settings.rounds
-      })
+      // console.log('3 - SET settings');
+      // this.setState({
+      //   rounds: settings.rounds
+      // })
     } else {
       console.log('4 - SET settings');
       this.setState({
@@ -166,7 +166,7 @@ class Pz2 extends Component {
     // build board
     console.log('* build board *');
     let userId = this.props.user.id
-    let roundKey = (round) ? round-1 : this.state.round-1
+    let roundKey = (round) ? round-0 : this.state.round-0
     let roundUser = this.state.rounds[roundKey].users.filter( user => user.userId == userId )
     let userTiles = roundUser[0].tiles.map( (tile, key) => {
       return {
@@ -189,7 +189,7 @@ class Pz2 extends Component {
     // loop thru all users in round to find me
     let userKey = -1
     let userId = this.props.user.id
-    this.state.rounds[this.state.round-1].users.filter((user,key) => {
+    this.state.rounds[this.state.round-0].users.filter((user,key) => {
       if (user.userId == userId) userKey = key
       return
     })
@@ -226,10 +226,10 @@ class Pz2 extends Component {
   updateTableInsertTile(tileValue) {
     // append tile to table array
     let self = this
-    let refRound = '/boards/' + pzProps.code + '/rounds/' + (this.state.round-1) + '/'
+    let refRound = '/boards/' + pzProps.code + '/rounds/' + (this.state.round-0) + '/'
     let tableNew = this.state.board.table || []
     tableNew.push(tileValue)
-    let lastTilePlaced = (tableNew.length >= this.state.rounds[this.state.round-1].solution.length) ? true : false
+    let lastTilePlaced = (tableNew.length >= this.state.rounds[this.state.round-0].solution.length) ? true : false
     firebase.database().ref(refRound).update({
       table: tableNew
     }).then(function(){
@@ -246,7 +246,7 @@ class Pz2 extends Component {
   updateTableRemoveTile(tileValue) {
     // remove tile from table array
     let self = this
-    let refRound = '/boards/' + pzProps.code + '/rounds/' + (this.state.round-1) + '/'
+    let refRound = '/boards/' + pzProps.code + '/rounds/' + (this.state.round-0) + '/'
     let tableNew = this.state.board.table || []
     tableNew.pop()
     firebase.database().ref(refRound).update({
@@ -259,8 +259,8 @@ class Pz2 extends Component {
     // console.log('hold for bug, this.state.rounds',this.state.rounds);
     // console.log('hold for bug: this.state.round', this.state.round);
     let htmlTable = ''
-    if(this.state.rounds[this.state.round-1]) {
-      htmlTable = this.state.rounds[this.state.round-1].solution.map( (tile, key) => {
+    if(this.state.rounds[this.state.round-0]) {
+      htmlTable = this.state.rounds[this.state.round-0].solution.map( (tile, key) => {
         let innerHtml = ''
         let css = {}
         if(!this.state.board.table) return (<div key={key} className='cell'></div>)

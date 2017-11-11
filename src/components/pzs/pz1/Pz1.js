@@ -100,9 +100,10 @@ class Pz1 extends Component {
     var self = this
     let once = firebase.database().ref('/boards/pz1/').once('value').then(function(snapshot){
       if(self._ismounted) {
-        self.setStateBoard(snapshot.val())
+        // console.log('gotcha! - setting state 3');
+        // self.setStateBoard(snapshot.val())
       } else {
-        console.log('gotcha! - setting state 3');
+        console.log('gotcha! - setting state 4');
         self.setStateBoard(snapshot.val())
       }
       return
@@ -112,11 +113,11 @@ class Pz1 extends Component {
 
   setStateBoard(settings){
     if(this._ismounted) {
-      console.log('setting state 1');
-      this.setState({
-        rounds: settings.rounds
-      })
-      this.getMyItemPos()
+      // console.log('setting state 1');
+      // this.setState({
+      //   rounds: settings.rounds
+      // })
+      // this.getMyItemPos()
     } else {
       console.log('gotcha! - setting state 2');
       this.setState({
@@ -242,7 +243,7 @@ class Pz1 extends Component {
               const itemImage = itemMap['item' + rowIndex + colIndex]
               let ansCode = ''
               let myCode = (this.state.myItemPos[rowIndex]) ?this.state.myItemPos[rowIndex].code : ''
-              if( ( this.state.myItemPos[this.state.round-1] && (userCode == myCode) ) || this.state.rounds[rowIndex][colIndex].ans ) {
+              if( ( this.state.myItemPos[this.state.round-0] && (userCode == myCode) ) || this.state.rounds[rowIndex][colIndex].ans ) {
                 ansCode = userCode
               }
 
@@ -280,13 +281,13 @@ class Pz1 extends Component {
             })
 
             let clock = this.state.clock
-            if(this.state.round > rowIndex + 1) {
+            if(this.state.round > rowIndex+0) {
               clock = clock4
-            } else if(this.state.round < rowIndex + 1) {
+            } else if(this.state.round < rowIndex+0) {
               clock = clock0
             }
             return (
-              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex+1) ? {border: 'solid 1px red', opacity: '1'} : {border: 'none', pointerEvents: 'none', opacity: '.2'}}>
+              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex) ? {border: 'solid 1px red', opacity: '1'} : {border: 'none', pointerEvents: 'none', opacity: '.2'}}>
                 <img src={clock} width="50px" />
                 {inner}
               </div>
@@ -296,8 +297,8 @@ class Pz1 extends Component {
           <hr/>
           <br/><br/>
           {/*}<div style={{float: 'left', width: '45%', border: 'solid 1px gray', padding: '1%', textAlign: 'center'}}>
-            <img src={(typeof this.state.myItemPos[this.state.round-1] !== 'undefined') ? this.state.myItemPos[this.state.round-1].src : ''} /><br/>
-            <h2>{(typeof this.state.myItemPos[this.state.round-1] !== 'undefined') ? this.state.myItemPos[this.state.round-1].code : ''}</h2>
+            <img src={(typeof this.state.myItemPos[this.state.round-0] !== 'undefined') ? this.state.myItemPos[this.state.round-0].src : ''} /><br/>
+            <h2>{(typeof this.state.myItemPos[this.state.round-0] !== 'undefined') ? this.state.myItemPos[this.state.round-0].code : ''}</h2>
           </div>*/}
           <div style={{float: 'left', width: '45%', border: 'solid 1px gray', padding: '1%', textAlign: 'center'}}>
             <img src={this.state.selectedImgSrc} /><br/>
