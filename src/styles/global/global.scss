@@ -7,7 +7,7 @@ $colorBlue2: #00aeef;
 body {
   background-color: $colorBlack;
   color: $colorWhite;
-  font: 12px/20px Sans-serif;
+  font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
   padding: 1%;
   margin: 0;
   opacity: .8;
@@ -17,6 +17,7 @@ a {
   color: $colorWhite;
   margin-right: 10px;
   display: block;
+  cursor: pointer;
 }
 
 input,
@@ -26,6 +27,7 @@ button {
   display: block;
   margin: 1% 0;
   padding: 10px 30px;
+  cursor: pointer;
 }
 
 input[type='submit'],

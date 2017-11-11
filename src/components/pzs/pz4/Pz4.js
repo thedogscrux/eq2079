@@ -67,7 +67,7 @@ class Pz4 extends Component {
 
   }
 
-  // WATCH
+  // LIFECYCLE
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
@@ -116,13 +116,13 @@ class Pz4 extends Component {
       this.setState({
         rounds: settings.rounds
       })
-      this.getMyItemPos()
+      //this.getMyItemPos()
     } else {
       console.log('4 - SET settings');
       this.setState({
         rounds: settings.rounds
       })
-      this.getMyItemPos()
+      //this.getMyItemPos()
     }
   }
 
@@ -210,12 +210,11 @@ class Pz4 extends Component {
           // if all users are valid, end the round
           firebase.database().ref(refUsers).once('value').then(function(snapshot) {
             let users = snapshot.val();
-            //console.log('chaeck against all users if end of game:',users);
-            let endGame = true
+            let endRound = true
             users.map(user => {
-              if(user.valid == false) endGame = false
+              if(user.valid == false) endRound = false
             })
-            if(endGame) self.endRound()
+            if(endRound) self.endRound()
           })
         })
       } else {

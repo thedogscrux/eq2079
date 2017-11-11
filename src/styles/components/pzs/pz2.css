@@ -1,0 +1,50 @@
+#jigsaw-board-wrapper .table-wrapper {
+  width: 91vw;
+  max-width: 455px;
+  display: flex;
+  flex-wrap: wrap; }
+  #jigsaw-board-wrapper .table-wrapper .tile {
+    border: solid 0.5px rgba(255, 255, 255, 0.5);
+    height: 30vw;
+    width: 30vw;
+    max-width: 150px;
+    max-height: 150px;
+    background-size: contain;
+    display: flex; }
+    #jigsaw-board-wrapper .table-wrapper .tile button {
+      border: none;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-name: pulse;
+      width: 100%; }
+
+#jigsaw-board-wrapper .my-tiles-wrapper {
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap; }
+  #jigsaw-board-wrapper .my-tiles-wrapper .tile {
+    display: flex;
+    background-size: contain;
+    margin: 10px; }
+    #jigsaw-board-wrapper .my-tiles-wrapper .tile.disabled {
+      margin: 0px; }
+    #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+      border: none;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-name: pulse;
+      height: 50px;
+      width: 50px;
+      padding: 5px; }
+      #jigsaw-board-wrapper .my-tiles-wrapper .tile button:disabled {
+        background-color: rgba(255, 0, 0, 0.5);
+        display: none;
+        margin: 0px; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.6); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }

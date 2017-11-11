@@ -1,6 +1,6 @@
 const propsPzs = [
   {
-    name: 'Pz One',
+    name: 'Pz One Pipes',
     code: 'pz1',
     location: {
       lat: 0,
@@ -17,7 +17,7 @@ const propsPzs = [
     }
   },
   {
-    name: 'Pz Two',
+    name: 'Pz Two Jigsaw',
     code: 'pz2',
     location: {
       lat: 0,
@@ -29,8 +29,8 @@ const propsPzs = [
       left: '25%'
     },
     rounds: {
-      numOfRounds: 1,
-      roundSec: 10
+      numOfRounds: 2,
+      roundSec: 15
     }
   },
   {
@@ -51,7 +51,7 @@ const propsPzs = [
     }
   },
   {
-    name: 'Pz 4 Shape',
+    name: 'Pz Four Shape',
     code: 'pz4',
     location: {
       lat: 0,
@@ -64,11 +64,11 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 60
+      roundSec: 15
     }
   },
   {
-    name: 'Pz 5',
+    name: 'Pz 5 Dirty Shape',
     code: 'pz5',
     location: {
       lat: 0,
