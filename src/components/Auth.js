@@ -12,6 +12,8 @@ import { setUser } from '../actions/userActions'
 
 import { schemaUser } from '../data/schemas.js'
 
+import { propsPzs } from '../data/propsPzs.js'
+
 const fakeAuth = {
   isAuthenticated: false,
   authenticate(cb) {
@@ -159,30 +161,17 @@ class Auth extends Component {
           user.job = 'Engineer'
           user.status = 'active'
           user.launchId = launchId
-          // TODO: loop and add games
-          user.pzs = [
-            {
-              code: 'pz1',
+          // loop and add games
+          let pzs = []
+          propsPzs.forEach(function(pz){
+            pzs.push({
+              code: pz.code,
               attempts: 0,
-              score: 0.00
-            },{
-              code: 'pz2',
-              attempts: 0,
-              score: 0.00
-            },{
-              code: 'pz3',
-              attempts: 0,
-              score: 0.00
-            },{
-              code: 'pz4',
-              attempts: 0,
-              score: 0.00
-            },{
-              code: 'pz5',
-              attempts: 0,
-              score: 0.00
-            }
-          ]
+              score: 0.00,
+              hints: 0
+            })
+          })
+          user.pzs = pzs
           var newUserId = firebase.database().ref('/users/').push().key // Get a key for a new Post.
           return firebase.database().ref('/users/' + newUserId).set(user, function(error) {
             user.id = newUserId

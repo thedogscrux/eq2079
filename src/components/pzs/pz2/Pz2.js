@@ -26,10 +26,25 @@ import imageB06 from './images/B06.jpg'
 import imageB07 from './images/B07.jpg'
 import imageB08 from './images/B08.jpg'
 
+import { shuffleArray, testIfEqualArrays } from '../../../utils/Common.js'
+import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
+import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 
-const pzIndex = 1
-const pzProps = propsPzs[pzIndex]
+const HINTS = [
+  {
+    title: 'Hint One',
+    body: 'Fold the paper with the colored bars in half'
+  },
+  {
+    title: 'Hint Two',
+    subTitle: 'This is your last hint.',
+    body: 'The colored bars with red on top is the key.'
+  }
+]
+
+const PZ_INDEX = 1
+const PZ_PROPS = propsPzs[PZ_INDEX]
 
 const imageMap = new Map([
     [ 'imageA00', imageA00 ], [ 'imageA01', imageA01 ], [ 'imageA02', imageA02 ],
@@ -43,13 +58,19 @@ const imageMap = new Map([
 class Pz2 extends Component {
   constructor(props){
     super(props)
+    let score = new Score(PZ_INDEX)
     let baseSate = {
-      points: 0,
       round: props.round,
-      totalScore: 0,
       user: props.user,
       clock: props.clock,
-      valid: false
+      valid: false,
+      hints: props.user.pzs[PZ_INDEX].hints,
+      score: {
+        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
+        multi: 0 * game.score.mutliplayerMultiplier,
+        hintCost: score.calcHintCost(PZ_INDEX),
+        total: 0
+      }
     }
     this.state = {
       userKey: -1,
@@ -99,7 +120,7 @@ class Pz2 extends Component {
     let self = this
     let score = this.endGame()
     this.unwatchDB()
-    firebase.database().ref('/pzs/' + pzIndex + '/status').once('value').then(function(snapshot){
+    firebase.database().ref('/pzs/' + PZ_INDEX + '/status').once('value').then(function(snapshot){
       if(snapshot.val() === 'inactive') self.props.endGame(score)
     })
   }
@@ -107,12 +128,12 @@ class Pz2 extends Component {
   // WATCH DB
 
   unwatchDB() {
-    firebase.database().ref('/boards/' +  pzProps.code).off()
+    firebase.database().ref('/boards/' +  PZ_PROPS.code).off()
   }
 
   watchDB() {
     var self = this
-    firebase.database().ref('/boards/' +  pzProps.code).on('value', function(snapshot){
+    firebase.database().ref('/boards/' +  PZ_PROPS.code).on('value', function(snapshot){
       self.updateStatePz(snapshot.val())
     })
   }
@@ -133,7 +154,7 @@ class Pz2 extends Component {
 
   getSettings() {
     var self = this
-    let once = firebase.database().ref('/boards/' + pzProps.code).once('value').then(function(snapshot){
+    let once = firebase.database().ref('/boards/' + PZ_PROPS.code).once('value').then(function(snapshot){
       if(self._ismounted) {
         // console.log('1 - SET settings');
         // self.setStateRounds(snapshot.val())
@@ -212,6 +233,24 @@ class Pz2 extends Component {
     return score
   }
 
+  // HINT
+
+  getHint() {
+    console.log(' ** GET HINT ** ');
+    let hint = HINTS[this.state.hints]
+    // update user max score
+
+    // update the hint count
+    let newHintCount = this.state.hints + 1
+    this.setState({
+      ...this.state,
+      hints: newHintCount
+    })
+    firebase.database().ref('/users/' + this.props.user.id + '/pzs/' + PZ_INDEX).update({
+      hints: newHintCount
+    })
+  }
+
   // GUESS
 
   guess() {
@@ -226,7 +265,7 @@ class Pz2 extends Component {
   updateTableInsertTile(tileValue) {
     // append tile to table array
     let self = this
-    let refRound = '/boards/' + pzProps.code + '/rounds/' + (this.state.round-0) + '/'
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + (this.state.round-0) + '/'
     let tableNew = this.state.board.table || []
     tableNew.push(tileValue)
     let lastTilePlaced = (tableNew.length >= this.state.rounds[this.state.round-0].solution.length) ? true : false
@@ -246,7 +285,7 @@ class Pz2 extends Component {
   updateTableRemoveTile(tileValue) {
     // remove tile from table array
     let self = this
-    let refRound = '/boards/' + pzProps.code + '/rounds/' + (this.state.round-0) + '/'
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + (this.state.round-0) + '/'
     let tableNew = this.state.board.table || []
     tableNew.pop()
     firebase.database().ref(refRound).update({
@@ -256,8 +295,6 @@ class Pz2 extends Component {
 
   render(){
     // build table contents
-    // console.log('hold for bug, this.state.rounds',this.state.rounds);
-    // console.log('hold for bug: this.state.round', this.state.round);
     let htmlTable = ''
     if(this.state.rounds[this.state.round-0]) {
       htmlTable = this.state.rounds[this.state.round-0].solution.map( (tile, key) => {
@@ -303,9 +340,33 @@ class Pz2 extends Component {
       )
     })
 
+    // build hints
+    let htmlHintButton = (this.state.hints < HINTS.length) ? <button onClick={() => this.getHint()}>Get Hint</button> : ''
+    let htmlHints = HINTS.map( (hint, key) => {
+      // show the hint if its index is LESS than the user hint count
+      if (key >= this.state.hints) return(<div key={key} className='hint'></div>)
+      return (
+        <div key={key} className='hint'>
+          <h3>{hint.title}</h3>
+          <p>
+            {(hint.subTitle) ? <strong>{hint.subTitle}<br/></strong> : ''}
+            {hint.body}
+          </p>
+        </div>
+      )
+    })
+
     return(
-      <div id="jigsaw-board-wrapper" className='component-wrapper'>
+      <div id="jigsaw-board-wrapper" className='component-wrapper component-pz'>
+        <h2>Score: </h2>
+        max score: {this.state.score.max}<br/>
+        hint cost: {this.state.score.hintCost}<br/>
+
+        {htmlHintButton}
+        {htmlHints}
+
         <img src={this.state.clock} width="50px" />
+
         <div className='table-wrapper'>{htmlTable}</div>
         <div className='my-tiles-wrapper'>{htmlMyTiles}</div>
       </div>
@@ -320,7 +381,7 @@ const genSettingsPz2 = (props) => {
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed());
   // setup each user for each round
-  for(let round=0; round<pzProps.rounds.numOfRounds; round++){
+  for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
     props.players.forEach( (user,key) => {
@@ -337,7 +398,7 @@ const genSettingsPz2 = (props) => {
       ['A00', 'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08' ],
       ['B00', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08' ]
     ]
-    let shuffledItems = shuffle(solution[round])
+    let shuffledItems = shuffleArray(solution[round])
     // DEAL ITEMS to users
     let userIndex = 0
     shuffledItems.forEach((index, key) => {
@@ -356,37 +417,11 @@ const genSettingsPz2 = (props) => {
   // calc total score
   let totalScore = 0
   // store all info in dbase
-  firebase.database().ref('/boards/' + pzProps.code).set({
+  firebase.database().ref('/boards/' + PZ_PROPS.code).set({
     rounds: settings
   })
   //return settings
   return totalScore
-}
-
-const shuffle = (array) => {
-  let array2 = Object.assign([], array)
-  var currentIndex = array2.length, temporaryValue, randomIndex;
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    // And swap it with the current element.
-    temporaryValue = array2[currentIndex];
-    array2[currentIndex] = array2[randomIndex];
-    array2[randomIndex] = temporaryValue;
-  }
-  return array2;
-}
-
-const testIfEqualArrays = (a, b) => {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length != b.length) return false;
-  for (var i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
-  }
-  return true;
 }
 
 export default Pz2

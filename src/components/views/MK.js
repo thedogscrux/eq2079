@@ -8,6 +8,8 @@ import moment from 'moment'
 import tz from 'moment-timezone'
 import Random from 'random-js'
 
+import game from '../../Settings.js'
+
 import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
 import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
 import { propsPzs } from '../../data/propsPzs.js'
@@ -26,12 +28,8 @@ const pzSettingsMap = {
   genSettingsPz5
 }
 
-// Game Settings
-const launchAtTotalScore = 20
-
 // Clock
 const pzLoadingSec = 5
-const clockOn = true
 
 class MK extends Component {
   constructor(props) {
@@ -186,7 +184,7 @@ class MK extends Component {
         } else {
           let clockInterval = pz.rounds.roundSec / 4
           if ( timeNow.diff(moment(pz.timeGameStarts, 'kk:mm:ss'), 'seconds') >
-            ( (pz.round * pz.rounds.roundSec) - (pz.rounds.roundSec - (clockInterval*pz.clock)) ) ) {
+            ( ((pz.round+1) * pz.rounds.roundSec) - (pz.rounds.roundSec - (clockInterval*pz.clock)) ) ) {
             // basically: if NOW is after the END of the round, minus the amount of seconds in an interval
             this.pzUpdateClock(key)
           }
@@ -221,9 +219,9 @@ class MK extends Component {
     // set the timeGameStarts and timeGameEnds
     let roundTotalSec = propsPzs[pzIndex].rounds.numOfRounds * propsPzs[pzIndex].rounds.roundSec
     let timeGameStarts = moment().tz('America/Los_Angeles')
-    timeGameStarts.add(pzLoadingSec, 's')
+    timeGameStarts.add(game.clock.pzLoadingSec, 's')
     let timeGameEnds = moment().tz('America/Los_Angeles')
-    timeGameEnds.add(pzLoadingSec + roundTotalSec, 's')
+    timeGameEnds.add(game.clock.pzLoadingSec + roundTotalSec, 's')
     // set the timeNextRound
     // TODO is this needed?
     // TODO clean up clock. calculate all roundEndTimes and place in array at beggining of game
@@ -321,7 +319,7 @@ class MK extends Component {
     // })
     // check if mission complete?
     newScore = parseInt(newScore)
-    if(newScore >= launchAtTotalScore && this.state.launching === false) {
+    if(newScore >= game.score.launch && this.state.launching === false) {
       this.setState({ launching: true })
       this.launchRocket(newScore)
     } else if(newScore > oldScore && this.state.launching === false) {
@@ -329,7 +327,7 @@ class MK extends Component {
         totalScore: newScore
       }).then(function(){
         self.updateStateLaunchTotalScore(newScore)
-        // if(newScore >= launchAtTotalScore) {
+        // if(newScore >= game.score.launch) {
         //   self.launchRocket(newScore)
         // }
       })
@@ -353,7 +351,7 @@ class MK extends Component {
     // end current game
     firebase.database().ref('/launches/' + this.state.activeLaunch.id).update({
       status: 'complete',
-      totalScore: launchAtTotalScore
+      totalScore: game.score.launch
     }).then(function(){
       // deactivate current launch players
       firebase.database().ref('/users/').update(deactivateLaunchUsers).then(function(){
@@ -378,7 +376,7 @@ class MK extends Component {
           </div>
           <div className='col'>
             Players: {this.state.activeLaunch.players}<br/>
-            Total Score: {this.state.activeLaunch.totalScore} / {launchAtTotalScore}<br/>
+            Total Score: {this.state.activeLaunch.totalScore} / {game.score.launch}<br/>
             Total Game Plays: {this.state.activeLaunch.totalGamePlays}<br/>
           </div>
         </div>

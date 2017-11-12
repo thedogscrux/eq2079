@@ -30,7 +30,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 25
+      roundSec: 30
     }
   },
   {
