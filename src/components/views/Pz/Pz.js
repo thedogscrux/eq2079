@@ -191,6 +191,7 @@ class Pz extends Component {
         round={this.state.pz.round}
         user={this.props.user}
         clock={clockImg}
+        numOfUsers={(this.state.pz) ? this.state.pz.players.length : 1}
       />
     } else {
       content = <PzStart

@@ -3,6 +3,7 @@ import game from '../Settings.js'
 
 const ROUND_SCORE = game.score.round
 const HINT_COST = game.score.hintCost
+const MULTI = game.score.mutliplayerMultiplier
 
 class Score {
 
@@ -13,7 +14,17 @@ class Score {
 
   calcMaxScore(numUserHints = 0, numOfUsers = 0) {
     // total score - hints
-    return this.numOfRounds*ROUND_SCORE - ((this.numOfRounds*ROUND_SCORE) * (numUserHints*HINT_COST))
+    let totalScore = 0
+    let totalRoundScore = this.numOfRounds * ROUND_SCORE
+    let userHintsCost = numUserHints * HINT_COST
+    let totalBaseScore = totalRoundScore - (totalRoundScore * userHintsCost)
+    if(numOfUsers > 1) {
+      console.log('XXX adding multi to score for X players:',numOfUsers);
+      totalScore = totalBaseScore + (totalBaseScore * MULTI)
+    } else {
+      totalScore = totalBaseScore
+    }
+    return totalScore
   }
 
   calcHintCost() {

@@ -6,6 +6,11 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 
+import { shuffleArray, testIfEqualArrays } from '../../../utils/Common.js'
+import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
+import game from '../../../Settings.js'
+import { propsPzs } from '../../../data/propsPzs.js'
+
 import imageA00 from './images/A00.jpg'
 import imageA01 from './images/A01.jpg'
 import imageA02 from './images/A02.jpg'
@@ -26,10 +31,8 @@ import imageB06 from './images/B06.jpg'
 import imageB07 from './images/B07.jpg'
 import imageB08 from './images/B08.jpg'
 
-import { shuffleArray, testIfEqualArrays } from '../../../utils/Common.js'
-import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
-import game from '../../../Settings.js'
-import { propsPzs } from '../../../data/propsPzs.js'
+const PZ_INDEX = 1
+const PZ_PROPS = propsPzs[PZ_INDEX]
 
 const HINTS = [
   {
@@ -43,10 +46,7 @@ const HINTS = [
   }
 ]
 
-const PZ_INDEX = 1
-const PZ_PROPS = propsPzs[PZ_INDEX]
-
-const imageMap = new Map([
+const IMAGE_MAP = new Map([
     [ 'imageA00', imageA00 ], [ 'imageA01', imageA01 ], [ 'imageA02', imageA02 ],
     [ 'imageA03', imageA03 ], [ 'imageA04', imageA04 ], [ 'imageA05', imageA05 ],
     [ 'imageA06', imageA06 ], [ 'imageA07', imageA07 ], [ 'imageA08', imageA08 ],
@@ -66,7 +66,7 @@ class Pz2 extends Component {
       valid: false,
       hints: props.user.pzs[PZ_INDEX].hints,
       score: {
-        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
+        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, this.props.numOfUsers),
         multi: 0 * game.score.mutliplayerMultiplier,
         hintCost: score.calcHintCost(PZ_INDEX),
         round: 0,
@@ -252,14 +252,12 @@ class Pz2 extends Component {
   // HINT
 
   getHint() {
-    console.log(' ** GET HINT ** ');
-    console.log('user:',this.props.user);
+    console.log(' ** GET HINT ** ')
     let hint = HINTS[this.state.hints]
-    // update the hint count
     let newHintCount = this.state.hints + 1
     // update user max score
     let score = new Score(PZ_INDEX)
-    let newMaxScore = score.calcMaxScore(newHintCount, 1)
+    let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
     this.setState({
       ...this.state,
       hints: newHintCount,
@@ -351,7 +349,7 @@ class Pz2 extends Component {
         // insert tile in table array
         if(this.state.board.table[key]) {
           //innerHtml = this.state.board.table[key]
-          let img = imageMap.get('image' + this.state.board.table[key])
+          let img = IMAGE_MAP.get('image' + this.state.board.table[key])
           css = { backgroundImage: `url(${img})` }
         }
         let myTiles = this.state.board.myTiles.filter( tile => tile.value === this.state.board.table[key])
@@ -377,7 +375,7 @@ class Pz2 extends Component {
         let tableTiles = this.state.board.table.filter( tableTile => tableTile === tile.value)
         if(tableTiles.length > 0) disabled = 'disabled'
         // get assoc image
-        let img = imageMap.get('image' + tile.value)
+        let img = IMAGE_MAP.get('image' + tile.value)
         css = { backgroundImage: `url(${img})` }
       }
       return (
@@ -426,9 +424,8 @@ class Pz2 extends Component {
 // FUNCS
 
 const genSettingsPz2 = (props) => {
-  console.log('** generate settings **')
   let settings = []
-  let random = new Random(Random.engines.mt19937().autoSeed());
+  let random = new Random(Random.engines.mt19937().autoSeed())
   // setup each user for each round
   for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     // ADD USERS to pz - create an empty obj for each user
@@ -462,7 +459,6 @@ const genSettingsPz2 = (props) => {
       solution: solution[round]
     })
   }
-  console.log('settings',settings);
   // calc total score
   let totalScore = 0
   // store all info in dbase
