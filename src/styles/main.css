@@ -104,6 +104,46 @@ button {
     #component-map .map-wrapper .pz:hover {
       background-color: white; }
 
+body {
+  background-color: black;
+  color: white;
+  font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
+  padding: 1%;
+  margin: 0;
+  opacity: .8; }
+
+a {
+  color: white;
+  margin-right: 10px;
+  display: block;
+  cursor: pointer; }
+
+input,
+button {
+  border: none;
+  border: solid 1px white;
+  display: block;
+  margin: 1% 0;
+  padding: 10px 30px;
+  cursor: pointer; }
+
+input[type='submit'],
+button {
+  background-color: black;
+  color: white; }
+
+.component-wrapper {
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 1% 0;
+  padding: 1%; }
+  .component-wrapper.add {
+    background-color: rgba(255, 0, 0, 0.3); }
+
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 #component-welcome {
   color: #3a9bc7; }
   #component-welcome .ans-show-wrapper.hide {
@@ -350,6 +390,51 @@ button {
   #component-mk div.row div.col {
     flex-grow: 1; }
 
+body {
+  background-color: black;
+  color: white;
+  font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
+  padding: 1%;
+  margin: 0;
+  opacity: .8; }
+
+a {
+  color: white;
+  margin-right: 10px;
+  display: block;
+  cursor: pointer; }
+
+input,
+button {
+  border: none;
+  border: solid 1px white;
+  display: block;
+  margin: 1% 0;
+  padding: 10px 30px;
+  cursor: pointer; }
+
+input[type='submit'],
+button {
+  background-color: black;
+  color: white; }
+
+.component-wrapper {
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 1% 0;
+  padding: 1%; }
+  .component-wrapper.add {
+    background-color: rgba(255, 0, 0, 0.3); }
+
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.component-pz .hint {
+  background-color: rgba(255, 255, 255, 0.1);
+  margin-bottom: 15px;
+  padding: 5px 10px; }
+
 #pipe-board-wrapper {
   font: 16px/20px Courier, monospace;
   width: 100%;
@@ -418,7 +503,9 @@ button {
       animation-name: pulse;
       height: 50px;
       width: 50px;
-      padding: 5px; }
+      padding: 5px;
+      color: red;
+      font-weight: 600; }
       #jigsaw-board-wrapper .my-tiles-wrapper .tile button:disabled {
         background-color: rgba(255, 0, 0, 0.5);
         display: none;

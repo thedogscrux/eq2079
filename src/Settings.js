@@ -4,7 +4,7 @@ const game = {
     launch: 1000,
     hintCost: 0.25,
     mutliplayerMultiplier: 0.5,
-    round: 10,
+    round: 15,
     item: 3,
     participation: 1
   },

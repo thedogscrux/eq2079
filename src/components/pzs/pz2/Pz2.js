@@ -104,7 +104,10 @@ class Pz2 extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
-      if (this.props.round != nextProps.round) this.buildStateBoard(nextProps.round)
+      if (this.props.round != nextProps.round) {
+        this.updateStateScore()
+        this.buildStateBoard(nextProps.round)
+      }
       this.setState({
         round: nextProps.round,
         clock: nextProps.clock,
@@ -151,6 +154,19 @@ class Pz2 extends Component {
     }
   }
 
+  updateStateScore() {
+    let newTotalScore = this.state.score.total + this.state.score.round
+    // user cant score higher than max
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
+    this.setState({
+      ...this.state,
+      score: {
+        ...this.state.score,
+        total: newTotalScore
+      }
+    })
+  }
+
   // SETUP BOARD
 
   getSettings() {
@@ -189,16 +205,10 @@ class Pz2 extends Component {
     console.log('* build board *');
     let userId = this.props.user.id
     let roundKey = (round) ? round-0 : this.state.round-0
-    if(!this.state.rounds[roundKey]) {
-      alert('bug! bug! bug! bug! sometimes MK? sets the round higher than possible')
-      return
-    }
+    if(!this.state.rounds[roundKey]) return
     let roundUser = this.state.rounds[roundKey].users.filter( user => user.userId == userId )
     let userTiles = roundUser[0].tiles.map( (tile, key) => {
       return {
-        enabled: true,
-        image: 0,
-        tileKey: 0,
         value: tile
       }
     })
@@ -233,9 +243,10 @@ class Pz2 extends Component {
   }
 
   endGame(){
-    let score = 0
+    let newTotalScore = this.state.score.round + this.state.score.total
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
     // calc user score (final score calculated in Pz parent)
-    return score
+    return newTotalScore
   }
 
   // HINT
@@ -264,15 +275,6 @@ class Pz2 extends Component {
 
   // GUESS
 
-  guess() {
-    let points = this.state.points + 1
-    this.setState({
-      points: points
-    })
-  }
-
-  submitGuess(guess) { }
-
   updateTableInsertTile(tileValue) {
     // append tile to table array
     let self = this
@@ -295,7 +297,9 @@ class Pz2 extends Component {
       })
       // if all my tiles are valid, give me the round points
       let newRoundScore = 0
-      if (allMyTilesValid) newRoundScore = game.score.round
+      if (allMyTilesValid) {
+        newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
+      }
       this.setState({
         ...this.state,
         score: {
@@ -378,7 +382,7 @@ class Pz2 extends Component {
       }
       return (
         <div key={key} className={'tile ' + disabled} style={css}>
-          <button onClick={() => this.updateTableInsertTile(tile.value)} disabled={disabled}>{/*tile.value*/}</button>
+          <button onClick={() => this.updateTableInsertTile(tile.value)} disabled={disabled}>{(this.state.hints>1) ? tile.value : ''}</button>
         </div>
       )
     })
@@ -389,7 +393,7 @@ class Pz2 extends Component {
     let htmlHintButton = (this.state.hints < HINTS.length) ? <button onClick={() => this.getHint()} disabled={hintDisabled}>Get Hint{(hintDisabled)?' After '+ hintAttempts +' more attempt(s)':''}</button> : ''
     let htmlHints = HINTS.map( (hint, key) => {
       // show the hint if its index is LESS than the user hint count
-      if (key >= this.state.hints) return(<div key={key} className='hint'></div>)
+      if (key >= this.state.hints) return(<div key={key}></div>)
       return (
         <div key={key} className='hint'>
           <h3>{hint.title}</h3>
@@ -403,7 +407,8 @@ class Pz2 extends Component {
 
     return(
       <div id="jigsaw-board-wrapper" className='component-wrapper component-pz'>
-        <h2>Score: {this.state.score.round}/{this.state.score.total}/{this.state.score.max}</h2>
+        <h2>Score:<br/>{this.state.score.round} / {this.state.score.total} / {this.state.score.max}</h2>
+        round / total / max<br/>
         hint cost: {this.state.score.hintCost}<br/>
 
         {htmlHintButton}

@@ -41,6 +41,8 @@
         height: 50px;
         width: 50px;
         padding: 5px;
+        color: red;
+        font-weight: 600;
         &:disabled {
           background-color: rgba(255, 0,0,.5);
           display: none;

@@ -35,7 +35,9 @@
       animation-name: pulse;
       height: 50px;
       width: 50px;
-      padding: 5px; }
+      padding: 5px;
+      color: red;
+      font-weight: 600; }
       #jigsaw-board-wrapper .my-tiles-wrapper .tile button:disabled {
         background-color: rgba(255, 0, 0, 0.5);
         display: none;
