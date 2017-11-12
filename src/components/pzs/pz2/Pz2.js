@@ -69,6 +69,7 @@ class Pz2 extends Component {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
         multi: 0 * game.score.mutliplayerMultiplier,
         hintCost: score.calcHintCost(PZ_INDEX),
+        round: 0,
         total: 0
       }
     }
@@ -188,6 +189,10 @@ class Pz2 extends Component {
     console.log('* build board *');
     let userId = this.props.user.id
     let roundKey = (round) ? round-0 : this.state.round-0
+    if(!this.state.rounds[roundKey]) {
+      alert('bug! bug! bug! bug! sometimes MK? sets the round higher than possible')
+      return
+    }
     let roundUser = this.state.rounds[roundKey].users.filter( user => user.userId == userId )
     let userTiles = roundUser[0].tiles.map( (tile, key) => {
       return {
@@ -224,7 +229,7 @@ class Pz2 extends Component {
   // END GAME
 
   endRound() {
-    this.props.endRound()
+    this.props.endRound() // parent component ends the round
   }
 
   endGame(){
@@ -237,14 +242,20 @@ class Pz2 extends Component {
 
   getHint() {
     console.log(' ** GET HINT ** ');
+    console.log('user:',this.props.user);
     let hint = HINTS[this.state.hints]
-    // update user max score
-
     // update the hint count
     let newHintCount = this.state.hints + 1
+    // update user max score
+    let score = new Score(PZ_INDEX)
+    let newMaxScore = score.calcMaxScore(newHintCount, 1)
     this.setState({
       ...this.state,
-      hints: newHintCount
+      hints: newHintCount,
+      score: {
+        ...this.state.score,
+        max: newMaxScore
+      }
     })
     firebase.database().ref('/users/' + this.props.user.id + '/pzs/' + PZ_INDEX).update({
       hints: newHintCount
@@ -268,7 +279,32 @@ class Pz2 extends Component {
     let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + (this.state.round-0) + '/'
     let tableNew = this.state.board.table || []
     tableNew.push(tileValue)
-    let lastTilePlaced = (tableNew.length >= this.state.rounds[this.state.round-0].solution.length) ? true : false
+    let solution = this.state.rounds[this.state.round-0].solution
+    let lastTilePlaced = (tableNew.length >= solution.length) ? true : false
+    // UPDATE SCORE: by checking if all my tiles are in the correct position
+      // loop thru all my  tiles, then loop thru all tiles on table to check
+      let allMyTilesValid = true
+      this.state.board.myTiles.map( myTile => {
+        // if my tile is not on the table, then i am not 100% valid
+        let tableTiles = tableNew.filter( tableTile => tableTile === myTile.value)
+        if(tableTiles.length < 1) allMyTilesValid = false
+        // loop thru all table tiles, if my tile is on the table, and in the WRONG spot, then i am not 100% valid
+        tableNew.map( (tableTile, key) => {
+          if(tableTile === myTile.value && solution[key] != myTile.value) allMyTilesValid = false
+        })
+      })
+      // if all my tiles are valid, give me the round points
+      let newRoundScore = 0
+      if (allMyTilesValid) newRoundScore = game.score.round
+      this.setState({
+        ...this.state,
+        score: {
+          ...this.state.score,
+          round: newRoundScore
+        }
+      })
+
+    // update the table on the dbase
     firebase.database().ref(refRound).update({
       table: tableNew
     }).then(function(){
@@ -279,7 +315,6 @@ class Pz2 extends Component {
         })
       }
     })
-
   }
 
   updateTableRemoveTile(tileValue) {
@@ -288,6 +323,14 @@ class Pz2 extends Component {
     let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + (this.state.round-0) + '/'
     let tableNew = this.state.board.table || []
     tableNew.pop()
+    // set current round score to 0
+    this.setState({
+      ...this.state,
+      score: {
+        ...this.state.score,
+        round: 0
+      }
+    })
     firebase.database().ref(refRound).update({
       table: tableNew
     })
@@ -326,7 +369,7 @@ class Pz2 extends Component {
       let disabled = ''
       let css = {}
       if(this.state.board.table) {
-        // if table has content, test for disabled any tiles placed on table
+        // see if this tile is on the table, if it is then disable it
         let tableTiles = this.state.board.table.filter( tableTile => tableTile === tile.value)
         if(tableTiles.length > 0) disabled = 'disabled'
         // get assoc image
@@ -341,7 +384,9 @@ class Pz2 extends Component {
     })
 
     // build hints
-    let htmlHintButton = (this.state.hints < HINTS.length) ? <button onClick={() => this.getHint()}>Get Hint</button> : ''
+    let hintAttempts = game.hints.allowAfterPzAttempts - this.props.user.pzs[PZ_INDEX].attempts
+    let hintDisabled = (hintAttempts > 0) ? 'disabled' : ''
+    let htmlHintButton = (this.state.hints < HINTS.length) ? <button onClick={() => this.getHint()} disabled={hintDisabled}>Get Hint{(hintDisabled)?' After '+ hintAttempts +' more attempt(s)':''}</button> : ''
     let htmlHints = HINTS.map( (hint, key) => {
       // show the hint if its index is LESS than the user hint count
       if (key >= this.state.hints) return(<div key={key} className='hint'></div>)
@@ -358,8 +403,7 @@ class Pz2 extends Component {
 
     return(
       <div id="jigsaw-board-wrapper" className='component-wrapper component-pz'>
-        <h2>Score: </h2>
-        max score: {this.state.score.max}<br/>
+        <h2>Score: {this.state.score.round}/{this.state.score.total}/{this.state.score.max}</h2>
         hint cost: {this.state.score.hintCost}<br/>
 
         {htmlHintButton}

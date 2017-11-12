@@ -8,6 +8,9 @@ const game = {
     item: 3,
     participation: 1
   },
+  hints: {
+    allowAfterPzAttempts: 3
+  },
   clock: {
     pzLoadingSec: 5
   },
