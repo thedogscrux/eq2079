@@ -94,7 +94,8 @@ class Pz5 extends Component {
               {
                 userId: '',
                 items: 0,
-                color: [0,0,0]
+                color: [0,0,0],
+                solutionItemCount: []
               }
             ]
           }
@@ -275,17 +276,17 @@ class Pz5 extends Component {
     let solution = this.state.rounds[this.state.round].solution
     let existingItemTableKey = -1
     let existingUsers = 0
+    let userItemsCount = 1
 
     // check if user has any items left, if they dont, remove the first one
     let removeKey = -1
-    let userItemsCount = 0
     newTable.map((item,key) => {
       item.users.map( (user, key) => {
         if(removeKey === -1 && item.userId === this.props.user.id) removeKey = key
         if(user === this.props.user.id) userItemsCount++
       })
     })
-    if (userItemsCount > this.state.board.myItems-1) newTable.splice(removeKey, 1)
+    if (userItemsCount > this.state.board.myItems) newTable.splice(removeKey, 1)
 
     // check if someone else has their item at point
     if(this.state.board.table) {
@@ -326,10 +327,22 @@ class Pz5 extends Component {
 
     let lastItemPlaced = (newTable.length == solution.length) ? true : false
 
-    // UPDATE SCORE: by checking if all my tiles are in the correct position
-      // loop thru all my  tiles, then loop thru all tiles on table to check
+    // UPDATE SCORE: by checking if all my needed items are on the table
       let allMyItemsValid = true
-      // TODO...
+      // if its equal to the number of items a user needs for solution, give em the points
+      allMyItemsValid = (userItemsCount === this.state.rounds[this.state.round].users[this.state.userKey].solutionItemCount[this.state.userKey]) ? true : false
+      // if all my items are valid, give me the round points
+      let newRoundScore = 0
+      if (allMyItemsValid) {
+        newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
+      }
+      this.setState({
+        ...this.state,
+        score: {
+          ...this.state.score,
+          round: newRoundScore
+        }
+      })
 
     // update the table on the dbase
     firebase.database().ref(refRound).update({
@@ -371,6 +384,10 @@ class Pz5 extends Component {
       board: {
         ...this.state.board,
         table: newTable
+      },
+      score: {
+        ...this.state.score,
+        round: 0
       }
     })
     let lastItemPlaced = (newTable.length == solution.length) ? true : false
@@ -438,7 +455,7 @@ class Pz5 extends Component {
           return (
             <div key={'col-'+y+x} className='cols' >
               <button onClick={() => this.removeItemFromTable(itemTableKey)} className={classNames} style={css}>
-                [{itemTableKey}]{x},{y}
+                {(this.state.hints>1) ? x + ',' + y : ''}
               </button>
             </div>
           )
@@ -446,14 +463,16 @@ class Pz5 extends Component {
           return (
             <div key={'col-'+y+x} className='cols' >
               <button onClick={() => this.addItemToTable(x, y)} style={css}>
-                [{itemTableKey}]{x},{y}
+                {(this.state.hints>1) ? x + ',' + y : ''}
               </button>
             </div>
           )
         } else {
           return (
             <div key={'col-'+y+x} className='cols' >
-              <button onClick={() => this.addItemToTable(x, y)} style={css}>{x},{y}</button>
+              <button onClick={() => this.addItemToTable(x, y)} style={css}>
+                {(this.state.hints>1) ? x + ',' + y : ''}
+              </button>
             </div>
           )
         }
@@ -493,8 +512,16 @@ const genSettingsPz5 = (props) => {
   // SHUFFLE ITEMS and determine solution
   let solutionColors = []
   let solution = []
+  let solutionUserItemCount = []
   if(props.players.length === 1) {
     solutionColors = [ BLACK ]
+    // how many occurances of each user color
+    // [ 6-BLACK ]
+    // [ 6-BLACK ]
+    solutionUserItemCount = [
+      [ 6 ],
+      [ 6 ]
+    ]
     solution = [
       [
         { x:0, y:0, color:BLACK },
@@ -515,6 +542,13 @@ const genSettingsPz5 = (props) => {
     ]
   } else if (props.players.length === 2) {
     solutionColors = [ RED, GREEN ]
+    // how many occurances of each user color
+    // [ 4-RED, 4-GREEN ]
+    // [ 4-RED, 4-GREEN ]
+    solutionUserItemCount = [
+      [ 4, 4 ],
+      [ 4, 4 ]
+    ]
     solution = [
       [
         { x:0, y:0, color:RED },
@@ -543,7 +577,8 @@ const genSettingsPz5 = (props) => {
         {
           userId: user,
           items: solution[round].length,
-          color: 0
+          color: 0,
+          solutionItemCount: solutionUserItemCount[round]
         }
       )
     })
