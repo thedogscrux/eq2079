@@ -163,7 +163,6 @@ class Pz5 extends Component {
     // user cant score higher than max
     newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
     this.setState({
-      ...this.state,
       score: {
         ...this.state.score,
         total: newTotalScore
@@ -252,7 +251,6 @@ class Pz5 extends Component {
     let score = new Score(PZ_INDEX)
     let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
     this.setState({
-      ...this.state,
       hints: newHintCount,
       score: {
         ...this.state.score,
@@ -337,7 +335,6 @@ class Pz5 extends Component {
         newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
       }
       this.setState({
-        ...this.state,
         score: {
           ...this.state.score,
           round: newRoundScore

@@ -136,7 +136,6 @@ const IMAGE_MAP = new Map([
     // user cant score higher than max
     newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
     this.setState({
-      ...this.state,
       score: {
         ...this.state.score,
         total: newTotalScore
@@ -215,7 +214,6 @@ const IMAGE_MAP = new Map([
     let score = new Score(PZ_INDEX)
     let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
     this.setState({
-      ...this.state,
       hints: newHintCount,
       score: {
         ...this.state.score,
@@ -237,7 +235,7 @@ const IMAGE_MAP = new Map([
     })
   }
 
-  updateTable() {
+  addItemToTable() {
     // add the item to the table and get points
     let self = this
     let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
@@ -252,15 +250,19 @@ const IMAGE_MAP = new Map([
     // UPDATE SCORE: by checking if all my items are in the correct position
       // loop thru all my  items, then loop thru all items on table to check
       let allMyItemsValid = true
-
-    // if all my items are valid, give me the round points
-    this.setState({
-      ...this.state,
-      board: {
-        ...this.state.board,
-        table: {}
+      // if its equal to the number of items a user needs for solution, give em the points
+      allMyItemsValid = (userItemsCount === this.state.rounds[this.state.round].users[this.state.userKey].solutionItemCount[this.state.userKey]) ? true : false
+      // if all my items are valid, give me the round points
+      let newRoundScore = 0
+      if (allMyItemsValid) {
+        newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
       }
-    })
+      this.setState({
+        score: {
+          ...this.state.score,
+          round: newRoundScore
+        }
+      })
 
     // check/set the color of the item
 
@@ -277,10 +279,31 @@ const IMAGE_MAP = new Map([
     })
   }
 
+  removeItemFromTable() {
+    this.setState({
+      score: {
+        ...this.state.score,
+        round: 0
+      }
+    })
+  }
+
   render(){
+
+    // score
+    let score = new Score(PZ_INDEX)
+    let htmlScore = score.htmlSimpleDisplay(this.state.score)
+
     return(
       <div id="xxx-board-wrapper" className='component-wrapper'>
-        Pz Zero
+        {htmlScore}
+        <Hints
+          hints={HINTS}
+          hintsCount={this.state.hints}
+          userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
+          getHint={() => this.getHint()}
+        />
+
         <button onClick={() => this.guess()}>Guess</button>
       </div>
     )
