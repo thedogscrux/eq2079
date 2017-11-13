@@ -11,8 +11,7 @@ import { shuffleArray, testIfEqualArrays, removeArrayKey } from '../../../utils/
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
-
-import imageA00 from './images/imageA00.svg'
+import Hints from '../../Hints.js'
 
 const PZ_INDEX = 4
 const PZ_PROPS = propsPzs[PZ_INDEX]
@@ -465,8 +464,20 @@ class Pz5 extends Component {
       )
     })
 
+    // score
+    let score = new Score(PZ_INDEX)
+    let htmlScore = score.htmlSimpleDisplay(this.state.score)
+
     return(
       <div id="spots-board-wrapper" className='component-wrapper'>
+        {htmlScore}
+        <Hints
+          hints={HINTS}
+          hintsCount={this.state.hints}
+          userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
+          getHint={() => this.getHint()}
+        />
+
         <img src={this.state.clock} width="50px" />
         <div id='spots-wrapper'>{htmlButtons}</div>
       </div>

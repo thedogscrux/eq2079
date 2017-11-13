@@ -1,3 +1,5 @@
+import React, { Component } from 'react'
+
 import { propsPzs } from '../data/propsPzs.js'
 import game from '../Settings.js'
 
@@ -11,6 +13,8 @@ class Score {
     this.pzProps = propsPzs[pzIndex]
     this.numOfRounds = this.pzProps.rounds.numOfRounds
   }
+
+  // CALCS
 
   calcMaxScore(numUserHints = 0, numOfUsers = 0) {
     // total score - hints
@@ -29,6 +33,18 @@ class Score {
 
   calcHintCost() {
     return (this.numOfRounds*ROUND_SCORE) * HINT_COST
+  }
+
+  // BUILD HTML
+
+  htmlSimpleDisplay(score) {
+    return(
+      <div>
+        <h2>Score:<br/>{score.round} / {score.total} / {score.max}</h2>
+        round / total / max<br/>
+        hint cost: {score.hintCost}<br/>
+      </div>
+    )
   }
 
 }
