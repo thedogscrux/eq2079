@@ -1,0 +1,32 @@
+#spots-board-wrapper {
+  #spots-wrapper {
+    display: flex;
+    flex-direction: column;
+    .rows {
+      width: 100%;
+      .cols {
+        display: inline-block;
+        width: 15vw;
+        height: 15vw;
+        text-align: center;
+        button {
+          margin: auto;
+          border-radius: 8vw;
+          // height: 25px;
+          // width: 25px;
+          width: 7vw;
+          height: 7vw;
+          padding: 0;
+          background-color: rgba(255, 255, 255, .8);
+          color: #000;
+          &.active {
+            border: solid white 3px;
+            height: 9vw;
+            width: 9vw;
+          }
+        }
+      }
+    }
+  }
+
+}

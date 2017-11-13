@@ -5,144 +5,181 @@ import 'firebase/database'
 import 'firebase/storage'
 
 import Random from 'random-js'
+import _ from 'underscore'
 
-import clock0 from '../../../images/pz/clock/clock-0.svg'
-import clock4 from '../../../images/pz/clock/clock-4.svg'
-
-import shape01 from './images/PzShape01.svg'
-
-// import item00 from './images/0-0.jpg'
-// import item01 from './images/0-1.jpg'
-// import item02 from './images/0-2.jpg'
-// import item03 from './images/0-3.jpg'
-// import item04 from './images/0-4.jpg'
-// import item10 from './images/1-0.jpg'
-// import item11 from './images/1-1.jpg'
-// import item12 from './images/1-2.jpg'
-// import item13 from './images/1-3.jpg'
-// import item14 from './images/1-4.jpg'
-// import item20 from './images/2-0.jpg'
-// import item21 from './images/2-1.jpg'
-// import item22 from './images/2-2.jpg'
-// import item23 from './images/2-3.jpg'
-// import item24 from './images/2-4.jpg'
-
+import { shuffleArray, testIfEqualArrays, removeArrayKey } from '../../../utils/Common.js'
+import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
+import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 
-const pzIndex = 4
-const pzProps = propsPzs[pzIndex]
+import imageA00 from './images/imageA00.svg'
 
-const shapeMap = {
-  shape01
-}
+const PZ_INDEX = 4
+const PZ_PROPS = propsPzs[PZ_INDEX]
 
-// const itemMap = {
-//   item00, item01, item02, item03, item04,
-//   item10, item11, item12, item13, item14,
-//   item20, item21, item22, item23, item24
-// }
+const HINTS = [
+  {
+    title: 'Hint One',
+    body: '...'
+  },
+  {
+    title: 'Hint Two',
+    subTitle: 'Subtitle',
+    body: '...'
+  }
+]
 
+const GRID_X = 5
+const GRID_Y = 50
+
+const BLACK = [0, 0, 0]
+const RED = [255, 0, 0]
+const GREEN = [0, 255, 0]
+const BLUE = [0, 0, 255]
+
+const YELLOW = [255, 255, 0] // RED + GREEN
+
+const ORANGE = [255, 165, 0]
+
+const COLOR_MAP = [
+  BLACK,
+  RED,
+  GREEN,
+  BLUE
+]
 
 class Pz5 extends Component {
-  constructor(props){
-    super(props)
-    let baseSate = {
-      points: 0,
-      round: props.round,
-      totalScore: 0,
-      user: props.user,
-      clock: props.clock,
-      valid: false
-    }
-    this.state = {
-      ...baseSate,
-      board: {
-        bars: [
+    constructor(props){
+      super(props)
+      let score = new Score(PZ_INDEX)
+      let baseSate = {
+        round: props.round,
+        user: props.user,
+        clock: props.clock,
+        valid: false,
+        hints: props.user.pzs[PZ_INDEX].hints,
+        score: {
+          max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
+          multi: 0 * game.score.mutliplayerMultiplier,
+          hintCost: score.calcHintCost(PZ_INDEX),
+          round: 0,
+          total: 0
+        }
+      }
+      this.state = {
+        userKey: -1,
+        ...baseSate,
+        board: {
+          table: [
+            {
+              users: [],
+              user: '',
+              color: [0,0,0],
+              x: 0,
+              y: 0
+            }
+          ],
+          myItems: 0,
+          myColor: 0
+        },
+        rounds: [
           {
-            position: 0,
-            solution: 0,
-            index: 0
+            solution: [
+              {
+                color: [0,0,0],
+                x: 0,
+                y: 0
+              }
+            ],
+            users: [
+              {
+                userId: '',
+                items: 0,
+                color: [0,0,0]
+              }
+            ]
           }
         ]
-      },
-      rounds: {}
+      }
+
     }
-    // this.state = {
-    //   ...baseSate,
-    //   bars: {},
-    //   guessLabel: '',
-    //   guessKey: '',
-    //   guessCode: '',
-    //   ans: '',
-    //   ansKey: {x:'y'},
-    //   rounds: {},
-    //   indexRound: 0,
-    //   indexColUser: 0,
-    //   guessInput: '',
-    //   myItemPos: [],
-    //   selectedImgSrc: ''
-    // }
-    //this.handleChangeGuessCode = this.handleChangeGuessCode.bind(this)
-  }
 
-  // BIND
-
-  // handleChangeGuessCode(event) {
-  //   this.setState({ guessCode: event.target.value });
-  // }
-
-  // WATCH
+  // LIFECYCLE
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
-      if (this.props.round != nextProps.round) this.buildStateBoard(nextProps.round)
+      if (this.props.round != nextProps.round) {
+        this.updateStateScore()
+        this.buildStateBoard(nextProps.round)
+      }
       this.setState({
         round: nextProps.round,
-        clock: nextProps.clock,
+        clock: nextProps.clock
       })
     }
   }
 
   componentWillMount() {
     this.getSettings()
-    // let promise = new Promise(function(resolve, reject) {
-    //   self.getSettings()
-    // });
-    // promise.then(function(result) {
-    //   self.buildStateBoard()
-    // });
-    // new Promise(function(resolve, reject) {
-    //
-    //   return this.getSettings()
-    //
-    // }).then(function(result) { // (**)
-    //
-    //   this.buildStateBoard()
-    //
-    // });
+    this.watchDB()
   }
 
   componentWillUnmount() {
     let self = this
     let score = this.endGame()
-    firebase.database().ref('/pzs/' + pzIndex + '/status').once('value').then(function(snapshot){
+    this.unwatchDB()
+    firebase.database().ref('/pzs/' + PZ_INDEX + '/status').once('value').then(function(snapshot){
       if(snapshot.val() === 'inactive') self.props.endGame(score)
+    })
+  }
+
+  // WATCH DB
+
+  unwatchDB() {
+    firebase.database().ref('/boards/' +  PZ_PROPS.code).off()
+  }
+
+  watchDB() {
+    var self = this
+    firebase.database().ref('/boards/' +  PZ_PROPS.code).on('value', function(snapshot){
+      self.updateStatePz(snapshot.val())
+    })
+  }
+
+  updateStatePz(pzBoard) {
+    let tableNew = pzBoard.rounds[this.state.round].table
+    if (tableNew != this.state.board.table) {
+      this.setState({
+        board: {
+          ...this.state.board,
+          table: tableNew
+        }
+      })
+    }
+  }
+
+  updateStateScore() {
+    let newTotalScore = this.state.score.total + this.state.score.round
+    // user cant score higher than max
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
+    this.setState({
+      ...this.state,
+      score: {
+        ...this.state.score,
+        total: newTotalScore
+      }
     })
   }
 
   // SETUP BOARD
 
-  // TODO is this func necessary? redunant of setStateRounds()
   getSettings() {
     var self = this
-    let once = firebase.database().ref('/boards/pz5/').once('value').then(function(snapshot){
-      if(self._ismounted) {
-        console.log('gotcha! - setting state 1');
-        self.setStateRounds(snapshot.val())
-      } else {
-        console.log('gotcha! - setting state 3');
+    let once = firebase.database().ref('/boards/' + PZ_PROPS.code).once('value').then(function(snapshot){
+      if(!self._ismounted) {
         self.setStateRounds(snapshot.val())
         self.buildStateBoard()
+        self.getMyUserKey()
       }
       return
     })
@@ -150,292 +187,288 @@ class Pz5 extends Component {
   }
 
   setStateRounds(settings){
-    if(this._ismounted) {
-      console.log('setting state 1');
+    if(!this._ismounted) {
       this.setState({
         rounds: settings.rounds
       })
-      this.getMyItemPos()
-    } else {
-      console.log('gotcha! - setting state 2');
-      this.setState({
-        rounds: settings.rounds
-      })
-      this.getMyItemPos()
     }
   }
 
   buildStateBoard(round) {
-    console.log('BUILD BOARD',this.state.rounds);
+    // build board
+    console.log('* build board *');
+    let userItems = 0
     let userId = this.props.user.id
-    //let userBars = {}
-    //let roundUsers = this.state.rounds[this.state.round-0].users
-    // filter 1
-    let roundKey = (round) ? round-0 : this.state.round-0
-    let roundUser = this.state.rounds[roundKey].users.filter( user => user.user == userId )
-    // filter 2
-    // let roundUsers = this.state.rounds[this.state.round-0].users
-    // let roundUser = roundUsers.filter( user => user.user == userId )
-    let userBars = roundUser[0].bars.map( bar => {
-      return {
-        position: 3,
-        solution: bar.solution,
-        index: bar.index
-      }
-    })
-    // userBars = roundUsers.map( (user, key) => {
-    //   // loop thru users in the round
-    //   if(user.user == userId) {
-    //     let bars = user.bars.map( (bar, key) => {
-    //       // loop thru each bar
-    //       return {
-    //         position: 3,
-    //         solution: bar.solution,
-    //         index: bar.index
-    //       }
-    //     })
-    //     console.log('loop: bars:', bars);
-    //     return bars
-    //   }
-    // })
-    //console.log('XXXXXXloop: userBars:',userBars);
+    let roundKey = (round) ? round : this.state.round
+    if(!this.state.rounds[roundKey]) return
+    let roundUser = this.state.rounds[roundKey].users.filter( user => user.userId == userId )
     this.setState({
       board: {
-        bars: userBars
+        ...this.state.board,
+        myItems: roundUser[0].items,
+        myColor: roundUser[0].color,
+        table: []
       }
     })
-    console.log('this.staet after board', this.state.board);
-    // console.log('focing update');
-    // this.forceUpdate()
-    // for active user only
-  //   board: [
-  //     bars: [
-  //       0: [
-  //         index: 1,
-  //         sol: 2,
-  //         position: 3
-  //       ],
-  //       1: [
-  //         index: 1,
-  //         sol: 2,
-  //         position: 3
-  //       ],
-  //       2: [
-  //         index: 1,
-  //         sol: 2,
-  //         position: 3
-  //       ]
-  //     ]
-  //   ]
+  }
+
+  getMyUserKey() {
+    // loop thru all users in round to find me
+    let userKey = -1
+    let userId = this.props.user.id
+    this.state.rounds[this.state.round].users.filter((user,key) => {
+      if (user.userId == userId) userKey = key
+      return
+    })
+    this.setState({
+      userKey: userKey
+    })
   }
 
   getMyItemPos() {
-    // get my item Positions
-    console.log('** gettting my item pos **');
-    // Object.keys(this.state.rounds).map((row, rowIndex) => {
-    //   const inner = Object.keys(this.state.rounds[rowIndex]).map((user, colIndex) => {
-    //     let userId = this.state.rounds[rowIndex][colIndex].user
-    //     if(userId == this.props.user.id) {
-    //       let src = itemMap['item' + rowIndex + colIndex]
-    //       let code = this.state.rounds[rowIndex][colIndex].code
-    //       let myItemPosArrary = this.state.myItemPos
-    //       myItemPosArrary.push({
-    //         src: src,
-    //         code: code
-    //       })
-    //       this.setState({
-    //         myItemPos: myItemPosArrary
-    //       })
-    //     }
-    //   })
-    // })
-  }
-
-
-  // GUESS
-
-  // getPoint(){
-  //   let points = this.state.points + 1
-  //   this.setState({
-  //     points: points
-  //   })
-  // }
-
-  guess(key, item, ans, indexRound, indexColUser, selectedImgSrc) {
-    // document.getElementById('itemCode').focus()
-    // this.setState({
-    //   guessKey: key,
-    //   guessLabel: item,
-    //   ans: ans,
-    //   indexRound: indexRound,
-    //   indexColUser: indexColUser,
-    //   selectedImgSrc: selectedImgSrc
-    // })
-  }
-
-  submitGuess(guess) {
-    // console.log('** Guess **');
-    // document.getElementById('msg').innerHTML = ''
-    // document.getElementById('itemCode').value = ''
-    // this.setState({
-    //   guessCode: ''
-    // })
-    // if(parseInt(this.state.guessCode) === parseInt(this.state.ans)) {
-    //   this.setState({
-    //     rounds: {
-    //       ...this.state.rounds,
-    //       [this.state.indexRound]: {
-    //         ...this.state.rounds[this.state.indexRound],
-    //         [this.state.indexColUser]: {
-    //           ...this.state.rounds[this.state.indexRound][this.state.indexColUser],
-    //           ans: true
-    //         }
-    //       }
-    //     }
-    //   })
-    // } else {
-    //   alert('wrong')
-    //   document.getElementById('msg').innerHTML = 'wrong'
-    // }
-    // document.getElementById('itemCode').focus()
-    // return
+    // might need if you have mutliple positions
   }
 
   // END GAME
 
-  endGame(){
-    // let userId = this.props.user.id
-    let score = 0
-    // // calc user score (final score calculated in Pz parent)
-    // Object.keys(this.state.rounds).map((key, round) => {
-    //   Object.keys(this.state.rounds[round]).map((key, userIndex) => {
-    //     let user = this.state.rounds[round][userIndex]
-    //     if(user.ans === true) {
-    //       score++
-    //     }
-    //     return
-    //   })
-    //   return
-    // })
-    return score
+  endRound() {
+    this.props.endRound()
   }
 
-  updateBarPos(stateBarKey, index, position) {
-    // update the bar position and check if valid
-    console.log('bar, pos',index, position);
-    // update the bar position
-    // if [stateBarKey] doesnt work, maybe loop thru to find index
+  endGame(){
+    let newTotalScore = this.state.score.round + this.state.score.total
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
+    // calc user score (final score calculated in Pz parent)
+    return newTotalScore
+  }
+
+  // HINT
+
+  getHint() {
+    console.log(' ** GET HINT ** ');
+    let hint = HINTS[this.state.hints]
+    let newHintCount = this.state.hints + 1
+    // update user max score
+    let score = new Score(PZ_INDEX)
+    let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
+    this.setState({
+      ...this.state,
+      hints: newHintCount,
+      score: {
+        ...this.state.score,
+        max: newMaxScore
+      }
+    })
+    firebase.database().ref('/users/' + this.props.user.id + '/pzs/' + PZ_INDEX).update({
+      hints: newHintCount
+    })
+  }
+
+  // GUESS
+
+  addItemToTable(x, y) {
+    // add the spot to the table and get points
+    let self = this
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
+    let newTable = this.state.board.table || []
+    let newColor = Object.assign([], this.state.board.myColor)
+    let newUsers = [ this.props.user.id ]
+    let solution = this.state.rounds[this.state.round].solution
+    let existingItemTableKey = -1
+    let existingUsers = 0
+
+    // check if user has any items left, if they dont, remove the first one
+    let removeKey = -1
+    let userItemsCount = 0
+    newTable.map((item,key) => {
+      item.users.map( (user, key) => {
+        if(removeKey === -1 && item.userId === this.props.user.id) removeKey = key
+        if(user === this.props.user.id) userItemsCount++
+      })
+    })
+    if (userItemsCount > this.state.board.myItems-1) newTable.splice(removeKey, 1)
+
+    // check if someone else has their item at point
+    if(this.state.board.table) {
+      existingUsers = this.state.board.table.filter( (item,key) => {
+        if (item.x === x && item.y === y) existingItemTableKey = key
+        return item.x === x && item.y === y
+      })
+    }
+
+    if (existingUsers.length >= 1) {
+      // add curent user to  existing users on point
+      newUsers =  Object.assign([], this.state.board.table[existingItemTableKey].users)
+      newUsers.push(this.props.user.id)
+      // set the color of the point
+      existingUsers.forEach( (user,key) => {
+        newColor[0] = newColor[0] + user.color[0]
+        newColor[1] = newColor[1] + user.color[1]
+        newColor[2] = newColor[2] + user.color[2]
+      })
+      // overwrite existing item in table
+      newTable[existingItemTableKey] = {
+        users: newUsers,
+        userId: 'this.props.user.id',
+        color: newColor,
+        x: x,
+        y: y
+      }
+    } else {
+      // append item to table
+      newTable.push({
+        users: newUsers,
+        userId: 'this.props.user.id',
+        color: newColor,
+        x: x,
+        y: y
+      })
+    }
+
+    let lastItemPlaced = (newTable.length == solution.length) ? true : false
+
+    // UPDATE SCORE: by checking if all my tiles are in the correct position
+      // loop thru all my  tiles, then loop thru all tiles on table to check
+      let allMyItemsValid = true
+      // TODO...
+
+    // update the table on the dbase
+    firebase.database().ref(refRound).update({
+      table: newTable
+    }).then(function(){
+      // check if table is valid, if so, end the round
+      if(lastItemPlaced) {
+        firebase.database().ref(refRound).once('value').then(function(snapshot) {
+          // setup table for testing
+          let minifiedTable = snapshot.val().table.map( (item, key) => String(item.x) + String(item.y) + '-' + item.color[0] + '-' + item.color[1] + '-' + item.color[2])
+          let minifiedSolution = snapshot.val().solution.map( (item, key) => String(item.x) + String(item.y) + '-' + item.color[0] + '-' + item.color[1] + '-' + item.color[2])
+          if(testIfEqualArrays(minifiedTable.sort(), minifiedSolution.sort())) {
+            self.endRound()
+          }
+        })
+      }
+    })
+  }
+
+  removeItemFromTable(removeKey) {
+    let self = this
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
+    let newTable = Object.assign([], this.state.board.table)
+    let solution = this.state.rounds[this.state.round].solution
+    if(newTable[removeKey].users.length > 1) {
+      let newItem = newTable[removeKey]
+      // remove my colors
+      newItem.color[0] = newItem.color[0] - this.state.board.myColor[0]
+      newItem.color[1] = newItem.color[1] - this.state.board.myColor[1]
+      newItem.color[2] = newItem.color[2] - this.state.board.myColor[2]
+      // remove myself from item
+      let myUserKey = newItem.users.indexOf(this.props.user.id);
+      newItem.users.splice(myUserKey, 1)
+    } else {
+      // remove item
+      newTable.splice(removeKey, 1)
+    }
     this.setState({
       board: {
-        bars: {
-          ...this.state.rounds.bars,
-          [stateBarKey]: position
-        }
+        ...this.state.board,
+        table: newTable
       }
     })
-    // check if valid
-    // loop thru all bars and if any are incorrect, user is not valid
-    //let valid = (this.state.board.bars[stateBarKey].solution === position) ? true : false
-    console.log('make sure state is updated with new bar pos before running validator:',this.state.board.bars);
-    let valid = true
-    Object.keys(this.state.board.bars).map( barKey => {
-      if (this.state.board.bars[barKey].solution !== this.state.board.bars[barKey].position) valid = false
-    })
-    if (this.state.valid != valid) {
-      if (valid) {
-        // if all users are valid, end the round
-        firebase.database().ref('/boards/pz5/rounds/0/users/').once(function(snapshot){
-          let users = snapshot.val()
-          console.log('........if all users are valid end the round');
-        })
-      } else {
-        firebase.database().ref('/boards/pz5/rounds/0/users/0/').update({
-          valid: valid
+    let lastItemPlaced = (newTable.length == solution.length) ? true : false
+    firebase.database().ref(refRound).update({
+      table: newTable
+    }).then(function(){
+      // check if table is valid, if so, end the round
+      if(lastItemPlaced) {
+        firebase.database().ref(refRound).once('value').then(function(snapshot) {
+          // setup table for testing
+          let minifiedTable = snapshot.val().table.map( (item, key) => String(item.x) + String(item.y) + '-' + item.color[0] + '-' + item.color[1] + '-' + item.color[2])
+          let minifiedSolution = snapshot.val().solution.map( (item, key) => String(item.x) + String(item.y) + '-' + item.color[0] + '-' + item.color[1] + '-' + item.color[2])
+          if(testIfEqualArrays(minifiedTable.sort(), minifiedSolution.sort())) {
+            self.endRound()
+          }
         })
       }
-    }
+    })
+
   }
 
-
   render(){
-    // const html = Object.keys(this.state.rounds).map( (key, roundIndex) => {
-    //   let htmlBars = ''
-    //   let round = this.state.rounds[roundIndex]
-    //   if(roundIndex == this.state.round-0) {
-    //     // get the users for this round
-    //     htmlBars = Object.keys(round).map( (key, userIndex) => {
-    //       // loop thru the user
-    //       let htmlBar = ''
-    //       let user = round[userIndex]
-    //       if(user.user == this.props.user.id) {
-    //         htmlBar = Object.keys(user.bars).map( (key, barIndex) => {
-    //           let bar = user.bars[barIndex]
-    //           return (
-    //             <div key={key} className='bar' style={{backgroundColor: 'red'}}>
-    //               <button onClick={() => this.updateBarPos(barIndex, 0)}>index: {bar.index} , {bar.solution}</button>
-    //               <button onClick={() => this.updateBarPos(barIndex, 1)}>index: {bar.index} , {bar.solution}</button>
-    //               <button onClick={() => this.updateBarPos(barIndex, 2)}>index: {bar.index} , {bar.solution}</button>
-    //               <button onClick={() => this.updateBarPos(barIndex, 3)}>index: {bar.index} , {bar.solution}</button>
-    //               <button onClick={() => this.updateBarPos(barIndex, 4)}>index: {bar.index} , {bar.solution}</button>
-    //             </div>
-    //           )
-    //         })
-    //       }
-    //       return (<div key={key}>{htmlBar}</div>)
-    //     })
-    //   }
-    //   return (<div key={key}>{htmlBars}</div>)
-    // })
-    // board: [
-    //     bars: [
-    //       0: [
-    //         index: 1,
-    //         sol: 2,
-    //         position: 3
-    //       ],
-    //       1: [
-    //         index: 1,
-    //         sol: 2,
-    //         position: 3
-    //       ],
-    //       2: [
-    //         index: 1,
-    //         sol: 2,
-    //         position: 3
-    //       ]
-    //     ]
-    //   ]
-    // console.log('render: this.state.board',this.state.board)
-    // console.log('render: this.state.rounds',this.state.rounds)
-    // loop thru all user bars
+    // build an array of empty rows/cols
+    let htmlRows = []
+    for(var y=0; y<=GRID_Y; y++) {
+      let cols = []
+      for(var x=0; x<=GRID_X; x++) {
+        cols.push('')
+      }
+      htmlRows.push(cols)
+    }
 
-    const htmlBars = Object.keys(this.state.board.bars).map( stateBarKey => {
-      let bar = this.state.board.bars[stateBarKey]
-      let bgColor = 'gray'
-      // switch(bar.index) {
-      //   case 0:
-      //     bgColor = 'red'
-      //     break;
-      //   case 2:
-      //     bgColor = 'blue'
-      //     break;
-      // }
-      return (
-        <div key={stateBarKey} style={{ backgroundColor: bgColor }} className='bar'>
-          <button onClick={() => this.updateBarPos(stateBarKey, bar.index, 0)}>index:  {bar.index} {bar.position} , {bar.solution}</button>
-          <button onClick={() => this.updateBarPos(stateBarKey, bar.index, 1)}>index: {bar.position} , {bar.solution}</button>
-          <button onClick={() => this.updateBarPos(stateBarKey, bar.index, 2)}>index: {bar.position} , {bar.solution}</button>
-          <button onClick={() => this.updateBarPos(stateBarKey, bar.index, 3)}>index: {bar.position} , {bar.solution}</button>
-          <button onClick={() => this.updateBarPos(stateBarKey, bar.index, 4)}>index: {bar.position} , {bar.solution}</button>
-        </div>
+    // insert buttons in each row/col cell
+    let htmlButtons = htmlRows.map( (row, y) => {
+      let innerHtml = row.map((col,x) => {
+        // if spot is selected, style it
+        let css = {}
+        let classNames = ''
+        let myItem = false
+        let teamItem = false
+        let itemTableKey = 0
+        let userId = this.props.user.id
+
+        if(this.state.board.table && this.state.board.table.length >= 1){
+          // loop thru all items on table
+          this.state.board.table.map( (item, key) => {
+            if(item.x === x && item.y === y) {
+              classNames = 'active'
+              css.backgroundColor = 'rgba(' + item.color[0] + ',' + item.color[1] + ',' + item.color[2] + ', .8)'
+              // see if i am in this item's user list
+              let myUserKey = item.users.indexOf(userId);
+              if(myUserKey > -1) {
+                myItem = true
+                itemTableKey = key
+              } else {
+                teamItem = true
+                itemTableKey = key
+              }
+            }
+
+          })
+        }
+
+        if(myItem) {
+          return (
+            <div key={'col-'+y+x} className='cols' >
+              <button onClick={() => this.removeItemFromTable(itemTableKey)} className={classNames} style={css}>
+                [{itemTableKey}]{x},{y}
+              </button>
+            </div>
+          )
+        } else if(teamItem) {
+          return (
+            <div key={'col-'+y+x} className='cols' >
+              <button onClick={() => this.addItemToTable(x, y)} style={css}>
+                [{itemTableKey}]{x},{y}
+              </button>
+            </div>
+          )
+        } else {
+          return (
+            <div key={'col-'+y+x} className='cols' >
+              <button onClick={() => this.addItemToTable(x, y)} style={css}>{x},{y}</button>
+            </div>
+          )
+        }
+      })
+
+      return(
+        <div key={'row-'+y} className='rows'>{innerHtml}</div>
       )
     })
 
     return(
-      <div id="shape-board-wrapper" className='component-wrapper'>
+      <div id="spots-board-wrapper" className='component-wrapper'>
         <img src={this.state.clock} width="50px" />
-        {htmlBars}
-        <img src={shape01} />
+        <div id='spots-wrapper'>{htmlButtons}</div>
       </div>
     )
   }
@@ -444,97 +477,88 @@ class Pz5 extends Component {
 // FUNCS
 
 const genSettingsPz5 = (props) => {
-  console.log('** generate settings **')
-  // generate user items
   let settings = []
-  let settingsUsers = []
-  let rowAssignmentIndex = 0
-  let userIndex = 0
-  let random = new Random(Random.engines.mt19937().autoSeed());
+  let random = new Random(Random.engines.mt19937().autoSeed())
+  // SHUFFLE ITEMS and determine solution
+  let solutionColors = []
+  let solution = []
+  if(props.players.length === 1) {
+    solutionColors = [ BLACK ]
+    solution = [
+      [
+        { x:0, y:0, color:BLACK },
+        { x:1, y:0, color:BLACK },
+        { x:2, y:0, color:BLACK },
+        { x:3, y:0, color:BLACK },
+        { x:4, y:0, color:BLACK },
+        { x:5, y:0, color:BLACK }
+      ],
+      [
+        { x:0, y:0, color:BLACK },
+        { x:1, y:0, color:BLACK },
+        { x:2, y:0, color:BLACK },
+        { x:0, y:1, color:BLACK },
+        { x:1, y:1, color:BLACK },
+        { x:2, y:1, color:BLACK }
+      ]
+    ]
+  } else if (props.players.length === 2) {
+    solutionColors = [ RED, GREEN ]
+    solution = [
+      [
+        { x:0, y:0, color:RED },
+        { x:1, y:0, color:RED },
+        { x:2, y:0, color:GREEN },
+        { x:3, y:0, color:GREEN },
+        { x:4, y:0, color:YELLOW },
+        { x:5, y:0, color:YELLOW }
+      ],
+      [
+        { x:0, y:1, color:RED },
+        { x:1, y:1, color:RED },
+        { x:2, y:1, color:GREEN },
+        { x:3, y:1, color:GREEN },
+        { x:4, y:1, color:YELLOW },
+        { x:5, y:1, color:YELLOW }
+      ],
+    ]
+  }
   // setup each user for each round
-  for(let round=0; round<pzProps.rounds.numOfRounds; round++){
-    settingsUsers = []
-    props.players.forEach( (player,key) => {
+  for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
+    // ADD USERS to pz - create an empty obj for each user
+    let settingsUsers = []
+    props.players.forEach( (user,key) => {
       settingsUsers.push(
         {
-          user: player,
-          valid: false,
-          bars: []
+          userId: user,
+          items: solution[round].length,
+          color: 0
         }
       )
     })
-    settings.push({
-      users: settingsUsers
+    // settings = rounds[#][users][#] (without user data)
+    // DEAL colors to users
+    let userIndex = 0
+    solutionColors.forEach((color, key) => {
+      settingsUsers[userIndex].color = color
+      userIndex ++
     })
-  }
-  // loop thru rounds
-  console.log('settings',settings);
-  for(let round=0; round<pzProps.rounds.numOfRounds; round++){
-    // distribute bars to users
-    let rowAssignment = shuffle([0, 1, 2, 3, 4, 5])
-    let solution = [ 1, 1, 2, 2, 3, 3 ]
-    rowAssignment.forEach(index => {
-        settings[round].users[userIndex].bars.push({
-          index: rowAssignment[index],
-          solution: solution[rowAssignment[index]]
-        })
-        userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
+    // settings = rounds[#][users][#] (with user data)
+    // STORE settings
+    settings.push({
+      users: settingsUsers,
+      table: [],
+      solution: solution[round]
     })
   }
   // calc total score
   let totalScore = 0
   // store all info in dbase
-  firebase.database().ref('/boards/pz5').set({
+  firebase.database().ref('/boards/' + PZ_PROPS.code).set({
     rounds: settings
   })
   //return settings
   return totalScore
-}
-
-// const genSettingsPz5OLD = (props) => {
-//   console.log('** generate settings **')
-//   // generate user items
-//   let settings = []
-//   let random = new Random(Random.engines.mt19937().autoSeed());
-//   for(let round=0; round<pzProps.rounds.numOfRounds; round++){
-//     let cols = []
-//     props.players.forEach( (player,key) => {
-//       let code = random.integer(100, 999)
-//       cols.push(
-//         {
-//           user: player,
-//           code: code,
-//           ans: false
-//         }
-//       )
-//     })
-//     // rando the array/row
-//     let shuffled = shuffle(cols)
-//     settings.push(shuffled)
-//   }
-//   // calc total score
-//   let totalScore = (pzProps.rounds.numOfRounds * props.players.length) - pzProps.rounds.numOfRounds
-//   // store all info in dbase
-//   firebase.database().ref('/boards/pz5').set({
-//     rounds: settings
-//   })
-//   //return settings
-//   return totalScore
-// }
-
-const shuffle = (array) => {
-  var currentIndex = array.length, temporaryValue, randomIndex;
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-  return array;
 }
 
 export default Pz5

@@ -55,7 +55,7 @@ const IMAGE_MAP = new Map([
         ...baseSate,
         board: {
           table: [ 2, 1, 0 ],
-          myTiles: [
+          myItems: [
             {
               value: 'A00'
             }
@@ -67,7 +67,7 @@ const IMAGE_MAP = new Map([
             solution: [ 0, 1, 2 ],
             users: [
               {
-                tiles: [ 0, 2 ],
+                items: [ 0, 2 ],
                 userId: ''
               }
             ]
@@ -100,6 +100,7 @@ const IMAGE_MAP = new Map([
   componentWillUnmount() {
     let self = this
     let score = this.endGame()
+    this.unwatchDB()
     firebase.database().ref('/pzs/' + PZ_INDEX + '/status').once('value').then(function(snapshot){
       if(snapshot.val() === 'inactive') self.props.endGame(score)
     })
@@ -118,8 +119,8 @@ const IMAGE_MAP = new Map([
     })
   }
 
-  updateStatePz(value) {
-    let tableNew = value.rounds[this.state.round].table
+  updateStatePz(pzBoard) {
+    let tableNew = pzBoard.rounds[this.state.round].table
     if (tableNew != this.state.board.table) {
       this.setState({
         board: {
@@ -171,7 +172,7 @@ const IMAGE_MAP = new Map([
     // make user has everything they need
     // table can be updated with a watch
     console.log('* build board *');
-    // pz2 - loop thru all user assigned tiles and add them to state. a table is updated with a db watch
+    // pz2 - loop thru all user assigned items and add them to state. a table is updated with a db watch
   }
 
   getMyUserKey() {
@@ -236,6 +237,46 @@ const IMAGE_MAP = new Map([
     })
   }
 
+  updateTable() {
+    // add the item to the table and get points
+    let self = this
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
+    let tableNew = this.state.board.table || []
+    let solution = this.state.rounds[this.state.round].solution
+
+
+    // add item to table
+    tableNew.push(tileValue)
+    let lastItemPlaced = (tableNew.length >= solution.length) ? true : false
+
+    // UPDATE SCORE: by checking if all my items are in the correct position
+      // loop thru all my  items, then loop thru all items on table to check
+      let allMyItemsValid = true
+
+    // if all my items are valid, give me the round points
+    this.setState({
+      ...this.state,
+      board: {
+        ...this.state.board,
+        table: {}
+      }
+    })
+
+    // check/set the color of the item
+
+    // update the table on the dbase
+    firebase.database().ref(refRound).update({
+      table: tableNew
+    }).then(function(){
+      // check if table is valid, if so, end the round
+      if(lastItemPlaced) {
+        firebase.database().ref(refRound).once('value').then(function(snapshot) {
+          if(testIfEqualArrays(snapshot.val().table, snapshot.val().solution)) self.endRound()
+        })
+      }
+    })
+  }
+
   render(){
     return(
       <div id="xxx-board-wrapper" className='component-wrapper'>
@@ -252,7 +293,7 @@ const genSettingsPz0 = (props) => {
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed())
   // setup each user for each round
-  for(let round=0; round<pzProps.rounds.numOfRounds; round++){
+  for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
     props.players.forEach( (user,key) => {
@@ -272,7 +313,7 @@ const genSettingsPz0 = (props) => {
       [ 1, 2, 3, 1, 2, 3 ]
     ]
     let solution = solutions[round]
-    let shuffledItems = shuffle([0, 1, 2, 3, 4, 5])
+    let shuffledItems = shuffleArray([0, 1, 2, 3, 4, 5])
     // pz2
     let solution = [
       ['A00', 'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08' ],
@@ -291,7 +332,7 @@ const genSettingsPz0 = (props) => {
     })
     // pz2
     shuffledItems.forEach((index, key) => {
-        settingsUsers[userIndex].tiles.push(shuffledItems[key])
+        settingsUsers[userIndex].items.push(shuffledItems[key])
         userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
     })
     // settings = rounds[#][users][#] (with user data)
@@ -310,7 +351,7 @@ const genSettingsPz0 = (props) => {
   // calc total score
   let totalScore = 0
   // store all info in dbase
-  firebase.database().ref('/boards/' + pzProps.code).set({
+  firebase.database().ref('/boards/' + PZ_PROPS.code).set({
     rounds: settings
   })
   //return settings

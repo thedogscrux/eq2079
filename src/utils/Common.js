@@ -24,11 +24,19 @@ const testIfEqualArrays = (a, b) => {
   return true;
 }
 
+const removeArrayKey = (array, key) => {
+  let array2 = Object.assign([], array)
+  const index = array2.indexOf(key);
+  array2.splice(index, 1);
+  return array2
+}
+
 // abstract clas smample below (funcs must be inside class)
 // export const shuffle = Score.prototype.shuffle
 // export const testIfEqualArrays = Score.prototype.testIfEqualArrays
 
 export {
   shuffleArray,
-  testIfEqualArrays
+  testIfEqualArrays,
+  removeArrayKey
 }

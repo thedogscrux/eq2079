@@ -4,7 +4,7 @@ body {
   font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8; }
+  opacity: .4; }
 
 a {
   color: white;
@@ -47,7 +47,7 @@ body {
   font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8; }
+  opacity: .4; }
 
 a {
   color: white;
@@ -110,7 +110,7 @@ body {
   font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8; }
+  opacity: .4; }
 
 a {
   color: white;
@@ -343,7 +343,7 @@ body {
   font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8; }
+  opacity: .4; }
 
 a {
   color: white;
@@ -396,7 +396,7 @@ body {
   font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8; }
+  opacity: .4; }
 
 a {
   color: white;
@@ -533,3 +533,26 @@ button {
     border: none; }
     #shape-board-wrapper .bar button.active {
       background-color: #000; }
+
+#spots-board-wrapper #spots-wrapper {
+  display: flex;
+  flex-direction: column; }
+  #spots-board-wrapper #spots-wrapper .rows {
+    width: 100%; }
+    #spots-board-wrapper #spots-wrapper .rows .cols {
+      display: inline-block;
+      width: 15vw;
+      height: 15vw;
+      text-align: center; }
+      #spots-board-wrapper #spots-wrapper .rows .cols button {
+        margin: auto;
+        border-radius: 8vw;
+        width: 7vw;
+        height: 7vw;
+        padding: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #000; }
+        #spots-board-wrapper #spots-wrapper .rows .cols button.active {
+          border: solid white 3px;
+          height: 9vw;
+          width: 9vw; }
