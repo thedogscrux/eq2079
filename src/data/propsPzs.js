@@ -30,11 +30,11 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 30
+      roundSec: 7
     }
   },
   {
-    name: 'Pz Three',
+    name: 'Pz Three Soduko',
     code: 'pz3',
     location: {
       lat: 0,
@@ -46,8 +46,8 @@ const propsPzs = [
       left: '80%'
     },
     rounds: {
-      numOfRounds: 1,
-      roundSec: 25
+      numOfRounds: 2,
+      roundSec: 300
     }
   },
   {
@@ -64,11 +64,11 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 25
+      roundSec: 7
     }
   },
   {
-    name: 'Pz 5 Dirty Shape',
+    name: 'Pz 5 Spots',
     code: 'pz5',
     location: {
       lat: 0,
@@ -76,12 +76,12 @@ const propsPzs = [
     },
     mapPos: {
       floor: 'ground',
-      bottom: '10%',
-      left: '20%'
+      bottom: '20%',
+      left: '10%'
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 25
+      roundSec: 300
     }
   }
 ]

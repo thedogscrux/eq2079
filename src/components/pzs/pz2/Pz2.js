@@ -59,12 +59,13 @@ class Pz2 extends Component {
   constructor(props){
     super(props)
     let score = new Score(PZ_INDEX)
-    let baseSate = {
+    let baseState = {
       round: props.round,
       user: props.user,
       clock: props.clock,
       valid: false,
       hints: props.user.pzs[PZ_INDEX].hints,
+      userKey: -1,
       score: {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, this.props.numOfUsers),
         multi: 0 * game.score.mutliplayerMultiplier,
@@ -74,8 +75,7 @@ class Pz2 extends Component {
       }
     }
     this.state = {
-      userKey: -1,
-      ...baseSate,
+      ...baseState,
       board: {
         table: [ 2, 1, 0 ],
         myTiles: [

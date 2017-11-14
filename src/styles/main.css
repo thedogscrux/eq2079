@@ -1,3 +1,16 @@
+.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }
+
 body {
   background-color: black;
   color: white;
@@ -40,6 +53,19 @@ button {
 
 #component-nav a {
   display: inline-block; }
+
+.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }
 
 body {
   background-color: black;
@@ -103,6 +129,19 @@ button {
     padding: 0; }
     #component-map .map-wrapper .pz:hover {
       background-color: white; }
+
+.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }
 
 body {
   background-color: black;
@@ -337,6 +376,19 @@ button {
   100% {
     opacity: 1; } }
 
+.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }
+
 body {
   background-color: black;
   color: white;
@@ -389,6 +441,19 @@ button {
   margin-bottom: 20px; }
   #component-mk div.row div.col {
     flex-grow: 1; }
+
+.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }
 
 body {
   background-color: black;
@@ -466,6 +531,59 @@ button {
   color: #fff;
   cursor: pointer; }
 
+.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }
+
+body {
+  background-color: black;
+  color: white;
+  font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
+  padding: 1%;
+  margin: 0;
+  opacity: .4; }
+
+a {
+  color: white;
+  margin-right: 10px;
+  display: block;
+  cursor: pointer; }
+
+input,
+button {
+  border: none;
+  border: solid 1px white;
+  display: block;
+  margin: 1% 0;
+  padding: 10px 30px;
+  cursor: pointer; }
+
+input[type='submit'],
+button {
+  background-color: black;
+  color: white; }
+
+.component-wrapper {
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 1% 0;
+  padding: 1%; }
+  .component-wrapper.add {
+    background-color: rgba(255, 0, 0, 0.3); }
+
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 #jigsaw-board-wrapper .table-wrapper {
   width: 91vw;
   max-width: 455px;
@@ -498,9 +616,6 @@ button {
       margin: 0px; }
     #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
       border: none;
-      animation-duration: 3s;
-      animation-iteration-count: infinite;
-      animation-name: pulse;
       height: 50px;
       width: 50px;
       padding: 5px;
@@ -511,13 +626,76 @@ button {
         display: none;
         margin: 0px; }
 
+.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
 @keyframes pulse {
   0% {
     background-color: rgba(255, 255, 255, 0); }
   50% {
-    background-color: rgba(255, 255, 255, 0.6); }
+    background-color: rgba(255, 255, 255, 0.3); }
   100% {
     background-color: rgba(255, 255, 255, 0); } }
+
+body {
+  background-color: black;
+  color: white;
+  font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
+  padding: 1%;
+  margin: 0;
+  opacity: .4; }
+
+a {
+  color: white;
+  margin-right: 10px;
+  display: block;
+  cursor: pointer; }
+
+input,
+button {
+  border: none;
+  border: solid 1px white;
+  display: block;
+  margin: 1% 0;
+  padding: 10px 30px;
+  cursor: pointer; }
+
+input[type='submit'],
+button {
+  background-color: black;
+  color: white; }
+
+.component-wrapper {
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 1% 0;
+  padding: 1%; }
+  .component-wrapper.add {
+    background-color: rgba(255, 0, 0, 0.3); }
+
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+#soduko-board-wrapper #grid {
+  display: flex;
+  flex-direction: column; }
+  #soduko-board-wrapper #grid .row {
+    display: flex; }
+    #soduko-board-wrapper #grid .row .col {
+      border: solid rgba(255, 255, 255, 0.5) 0.5px;
+      display: flex;
+      align-items: center; }
+      #soduko-board-wrapper #grid .row .col .contents {
+        margin: auto; }
+  #soduko-board-wrapper #grid.table-size-3 .row .col {
+    width: 12.5vw;
+    height: 12.5vw; }
+  #soduko-board-wrapper #grid.table-size-8 .row .col {
+    width: 16.66vw;
+    height: 16.66vw; }
 
 #shape-board-wrapper .bar {
   height: 40px;

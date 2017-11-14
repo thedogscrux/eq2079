@@ -10,6 +10,7 @@ import { shuffleArray, testIfEqualArrays } from '../../../utils/Common.js'
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
+import Hints from '../../Hints.js'
 
 import imageA00 from './images/imageA00.svg'
 
@@ -32,50 +33,50 @@ const IMAGE_MAP = new Map([
     [ 'imageA00', imageA00 ]
 ]);
 
-  class Pz0 extends Component {
-    constructor(props){
-      super(props)
-      let score = new Score(PZ_INDEX)
-      let baseSate = {
-        round: props.round,
-        user: props.user,
-        clock: props.clock,
-        valid: false,
-        hints: props.user.pzs[PZ_INDEX].hints,
-        score: {
-          max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
-          multi: 0 * game.score.mutliplayerMultiplier,
-          hintCost: score.calcHintCost(PZ_INDEX),
-          round: 0,
-          total: 0
-        }
+class Pz0 extends Component {
+  constructor(props){
+    super(props)
+    let score = new Score(PZ_INDEX)
+    let baseState = {
+      round: props.round,
+      user: props.user,
+      clock: props.clock,
+      valid: false,
+      hints: props.user.pzs[PZ_INDEX].hints,
+      userKey: -1,
+      score: {
+        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
+        multi: 0 * game.score.mutliplayerMultiplier,
+        hintCost: score.calcHintCost(PZ_INDEX),
+        round: 0,
+        total: 0
       }
-      this.state = {
-        userKey: -1,
-        ...baseSate,
-        board: {
-          table: [ 2, 1, 0 ],
-          myItems: [
-            {
-              value: 'A00'
-            }
-          ],
-        },
-        rounds: [
-          {
-            table: [ 2, 1, 0 ],
-            solution: [ 0, 1, 2 ],
-            users: [
-              {
-                items: [ 0, 2 ],
-                userId: ''
-              }
-            ]
-          }
-        ]
-      }
-
     }
+    this.state = {
+      ...baseState,
+      board: {
+        table: [ 2, 1, 0 ],
+        myItems: [
+          {
+            value: 'A00'
+          }
+        ],
+      },
+      rounds: [
+        {
+          table: [ 2, 1, 0 ],
+          solution: [ 0, 1, 2 ],
+          users: [
+            {
+              items: [ 0, 2 ],
+              userId: ''
+            }
+          ]
+        }
+      ]
+    }
+
+  }
 
   // LIFECYCLE
 
@@ -172,6 +173,7 @@ const IMAGE_MAP = new Map([
     // table can be updated with a watch
     console.log('* build board *');
     // pz2 - loop thru all user assigned items and add them to state. a table is updated with a db watch
+    // pz5 dots - get properties for this user for this round, reset the table
   }
 
   getMyUserKey() {
@@ -235,16 +237,16 @@ const IMAGE_MAP = new Map([
     })
   }
 
-  addItemToTable() {
+  addItemToTable(item) {
     // add the item to the table and get points
     let self = this
     let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
     let tableNew = this.state.board.table || []
     let solution = this.state.rounds[this.state.round].solution
-
+    let userItemsCount = 1
 
     // add item to table
-    tableNew.push(tileValue)
+    tableNew.push(item)
     let lastItemPlaced = (tableNew.length >= solution.length) ? true : false
 
     // UPDATE SCORE: by checking if all my items are in the correct position

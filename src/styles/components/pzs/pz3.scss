@@ -1,0 +1,42 @@
+@import "../../global/global.scss";
+
+#soduko-board-wrapper {
+  //3/8
+  #grid {
+    display: flex;
+    flex-direction: column;
+    .row {
+      display: flex;
+      .col {
+        border: solid rgba(255, 255, 255, .5) .5px;
+        display: flex;
+        align-items: center;
+        &.my-cell {
+          @extend .ans-pulse;
+        }
+        .contents {
+          margin: auto;
+        }
+      }
+    }
+    &.table-size-3 {
+      .row {
+        .col {
+          // width: calc(100vw / 8);
+          // height: calc(100vw / 8);
+          width: 12.5vw;
+          height: 12.5vw;
+        }
+      }
+    }
+    &.table-size-8 {
+      .row {
+        .col {
+          width: 16.66vw;
+          height: 16.66vw;
+        }
+      }
+    }
+  }
+
+}

@@ -1,3 +1,5 @@
+@import "../../global/global.scss";
+
 #jigsaw-board-wrapper {
   .table-wrapper {
     width: 91vw;
@@ -34,10 +36,8 @@
         margin: 0px;
       }
       button {
+        @extend .ans-pulse;
         border: none;
-        animation-duration: 3s;
-        animation-iteration-count: infinite;
-        animation-name: pulse;
         height: 50px;
         width: 50px;
         padding: 5px;
@@ -50,17 +50,5 @@
         }
       }
     }
-  }
-}
-
-@keyframes pulse {
-  0% {
-    background-color: rgba(255, 255, 255, .0);
-  }
-  50% {
-    background-color: rgba(255, 255, 255, .6);
-  }
-  100% {
-    background-color: rgba(255, 255, 255, .0);
   }
 }

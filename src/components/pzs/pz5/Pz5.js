@@ -51,7 +51,7 @@ class Pz5 extends Component {
     constructor(props){
       super(props)
       let score = new Score(PZ_INDEX)
-      let baseSate = {
+      let baseState = {
         round: props.round,
         user: props.user,
         clock: props.clock,
@@ -67,7 +67,7 @@ class Pz5 extends Component {
       }
       this.state = {
         userKey: -1,
-        ...baseSate,
+        ...baseState,
         board: {
           table: [
             {
@@ -196,7 +196,6 @@ class Pz5 extends Component {
   buildStateBoard(round) {
     // build board
     console.log('* build board *');
-    let userItems = 0
     let userId = this.props.user.id
     let roundKey = (round) ? round : this.state.round
     if(!this.state.rounds[roundKey]) return

@@ -1,3 +1,7 @@
+@import "mixins.scss";
+@import "forms.scss";
+@import "animations.scss";
+
 $colorWhite: rgb(255, 255, 255);
 $colorWhiteAlpha: rgba(255, 255, 255, .2);
 $colorBlack: rgb(0, 0, 0);
@@ -11,7 +15,7 @@ body {
   font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
   padding: 1%;
   margin: 0;
-  opacity: .8;
+  opacity: .4;
 }
 
 a {

@@ -24,17 +24,17 @@ const shapeMap = [
 class Pz4 extends Component {
   constructor(props){
     super(props)
-    let baseSate = {
+    let baseState = {
       points: 0,
       round: props.round,
       totalScore: 0,
       user: props.user,
       clock: props.clock,
-      valid: false
+      valid: false,
+      userKey: -1,
     }
     this.state = {
-      userKey: -1,
-      ...baseSate,
+      ...baseState,
       board: {
         bars: [
           {

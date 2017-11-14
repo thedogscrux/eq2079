@@ -1,3 +1,56 @@
+.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }
+
+body {
+  background-color: black;
+  color: white;
+  font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
+  padding: 1%;
+  margin: 0;
+  opacity: .4; }
+
+a {
+  color: white;
+  margin-right: 10px;
+  display: block;
+  cursor: pointer; }
+
+input,
+button {
+  border: none;
+  border: solid 1px white;
+  display: block;
+  margin: 1% 0;
+  padding: 10px 30px;
+  cursor: pointer; }
+
+input[type='submit'],
+button {
+  background-color: black;
+  color: white; }
+
+.component-wrapper {
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 1% 0;
+  padding: 1%; }
+  .component-wrapper.add {
+    background-color: rgba(255, 0, 0, 0.3); }
+
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 #jigsaw-board-wrapper .table-wrapper {
   width: 91vw;
   max-width: 455px;
@@ -30,9 +83,6 @@
       margin: 0px; }
     #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
       border: none;
-      animation-duration: 3s;
-      animation-iteration-count: infinite;
-      animation-name: pulse;
       height: 50px;
       width: 50px;
       padding: 5px;
@@ -42,11 +92,3 @@
         background-color: rgba(255, 0, 0, 0.5);
         display: none;
         margin: 0px; }
-
-@keyframes pulse {
-  0% {
-    background-color: rgba(255, 255, 255, 0); }
-  50% {
-    background-color: rgba(255, 255, 255, 0.6); }
-  100% {
-    background-color: rgba(255, 255, 255, 0); } }
