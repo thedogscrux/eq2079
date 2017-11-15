@@ -1,0 +1,23 @@
+@import "../imports/imports.scss";
+
+// buttons
+
+input,
+button {
+  border: solid 1px $colorWhite;
+  display: block;
+  margin: 1vh 0;
+  padding: 10px 30px;
+  cursor: pointer;
+}
+
+input[type='submit'],
+button {
+  background-color: $colorBlack;
+  color: $colorWhite;
+}
+
+// text inputs
+
+input[type="text"] {
+}

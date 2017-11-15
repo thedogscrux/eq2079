@@ -16,15 +16,7 @@
   100% {
     background-color: rgba(255, 255, 255, 0); } }
 
-#component-mk h2 {
-  color: #16161d;
-  background-color: white; }
-
-#component-mk article {
-  border-bottom: solid 1px white; }
-
-#component-mk div.row {
-  display: flex;
-  margin-bottom: 20px; }
-  #component-mk div.row div.col {
-    flex-grow: 1; }
+.component-wrapper {
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 1vh 0;
+  padding: 1vh 1vw; }

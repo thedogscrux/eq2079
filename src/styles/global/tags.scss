@@ -1,0 +1,49 @@
+@import "../imports/imports.scss";
+
+body {
+  background-color: $colorBlack;
+  color: $colorWhite;
+  font: 100 12px/20px $fontAvenirNextUltraLight;
+  padding: 1vw;
+  margin: 0;
+  opacity: .8;
+}
+
+// Headings
+
+h1 { }
+
+// Images
+
+img {
+  border: none;
+  min-height: 20px;
+  min-width: 20px;
+}
+
+// Text
+
+P {
+  font: 400 12px/14px $fontAvenir;
+}
+
+// Links
+
+a,
+a:visited,
+a:hover,
+a:active {
+  color: $colorWhite;
+  display: block;
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+// Video
+video,
+.video { }

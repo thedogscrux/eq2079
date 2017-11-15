@@ -1,57 +1,6 @@
-@import "mixins.scss";
+@import "../imports/imports.scss";
+
+// global styles
+@import "tags.scss";
 @import "forms.scss";
-@import "animations.scss";
-
-$colorWhite: rgb(255, 255, 255);
-$colorWhiteAlpha: rgba(255, 255, 255, .2);
-$colorBlack: rgb(0, 0, 0);
-$colorBlue1: #3a9bc7;
-$colorBlue2: #00aeef;
-$colorRed: rgba(255, 50, 50, .5);
-
-body {
-  background-color: $colorBlack;
-  color: $colorWhite;
-  font: 100 12px/20px 'Avenir Ultra Light', Avenir, Sans-serif;
-  padding: 1%;
-  margin: 0;
-  opacity: .4;
-}
-
-a {
-  color: $colorWhite;
-  margin-right: 10px;
-  display: block;
-  cursor: pointer;
-}
-
-input,
-button {
-  border: none;
-  border: solid 1px $colorWhite;
-  display: block;
-  margin: 1% 0;
-  padding: 10px 30px;
-  cursor: pointer;
-}
-
-input[type='submit'],
-button {
-  background-color: $colorBlack;
-  color: $colorWhite;
-}
-
-.component-wrapper {
-  background-color: $colorWhiteAlpha;
-  margin: 1% 0;
-  padding: 1%;
-  &.add {
-    background-color: rgba(255, 0, 0, .3);
-  }
-}
-
-.clear:after {
-  content: "";
-  display: table;
-  clear: both;
-}
+@import "icons.scss";

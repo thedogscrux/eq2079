@@ -16,15 +16,30 @@
   100% {
     background-color: rgba(255, 255, 255, 0); } }
 
-input,
-button {
-  border: solid 1px white;
+body {
+  background-color: #16161d;
+  color: white;
+  font: 100 12px/20px "Avenir Next Ultra-Light", Avenir, Sans-serif;
+  padding: 1vw;
+  margin: 0;
+  opacity: .8; }
+
+img {
+  border: none;
+  min-height: 20px;
+  min-width: 20px; }
+
+P {
+  font: 400 12px/14px Avenir, Sans-serif; }
+
+a,
+a:visited,
+a:hover,
+a:active {
+  color: white;
   display: block;
-  margin: 1vh 0;
-  padding: 10px 30px;
   cursor: pointer; }
 
-input[type='submit'],
-button {
-  background-color: #16161d;
-  color: white; }
+a:hover {
+  text-decoration: underline;
+  cursor: pointer; }

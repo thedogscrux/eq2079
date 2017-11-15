@@ -108,7 +108,7 @@ class Map extends Component {
       myMapY = (myMapY <= 0) ? 2 : myMapY
       myMapY = (myMapY >= 100) ? 98 : myMapY
       // TODO add my coords to firebase for MK to see
-      let sizePx = 10
+      let sizePx = 25
       let translateCenter = `translate(-${sizePx/2}px,-${sizePx/2}px)`
       return(
         <div
@@ -136,7 +136,7 @@ class Map extends Component {
     html = this.state.pzs.map( (pz, key) => {
       let posBottom = pz.mapPos.bottom
       let posLeft = pz.mapPos.left
-      let sizePx = (pz.players) ? (20 + (pz.players.length * 2.9)) : 10
+      let sizePx = (pz.players) ? (40 + (pz.players.length * 2.9)) : 20
       let translateCenter = `translate(-${sizePx/2}px,-${sizePx/2}px)`
       let bgColor = null
       if(pz.status === 'active') {

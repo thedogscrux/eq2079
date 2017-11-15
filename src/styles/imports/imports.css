@@ -15,16 +15,3 @@
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
     background-color: rgba(255, 255, 255, 0); } }
-
-#component-mk h2 {
-  color: #16161d;
-  background-color: white; }
-
-#component-mk article {
-  border-bottom: solid 1px white; }
-
-#component-mk div.row {
-  display: flex;
-  margin-bottom: 20px; }
-  #component-mk div.row div.col {
-    flex-grow: 1; }

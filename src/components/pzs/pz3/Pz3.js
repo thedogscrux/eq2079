@@ -35,6 +35,25 @@ const VALUES = [
   'FOUR'
 ]
 
+// const VALUES = [
+//   [
+//     'ZERO',
+//     'ONE',
+//     'TWO',
+//     'THREE',
+//     'FOUR'
+//   ],
+//   [
+//     'ZERO',
+//     'ONE',
+//     'TWO',
+//     'THREE',
+//     'FOUR',
+//     'FIVE',
+//     'SIX'
+//   ],
+// ]
+
 class Pz3 extends Component {
   constructor(props){
     super(props)
@@ -333,7 +352,7 @@ class Pz3 extends Component {
     let refCell = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/table/' + item.row + '/' + item.col + '/'
     let tableNew = this.state.board.table || []
     let tableSize = this.state.rounds[this.state.round].tableSize
-    let solutionRowSum = (tableSize == 3) ? 10 : 45
+    let solutionRowSum = (tableSize == 3) ? 10 : 21
     //let userItemsCount = 1
 
     // get the new value
