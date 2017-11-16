@@ -83,6 +83,23 @@ const propsPzs = [
       numOfRounds: 2,
       roundSec: 300
     }
+  },
+  {
+    name: 'Pz 6 Volume',
+    code: 'pz6',
+    location: {
+      lat: 0,
+      long: 0
+    },
+    mapPos: {
+      floor: 'ground',
+      bottom: '80%',
+      left: '70%'
+    },
+    rounds: {
+      numOfRounds: 2,
+      roundSec: 500
+    }
   }
 ]
 

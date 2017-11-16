@@ -21,6 +21,7 @@ import pz2 from '../../pzs/pz2/Pz2'
 import pz3 from '../../pzs/pz3/Pz3'
 import pz4 from '../../pzs/pz4/Pz4'
 import pz5 from '../../pzs/pz5/Pz5'
+import pz6 from '../../pzs/pz6/Pz6'
 
 import clock0 from '../../../images/pz/clock/clock-0.svg'
 import clock1 from '../../../images/pz/clock/clock-1.svg'
@@ -33,7 +34,8 @@ const pzMap = {
   pz2,
   pz3,
   pz4,
-  pz5
+  pz5,
+  pz6
 }
 
 const clockMap = {

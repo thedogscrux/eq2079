@@ -1,0 +1,66 @@
+@import "../../imports/imports.scss";
+
+$sliderSize: 300px;
+$sliderThickness: 200px;
+
+$offset: $sliderSize / 6;
+
+#volume-board-wrapper {
+  #slidecontainer {
+    width: $sliderThickness;
+    height: $sliderSize;
+    margin: auto;
+    border: solid red 1px;
+  }
+
+  .slider {
+      -webkit-appearance: none;
+      width: $sliderSize;
+      height: $sliderThickness;
+      background: $colorBlack;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+      //transform: rotate(90deg);
+
+      // maybe?
+      padding: 0;
+      margin: 0;
+      transform: translate(-136px,$offset) rotate(-90deg);
+  }
+
+  .slider:hover {
+      opacity: 1;
+  }
+
+  .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: $sliderThickness;
+      cursor: pointer;
+  }
+
+  .slider::-moz-range-thumb {
+      width: 25px;
+      height: $sliderThickness;
+      cursor: pointer;
+  }
+
+  .slider.liquid-1::-webkit-slider-thumb { background: red; }
+  .slider.liquid-1::-moz-range-thumb { background: red; }
+
+  .slider.liquid-2::-webkit-slider-thumb { background: yellow; }
+  .slider.liquid-2::-moz-range-thumb { background: yellow; }
+
+  .slider.liquid-3::-webkit-slider-thumb { background: cyan; }
+  .slider.liquid-3::-moz-range-thumb { background: cyan; }
+
+  .slider.liquid-4::-webkit-slider-thumb { background: blue; }
+  .slider.liquid-4::-moz-range-thumb { background: blue; }
+
+  .slider.liquid-5::-webkit-slider-thumb { background: magenta; }
+  .slider.liquid-5::-moz-range-thumb { background: magenta; }
+
+}

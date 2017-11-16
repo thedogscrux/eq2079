@@ -422,7 +422,7 @@ class Pz3 extends Component {
                 className='col my-cell'
                 style={css}
               >
-                <div class='contents'>
+                <div className='contents'>
                   {VALUES[val]}
                   {(this.state.hints>1) ? '<br/>' + rowKey + ',' +  colKey : ''}
                 </div>
@@ -432,7 +432,7 @@ class Pz3 extends Component {
             css.backgroundColor = 'rgba(0, 0, 0, .7)';
             return (
               <div key={'col-'+rowKey+colKey} className='col' style={css}>
-                <div class='contents'>
+                <div className='contents'>
                   {VALUES[val]}
                   {(this.state.hints>1) ? '<br/>' + rowKey + ',' +  colKey : ''}
                 </div>

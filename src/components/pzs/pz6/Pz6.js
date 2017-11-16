@@ -12,9 +12,7 @@ import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 
-import imageA00 from './images/imageA00.svg'
-
-const PZ_INDEX = 0
+const PZ_INDEX = 5
 const PZ_PROPS = propsPzs[PZ_INDEX]
 
 const HINTS = [
@@ -29,11 +27,23 @@ const HINTS = [
   }
 ]
 
-const IMAGE_MAP = new Map([
-    [ 'imageA00', imageA00 ]
-]);
+const SOLUTIONS = [
+  [ 1, 2, 3, 4, 5 ],
+  [ 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+]
 
-class Pz0 extends Component {
+const DIFFICULTY = [ 'easy', 'medium', 'hard' ]
+
+const LIQUIDS = [
+  'black',
+  'red',
+  'yellow',
+  'cyan',
+  'blue',
+  'magenta'
+]
+
+class Pz6 extends Component {
   constructor(props){
     super(props)
     let score = new Score(PZ_INDEX)
@@ -54,28 +64,55 @@ class Pz0 extends Component {
     }
     this.state = {
       ...baseState,
+      sliderValue: 0,
       board: {
-        table: [ 2, 1, 0 ],
-        myItems: [
-          {
-            value: 'A00'
-          }
-        ],
+        solution: 0,
+        val: 0,
+        valid: false,
+        difficulty: 0,
+        table: [
+
+        ]
       },
       rounds: [
         {
-          table: [ 2, 1, 0 ],
-          solution: [ 0, 1, 2 ],
+          difficulty: 0,
+          solution: [ 1, 2, 3 ],
           users: [
             {
-              items: [ 0, 2 ],
-              userId: ''
+              userId: '',
+              val: 0,
+              solution: 0
+            }
+          ]
+        },
+        {
+          difficulty: 'hard',
+          solution: [ 1, 2, 3 ],
+          users: [
+            {
+              userId: '',
+              val: 0,
+              solution: 0
+            },
+            {
+              userId: '',
+              val: 0,
+              solution: 0
             }
           ]
         }
       ]
     }
+    this.onRangeChange = this.onRangeChange.bind(this)
 
+  }
+
+  // HANDLERS
+  onRangeChange(event) {
+    this.setState({
+      sliderValue: parseInt(event.target.value)
+    })
   }
 
   // LIFECYCLE
@@ -94,6 +131,7 @@ class Pz0 extends Component {
   }
 
   componentWillMount() {
+    //React.initializeTouchEvents(true);
     this.getSettings()
     this.watchDB()
   }
@@ -169,14 +207,20 @@ class Pz0 extends Component {
 
   buildStateBoard(round) {
     // build board
-    // make user has everything they need
-    // table can be updated with a watch
     console.log('* build board *');
     let userId = this.props.user.id
     let roundKey = (round) ? round : this.state.round
-    if(!this.state.rounds[roundKey]) return
-    // pz2 - loop thru all user assigned items and add them to state. a table is updated with a db watch
-    // pz5 dots - get properties for this user for this round, reset the table
+    let roundUser = this.state.rounds[roundKey].users.filter( user => user.userId == userId )
+    this.setState({
+      board: {
+        ...this.state.board,
+        valid: false,
+        solution: roundUser[0].solution,
+        val: 0,
+        difficulty: this.state.rounds[roundKey].difficulty,
+        table: []
+      }
+    })
   }
 
   getMyUserKey() {
@@ -190,10 +234,6 @@ class Pz0 extends Component {
     this.setState({
       userKey: userKey
     })
-  }
-
-  getMyItemPos() {
-    // might need if you have mutliple positions
   }
 
   // END GAME
@@ -233,33 +273,30 @@ class Pz0 extends Component {
   // GUESS
 
   guess() {
-    // pz2 has a shared array that gets udpated when each user contributes a tile
-    let points = this.state.points + 1
-    this.setState({
-      points: points
-    })
-  }
-
-  addItemToTable(item) {
     // add the item to the table and get points
     let self = this
-    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
-    let tableNew = this.state.board.table || []
-    let solution = this.state.rounds[this.state.round].solution
-    let userItemsCount = 1
+    let guessVal = this.state.sliderValue
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/users/'
+    let refUser = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/users/' + this.state.userKey
+    let solutionVal = this.state.rounds[this.state.round].users[this.state.userKey].solution
+    //let newTable = Object.assign([], this.state.board.table)
+    let newUser = Object.assign([], this.state.rounds[this.state.round].users[this.state.userKey])
+    let newRounds = Object.assign([], this.state.rounds)
 
-    // add item to table
-    tableNew.push(item)
-    let lastItemPlaced = (tableNew.length >= solution.length) ? true : false
+    // add value to table
+    //tableNew.push(item)
+
 
     // UPDATE SCORE: by checking if all my items are in the correct position
       // loop thru all my  items, then loop thru all items on table to check
-      let allMyItemsValid = true
+      console.log('solutionVal',solutionVal);
+      let userValid = (guessVal === solutionVal) ? true : false
+
       // if its equal to the number of items a user needs for solution, give em the points
-      allMyItemsValid = (userItemsCount === this.state.rounds[this.state.round].users[this.state.userKey].solutionItemCount[this.state.userKey]) ? true : false
+      //allMyItemsValid = (userItemsCount === this.state.rounds[this.state.round].users[this.state.userKey].solutionItemCount[this.state.userKey]) ? true : false
       // if all my items are valid, give me the round points
       let newRoundScore = 0
-      if (allMyItemsValid) {
+      if (userValid) {
         newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
       }
       this.setState({
@@ -269,26 +306,28 @@ class Pz0 extends Component {
         }
       })
 
-    // check/set the color of the item
+    // update my data
+    newRounds[this.state.round].users[this.state.userKey] = newUser
+
+    this.setState({
+      rounds: newRounds
+    })
 
     // update the table on the dbase
-    firebase.database().ref(refRound).update({
-      table: tableNew
+    firebase.database().ref(refUser).update({
+      val: guessVal,
+      valid: userValid
     }).then(function(){
       // check if table is valid, if so, end the round
-      if(lastItemPlaced) {
+      if(userValid) {
         firebase.database().ref(refRound).once('value').then(function(snapshot) {
-          if(testIfEqualArrays(snapshot.val().table, snapshot.val().solution)) self.endRound()
+          console.log('snapshot.val()',snapshot.val());
+          let allUsersValid = true
+          snapshot.val().map(user => {
+            if(!user.valid) allUsersValid = false
+          })
+          if(allUsersValid) self.endRound()
         })
-      }
-    })
-  }
-
-  removeItemFromTable() {
-    this.setState({
-      score: {
-        ...this.state.score,
-        round: 0
       }
     })
   }
@@ -298,9 +337,17 @@ class Pz0 extends Component {
     // score
     let score = new Score(PZ_INDEX)
     let htmlScore = score.htmlSimpleDisplay(this.state.score)
+    let myVal = 0
+    let solution = this.state.board.solution
+    let difficulty = this.state.board.difficulty
+    let cssClassNames = 'slider ' + 'liquid-' + solution
+    if(this.state.board.table && this.state.rounds[this.state.round].users[this.state.userKey]){
+      myVal = this.state.rounds[this.state.round].users[this.state.userKey].val
+      //solution = this.state.board.solution
+    }
 
     return(
-      <div id="xxx-board-wrapper" className='component-wrapper'>
+      <div id="volume-board-wrapper" className='component-wrapper'>
         {htmlScore}
         <Hints
           hints={HINTS}
@@ -309,7 +356,22 @@ class Pz0 extends Component {
           getHint={() => this.getHint()}
         />
 
-        <button onClick={() => this.guess()}>Guess</button>
+        <div id='slidecontainer'>
+          <input type='range'
+            onMouseUp={() => this.guess()}
+            onTouchEnd={() => this.guess()}
+            onChange={this.onRangeChange}
+            min='1'
+            max='5'
+            value={this.state.sliderValue}
+            className={cssClassNames}
+            id='myRange'
+          />
+        </div>
+        difficulty: {difficulty}<br/>
+        slider Value: {this.state.sliderValue}<br/>
+        db val: {myVal}<br/>
+        solution: {solution}
       </div>
     )
   }
@@ -317,11 +379,19 @@ class Pz0 extends Component {
 
 // FUNCS
 
-const genSettingsPz0 = (props) => {
+const genSettingsPz6 = (props) => {
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed())
   // setup each user for each round
   for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
+    // DIFFICULTY
+    let difficulty = 0
+    if (round >= 1) {
+      difficulty = 1
+    } else if (round >= 2) {
+      difficulty = 2
+    }
+
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
     props.players.forEach( (user,key) => {
@@ -329,51 +399,28 @@ const genSettingsPz0 = (props) => {
         {
           userId: user,
           valid: false,
-          items: []
+          solution: 0,
+          val: 0
         }
       )
     })
     // settings = rounds[#][users][#] (without user data)
     // SHUFFLE ITEMS and determine solution
-    // pz4
-    let solutions = [
-      [ 1, 1, 2, 2, 3, 3 ],
-      [ 1, 2, 3, 1, 2, 3 ]
-    ]
-    let solution = solutions[round]
-    let shuffledItems = shuffleArray([0, 1, 2, 3, 4, 5])
-    // pz2
-    let solution = [
-      ['A00', 'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08' ],
-      ['B00', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08' ]
-    ]
-    let shuffledItems = shuffleArray(solution[round])
-    // DEAL ITEMS to users
-    let userIndex = 0
-    // pz4
-    shuffledItems.forEach(index => {
-        settingsUsers[userIndex].items.push({
-          index: shuffledItems[index],
-          solution: solution[shuffledItems[index]]
-        })
-        userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
+    let solution = []
+    settingsUsers.forEach( user => {
+      solution.push(SOLUTIONS[difficulty][random.integer(0, 4)])
     })
-    // pz2
-    shuffledItems.forEach((index, key) => {
-        settingsUsers[userIndex].items.push(shuffledItems[key])
-        userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
+    // DEAL ITEMS to users
+    solution.forEach( (solution, key) => {
+        settingsUsers[key].solution = solution
     })
     // settings = rounds[#][users][#] (with user data)
     // STORE settings
-    // pz4
-    settings.push({
-      users: settingsUsers
-    })
-    // pz2
     settings.push({
       users: settingsUsers,
       table: [],
-      solution: solution[round]
+      solution: solution,
+      difficulty: difficulty
     })
   }
   // calc total score
@@ -386,8 +433,8 @@ const genSettingsPz0 = (props) => {
   return totalScore
 }
 
-export default Pz0
+export default Pz6
 
 export {
-  genSettingsPz0
+  genSettingsPz6
 }

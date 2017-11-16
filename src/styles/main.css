@@ -591,3 +591,85 @@ button {
         color: #000; }
         #spots-board-wrapper #spots-wrapper .rows .cols button.active {
           border: solid white 3px; }
+
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }
+
+#volume-board-wrapper #slidecontainer {
+  width: 200px;
+  height: 300px;
+  margin: auto;
+  border: solid red 1px; }
+
+#volume-board-wrapper .slider {
+  -webkit-appearance: none;
+  width: 300px;
+  height: 200px;
+  background: #16161d;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  padding: 0;
+  margin: 0;
+  transform: translate(-136px, 50px) rotate(-90deg); }
+
+#volume-board-wrapper .slider:hover {
+  opacity: 1; }
+
+#volume-board-wrapper .slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 200px;
+  cursor: pointer; }
+
+#volume-board-wrapper .slider::-moz-range-thumb {
+  width: 25px;
+  height: 200px;
+  cursor: pointer; }
+
+#volume-board-wrapper .slider.liquid-1::-webkit-slider-thumb {
+  background: red; }
+
+#volume-board-wrapper .slider.liquid-1::-moz-range-thumb {
+  background: red; }
+
+#volume-board-wrapper .slider.liquid-2::-webkit-slider-thumb {
+  background: yellow; }
+
+#volume-board-wrapper .slider.liquid-2::-moz-range-thumb {
+  background: yellow; }
+
+#volume-board-wrapper .slider.liquid-3::-webkit-slider-thumb {
+  background: cyan; }
+
+#volume-board-wrapper .slider.liquid-3::-moz-range-thumb {
+  background: cyan; }
+
+#volume-board-wrapper .slider.liquid-4::-webkit-slider-thumb {
+  background: blue; }
+
+#volume-board-wrapper .slider.liquid-4::-moz-range-thumb {
+  background: blue; }
+
+#volume-board-wrapper .slider.liquid-5::-webkit-slider-thumb {
+  background: magenta; }
+
+#volume-board-wrapper .slider.liquid-5::-moz-range-thumb {
+  background: magenta; }

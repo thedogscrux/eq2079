@@ -21,9 +21,10 @@ class Nav extends Component {
         <Link to='/pzs'>Pzs</Link>
         <Link to='/pzs/pz1'>Pz 1 (pipes)</Link>
         <Link to='/pzs/pz2'>Pz 2 (jigsaw)</Link>
-        <Link to='/pzs/pz3'>Pz 3</Link>
+        <Link to='/pzs/pz3'>Pz 3 (soduko)</Link>
         <Link to='/pzs/pz4'>Pz 4 (shape)</Link>
-        <Link to='/pzs/pz5'>Pz 5 (molecules)</Link>
+        <Link to='/pzs/pz5'>Pz 5 (spots)</Link>
+        <Link to='/pzs/pz6'>Pz 6 (volume)</Link>
         <br/>
         <Link to="/mk">Mission Kontrol</Link>
         <Link to="/projector">Projector</Link>

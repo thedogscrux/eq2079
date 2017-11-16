@@ -19,13 +19,15 @@ import { genSettingsPz2 } from '../pzs/pz2/Pz2'
 import { genSettingsPz3} from '../pzs/pz3/Pz3'
 import { genSettingsPz4 } from '../pzs/pz4/Pz4'
 import { genSettingsPz5 } from '../pzs/pz5/Pz5'
+import { genSettingsPz6 } from '../pzs/pz6/Pz6'
 
 const pzSettingsMap = {
   genSettingsPz1,
   genSettingsPz2,
   genSettingsPz3,
   genSettingsPz4,
-  genSettingsPz5
+  genSettingsPz5,
+  genSettingsPz6
 }
 
 // Clock
