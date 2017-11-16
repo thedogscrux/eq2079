@@ -29,6 +29,7 @@ const HINTS = [
 
 const SOLUTIONS = [
   [ 1, 2, 3, 4, 5 ],
+  [ 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
   [ 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
 ]
 
@@ -40,7 +41,12 @@ const LIQUIDS = [
   'yellow',
   'cyan',
   'blue',
-  'magenta'
+  'magenta',
+  'BlueViolet',
+  'BlanchedAlmond',
+  'Coral',
+  'DarkGreen',
+  'Grey'
 ]
 
 class Pz6 extends Component {
@@ -210,6 +216,7 @@ class Pz6 extends Component {
     console.log('* build board *');
     let userId = this.props.user.id
     let roundKey = (round) ? round : this.state.round
+    if(!this.state.rounds[roundKey]) return
     let roundUser = this.state.rounds[roundKey].users.filter( user => user.userId == userId )
     this.setState({
       board: {
@@ -340,10 +347,27 @@ class Pz6 extends Component {
     let myVal = 0
     let solution = this.state.board.solution
     let difficulty = this.state.board.difficulty
-    let cssClassNames = 'slider ' + 'liquid-' + solution
+    let cssClassLiquid = 'liquid-' + solution
+
+    // style the slide containers depending on how many there are
+    let cssClassSlidecontainer = (difficulty === 0) ? 'small' : (difficulty === 1) ? 'medium' : 'large'
+
     if(this.state.board.table && this.state.rounds[this.state.round].users[this.state.userKey]){
       myVal = this.state.rounds[this.state.round].users[this.state.userKey].val
       //solution = this.state.board.solution
+    }
+
+    let htmlSliderHard = ''
+    if (difficulty >= 2) {
+      htmlSliderHard =
+        <div className={'slidecontainer ' + cssClassSlidecontainer}>
+          <input type='range'
+            min='1'
+            max='5'
+            value={this.state.sliderValue}
+            className={'slider ' + cssClassLiquid}
+          />
+        </div>
     }
 
     return(
@@ -356,22 +380,38 @@ class Pz6 extends Component {
           getHint={() => this.getHint()}
         />
 
-        <div id='slidecontainer'>
-          <input type='range'
-            onMouseUp={() => this.guess()}
-            onTouchEnd={() => this.guess()}
-            onChange={this.onRangeChange}
-            min='1'
-            max='5'
-            value={this.state.sliderValue}
-            className={cssClassNames}
-            id='myRange'
-          />
-        </div>
         difficulty: {difficulty}<br/>
         slider Value: {this.state.sliderValue}<br/>
         db val: {myVal}<br/>
-        solution: {solution}
+        solution: {solution}<br/>
+
+        <div id='sliderWrappers'>
+          <div className={'slidecontainer ' + cssClassSlidecontainer}>
+            <input type='range'
+              onMouseUp={() => this.guess()}
+              onTouchEnd={() => this.guess()}
+              onChange={this.onRangeChange}
+              min='1'
+              max='5'
+              value={this.state.sliderValue}
+              className={'slider ' + cssClassLiquid}
+              id='myRange'
+            />
+          </div>
+
+          <div className={'slidecontainer ' + cssClassSlidecontainer}>
+            <input type='range'
+              min='1'
+              max='5'
+              value={this.state.sliderValue}
+              className={'slider ' + cssClassLiquid}
+            />
+          </div>
+
+          {htmlSliderHard}
+
+        </div>
+
       </div>
     )
   }
@@ -386,10 +426,10 @@ const genSettingsPz6 = (props) => {
   for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     // DIFFICULTY
     let difficulty = 0
-    if (round >= 1) {
-      difficulty = 1
-    } else if (round >= 2) {
+    if (round >= 2) {
       difficulty = 2
+    } else if (round >= 1) {
+      difficulty = 1
     }
 
     // ADD USERS to pz - create an empty obj for each user
