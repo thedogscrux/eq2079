@@ -660,8 +660,8 @@ const genSettingsPz6 = (props) => {
       difficulty = 1
     }
     // hard code forest testing
-    maxRange = 10
-    difficulty = 2
+    // maxRange = 10
+    // difficulty = 2
 
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
@@ -730,33 +730,43 @@ const genSettingsPz6 = (props) => {
       //     val: 0
       //   }
       // ]
+      // create structure with empty users and vals
       settingsUsers.forEach( user => {
         solution.push(
           {
             users: [ ],
-            val: SOLUTIONS[difficulty][random.integer(0, maxRange-1)]
+            val: -1
           }
         )
       })
+
+      // assign users and their FINAL SOLUTIONS
       let solutionKey = 0
       settingsUsers.forEach( user => {
+        let val = SOLUTIONS[difficulty][random.integer(0, maxRange-1)]
         solution[solutionKey].users.push({
           userId: user.userId,
-          val: 0
+          val: val
         })
         solutionKey = (solutionKey < settingsUsers.length-1) ? solutionKey + 1 : 0
         solution[solutionKey].users.push({
           userId: user.userId,
-          val: 0
+          val: val
         })
-        //solutionKey = solutionKey + 1
+
+        // determine the TEAM SOLUTIONS
+        solution.forEach(teamSolution => {
+          let val1 = (teamSolution.users[0]) ? teamSolution.users[0].val : 0
+          let val2 = (teamSolution.users[1]) ? teamSolution.users[1].val : 0
+          teamSolution.val = val1 + val2
+        })
+      })
+      // remove user solutions
+      solution.forEach( (solution,key) => {
+        solution.users[0].val = 0
+        solution.users[1].val = 0
       })
     }
-    // DEAL ITEMS to users
-    // solution.forEach( (solution, key) => {
-    //     //settingsUsers[key].solution = solution
-    //     settingsUsers[key].liquid = solution.val
-    // })
 
     // settings = rounds[#][users][#] (with user data)
     // STORE settings
