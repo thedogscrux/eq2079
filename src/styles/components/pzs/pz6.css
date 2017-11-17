@@ -16,9 +16,26 @@
   100% {
     background-color: rgba(255, 255, 255, 0); } }
 
+#volume-board-wrapper .solution-key-wrapper {
+  display: flex; }
+  #volume-board-wrapper .solution-key-wrapper .solution-key {
+    margin: 0 10px;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    #volume-board-wrapper .solution-key-wrapper .solution-key .dot {
+      color: #16161d;
+      padding: 10px;
+      border-radius: 20px;
+      background-color: rgba(255, 255, 255, 0.7);
+      line-height: 6px;
+      font-weight: 600; }
+
 #volume-board-wrapper #sliderWrappers {
   height: 250px;
-  border: solid blue 1px;
+  border: solid #16161d 1px;
   flex-direction: row;
   flex-flow: row;
   display: flex;
@@ -27,15 +44,16 @@
     width: 75px;
     height: 250px;
     margin: 0;
-    border: solid red 1px;
+    border: solid #16161d 1px;
     width: auto;
     height: auto;
-    position: relative; }
+    position: relative;
+    font: 100 50px/70px Avenir, Sans-serif; }
     #volume-board-wrapper #sliderWrappers .slidecontainer .slider {
       -webkit-appearance: none;
       width: 250px;
       height: 75px;
-      background: #16161d;
+      background: rgba(0, 0, 0, 0.4);
       outline: none;
       opacity: 0.7;
       -webkit-transition: .2s;
@@ -59,11 +77,17 @@
     appearance: none;
     width: 25px;
     height: 75px;
-    cursor: pointer; }
+    cursor: pointer;
+    border: solid #fff 1px; }
   #volume-board-wrapper #sliderWrappers .slider::-moz-range-thumb {
     width: 25px;
     height: 75px;
-    cursor: pointer; }
+    cursor: pointer;
+    border: solid #fff 1px; }
+  #volume-board-wrapper #sliderWrappers .slider.liquid-1::-webkit-slider-thumb {
+    background: black; }
+  #volume-board-wrapper #sliderWrappers .slider.liquid-1::-moz-range-thumb {
+    background: black; }
   #volume-board-wrapper #sliderWrappers .slider.liquid-1::-webkit-slider-thumb {
     background: red; }
   #volume-board-wrapper #sliderWrappers .slider.liquid-1::-moz-range-thumb {
@@ -84,23 +108,23 @@
     background: magenta; }
   #volume-board-wrapper #sliderWrappers .slider.liquid-5::-moz-range-thumb {
     background: magenta; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-webkit-slider-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-6::-webkit-slider-thumb {
     background: BlueViolet; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-moz-range-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-6::-moz-range-thumb {
     background: BlueViolet; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-webkit-slider-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-7::-webkit-slider-thumb {
     background: BlanchedAlmond; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-moz-range-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-7::-moz-range-thumb {
     background: BlanchedAlmond; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-webkit-slider-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-8::-webkit-slider-thumb {
     background: Coral; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-moz-range-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-8::-moz-range-thumb {
     background: Coral; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-webkit-slider-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-9::-webkit-slider-thumb {
     background: DarkGreen; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-moz-range-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-9::-moz-range-thumb {
     background: DarkGreen; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-webkit-slider-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-10::-webkit-slider-thumb {
     background: Grey; }
-  #volume-board-wrapper #sliderWrappers .slider.liquid-5::-moz-range-thumb {
+  #volume-board-wrapper #sliderWrappers .slider.liquid-10::-moz-range-thumb {
     background: Grey; }

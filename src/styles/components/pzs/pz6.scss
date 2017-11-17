@@ -6,9 +6,31 @@ $sliderThickness: 75px;
 $offset: $sliderThickness * 2;
 
 #volume-board-wrapper {
+
+  // solutions key
+  .solution-key-wrapper {
+    display: flex;
+    .solution-key {
+      margin: 0 10px;
+      height: 40px;
+      width: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .dot {
+        color: $colorBlack;
+        padding: 10px;
+        border-radius: 20px;
+        background-color: rgba(255,255,255,.7);
+        line-height: 6px;
+        font-weight: 600;
+      }
+    }
+  }
+
   #sliderWrappers {
     height: $sliderSize;
-    border: solid blue 1px;
+    border: solid $colorBlack 1px;
     flex-direction: row;
     flex-flow: row;
     display: flex;
@@ -18,16 +40,17 @@ $offset: $sliderThickness * 2;
       width: $sliderThickness;
       height: $sliderSize;
       margin: 0;
-      border: solid red 1px;
+      border: solid $colorBlack 1px;
       width: auto;
       height: auto;
       position: relative;
+      font: 100 50px/70px $fontAvenir;
 
       .slider {
           -webkit-appearance: none;
           width: $sliderSize;
           height: $sliderThickness;
-          background: $colorBlack;
+          background: rgba(0,0,0,0.4);
           outline: none;
           opacity: 0.7;
           -webkit-transition: .2s;
@@ -79,13 +102,18 @@ $offset: $sliderThickness * 2;
         width: 25px;
         height: $sliderThickness;
         cursor: pointer;
+        border: solid #fff 1px;
     }
 
     .slider::-moz-range-thumb {
         width: 25px;
         height: $sliderThickness;
         cursor: pointer;
+        border: solid #fff 1px;
     }
+
+    .slider.liquid-1::-webkit-slider-thumb { background: black; }
+    .slider.liquid-1::-moz-range-thumb { background: black; }
 
     .slider.liquid-1::-webkit-slider-thumb { background: red; }
     .slider.liquid-1::-moz-range-thumb { background: red; }
@@ -102,21 +130,23 @@ $offset: $sliderThickness * 2;
     .slider.liquid-5::-webkit-slider-thumb { background: magenta; }
     .slider.liquid-5::-moz-range-thumb { background: magenta; }
 
-    .slider.liquid-5::-webkit-slider-thumb { background: BlueViolet; }
-    .slider.liquid-5::-moz-range-thumb { background: BlueViolet; }
+    .slider.liquid-6::-webkit-slider-thumb { background: BlueViolet; }
+    .slider.liquid-6::-moz-range-thumb { background: BlueViolet; }
 
-    .slider.liquid-5::-webkit-slider-thumb { background: BlanchedAlmond; }
-    .slider.liquid-5::-moz-range-thumb { background: BlanchedAlmond; }
+    .slider.liquid-7::-webkit-slider-thumb { background: BlanchedAlmond; }
+    .slider.liquid-7::-moz-range-thumb { background: BlanchedAlmond; }
 
-    .slider.liquid-5::-webkit-slider-thumb { background: Coral; }
-    .slider.liquid-5::-moz-range-thumb { background: Coral; }
+    .slider.liquid-8::-webkit-slider-thumb { background: Coral; }
+    .slider.liquid-8::-moz-range-thumb { background: Coral; }
 
-    .slider.liquid-5::-webkit-slider-thumb { background: DarkGreen; }
-    .slider.liquid-5::-moz-range-thumb { background: DarkGreen; }
+    .slider.liquid-9::-webkit-slider-thumb { background: DarkGreen; }
+    .slider.liquid-9::-moz-range-thumb { background: DarkGreen; }
 
-    .slider.liquid-5::-webkit-slider-thumb { background: Grey; }
-    .slider.liquid-5::-moz-range-thumb { background: Grey; }
+    .slider.liquid-10::-webkit-slider-thumb { background: Grey; }
+    .slider.liquid-10::-moz-range-thumb { background: Grey; }
 
   }
+
+
 
 }
