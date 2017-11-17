@@ -344,6 +344,9 @@ class Pz6 extends Component {
     let solutionVal = 0
     let userValid = true
 
+    let userValidA = true
+    let userValidB = true
+
     if (difficulty === 0) {
       // easy (solution A)
       userValid = (guessVal === solutionA.val) ? true : false
@@ -359,8 +362,23 @@ class Pz6 extends Component {
       refSolutionA = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/solution/' + this.state.board.solutionAKey + '/users/' + this.state.board.userAKey
     } else if (difficulty >= 2) {
       // hard (solution A and solution B)
-      solutionVal = this.state.board.mySolutions[0].val
-
+      //solutionVal = this.state.board.mySolutions[0].val
+      // A
+      let totalValA = guessVal
+      solutionA.users.map( (user => {
+        // leave me out, beucase i have an old score stored in state
+        if(user.userId != userId) totalValA = totalValA + user.val
+      }))
+      userValidA = (totalValA === solutionA.val) ? true : false
+      refSolutionA = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/solution/' + this.state.board.solutionAKey + '/users/' + this.state.board.userAKey
+      // B
+      let totalValB = guessVal
+      solutionB.users.map( (user => {
+        // leave me out, beucase i have an old score stored in state
+        if(user.userId != userId) totalValB = totalValB + user.val
+      }))
+      userValidB = (totalValB === solutionB.val) ? true : false
+      refSolutionB = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/solution/' + this.state.board.solutionBKey + '/users/' + this.state.board.userBKey
     }
 
     //let newTable = Object.assign([], this.state.board.table)
@@ -435,6 +453,31 @@ class Pz6 extends Component {
       })
     } else if (difficulty === 2) {
       // hard has two solutions per user
+      firebase.database().ref(refSolutionA).update({
+        val: guessVal,
+        valid: userValidA
+      }).then(function(){
+        firebase.database().ref(refSolutionB).update({
+          val: guessVal,
+          valid: userValidB
+        }).then(function(){
+          // check if table is valid, if so, end the round
+          if(userValid) {
+            firebase.database().ref(refSolutions).once('value').then(function(snapshot) {
+              let allUsersValid = true
+              snapshot.val().map( (solution, solutionKey) => {
+                // loop thru solution users to see if any are not valid
+                let totalVal = 0
+                solution.users.forEach((user, userKey) => {
+                  totalVal = totalVal + user.val
+                })
+                if(totalVal != solution.val) allUsersValid = false
+              })
+              if(allUsersValid) self.endRound()
+            })
+          }
+        })
+      })
               // firebase.database().ref(refSolutionA).update({
               //   val: guessVal
               // }).then(function(){
@@ -460,7 +503,8 @@ class Pz6 extends Component {
     let score = new Score(PZ_INDEX)
     let htmlScore = score.htmlSimpleDisplay(this.state.score)
     let myVal = 0
-    let solution = -1
+    let solutionA = -1
+    let solutionB = -1
     let beakerAVal = 0
     let beakerBVal = 0
     let liquid = this.state.board.liquid
@@ -480,27 +524,36 @@ class Pz6 extends Component {
     // settings based on difficulty
     if(this.state.render) {
       if (difficulty === 0) {
-        solution = this.state.board.mySolutions[0].val
+        solutionA = this.state.board.mySolutions[0].val
         beakerAVal = this.state.sliderValue
       } else if (difficulty === 1) {
         // medium
         cssClassSlideContainer = 'medium'
         minRange = 0
         maxRange = 10
-        solution = this.state.board.mySolutions[0].val
+        solutionA = this.state.board.mySolutions[0].val
         // beakerA is all user values combined
-        let totalVal = 0
         this.state.board.table[this.state.board.solutionAKey].users.map((user, userKey) => {
-          totalVal = totalVal + user.val
+          beakerAVal = beakerAVal + user.val
         })
-        solution = this.state.board.mySolutions[this.state.board.solutionAKey].val
-        beakerAVal = totalVal
+        solutionA = this.state.board.mySolutions[this.state.board.solutionAKey].val
       } else if (difficulty >= 2) {
         // hard
         cssClassSlideContainer = 'hard'
         minRange = 0
         maxRange = 10
-        // .....
+        // beakerA
+        solutionA = this.state.board.mySolutions[0].val
+        this.state.board.mySolutions[0].users.map((user, userKey) => {
+          beakerAVal = beakerAVal + user.val
+        })
+        solutionA = this.state.board.mySolutions[0].val
+        // beakerB
+        solutionB = this.state.board.mySolutions[1].val
+        this.state.board.mySolutions[1].users.map((user, userKey) => {
+          beakerBVal = beakerBVal + user.val
+        })
+        solutionB = this.state.board.mySolutions[1].val
       }
 
       myVal = this.state.rounds[this.state.round].users[this.state.userKey].val
@@ -509,11 +562,11 @@ class Pz6 extends Component {
     if (difficulty >= 2) {
       htmlSliderHard =
         <div className={'slidecontainer ' + cssClassSlideContainer}>
-          {solution}
+          B:{beakerBVal}/{solutionB}
           <input type='range'
             min={minRange}
             max={maxRange}
-            value={this.state.sliderValue}
+            value={beakerBVal}
             className={'slider ' + cssClassLiquid}
             readOnly={true}
           />
@@ -538,13 +591,16 @@ class Pz6 extends Component {
         difficulty: {difficulty}<br/>
         slider Value: {this.state.sliderValue}<br/>
         db val: {myVal}<br/>
-        solution: {solution}<br/>
+        solutionA: {solutionA}<br/>
 
         <div className='solution-key-wrapper'>{htmlSolutionKey}</div>
 
         <br/><br/>
 
         <div id='sliderWrappers'>
+
+          {htmlSliderHard}
+
           <div className={'slidecontainer ' + cssClassSlideContainer}>
             {this.state.sliderValue}
             <input type='range'
@@ -560,7 +616,7 @@ class Pz6 extends Component {
           </div>
 
           <div className={'slidecontainer ' + cssClassSlideContainer}>
-            A:{solution}
+            A:{beakerAVal}/{solutionA}
             <input type='range'
               min={minRange}
               max={maxRange}
@@ -569,8 +625,6 @@ class Pz6 extends Component {
               readOnly={true}
             />
           </div>
-
-          {htmlSliderHard}
 
         </div>
 
@@ -605,6 +659,9 @@ const genSettingsPz6 = (props) => {
       maxRange = 10
       difficulty = 1
     }
+    // hard code forest testing
+    maxRange = 10
+    difficulty = 2
 
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
@@ -622,14 +679,13 @@ const genSettingsPz6 = (props) => {
     if(difficulty === 0) {
       // each user solves for their own solution
       settingsUsers.forEach( user => {
-        //solution.push(SOLUTIONS[difficulty][random.integer(0, maxRange)])
-            solution.push({
-              users: [ {
-                userId: user.userId,
-                val: 0
-              } ],
-              val: user.liquid
-            })
+        solution.push({
+          users: [ {
+            userId: user.userId,
+            val: 0
+          } ],
+          val: user.liquid
+        })
       })
     } else if (difficulty === 1) {
       // all users share the same solution (sum)
@@ -648,11 +704,52 @@ const genSettingsPz6 = (props) => {
       })
     } else if (difficulty === 2) {
       // users are splits into triples and chaos ensues
+      let totalVal = 0
+      let users = []
+      // buid solution struct
+      // solution = [
+      //   {
+      //     users: [
+      //       { userId: user.userId, val: 0 },
+      //       { userId: user.userId, val: 0 }
+      //     ],
+      //     val: 0
+      //   },
+      //   {
+      //     users: [
+      //       { userId: user.userId, val: 0 },
+      //       { userId: user.userId, val: 0 }
+      //     ],
+      //     val: 0
+      //   },
+      //   {
+      //     users: [
+      //       { userId: user.userId, val: 0 },
+      //       { userId: user.userId, val: 0 }
+      //     ],
+      //     val: 0
+      //   }
+      // ]
       settingsUsers.forEach( user => {
-        solution.push({
-          users: [ user.userId ],
-          val: user.liquid
+        solution.push(
+          {
+            users: [ ],
+            val: SOLUTIONS[difficulty][random.integer(0, maxRange-1)]
+          }
+        )
+      })
+      let solutionKey = 0
+      settingsUsers.forEach( user => {
+        solution[solutionKey].users.push({
+          userId: user.userId,
+          val: 0
         })
+        solutionKey = (solutionKey < settingsUsers.length-1) ? solutionKey + 1 : 0
+        solution[solutionKey].users.push({
+          userId: user.userId,
+          val: 0
+        })
+        //solutionKey = solutionKey + 1
       })
     }
     // DEAL ITEMS to users
