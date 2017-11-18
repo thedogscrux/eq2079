@@ -44,6 +44,7 @@ class Pz0 extends Component {
       valid: false,
       hints: props.user.pzs[PZ_INDEX].hints,
       userKey: -1,
+      render: false,
       score: {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
         multi: 0 * game.score.mutliplayerMultiplier,
@@ -121,12 +122,12 @@ class Pz0 extends Component {
   }
 
   updateStatePz(pzBoard) {
-    let tableNew = pzBoard.rounds[this.state.round].table
-    if (tableNew != this.state.board.table) {
+    let newTable = pzBoard.rounds[this.state.round].table
+    if (newTable != this.state.board.table) {
       this.setState({
         board: {
           ...this.state.board,
-          table: tableNew
+          table: newTable
         }
       })
     }
@@ -188,7 +189,8 @@ class Pz0 extends Component {
       return
     })
     this.setState({
-      userKey: userKey
+      userKey: userKey,
+      render: true
     })
   }
 
@@ -244,13 +246,13 @@ class Pz0 extends Component {
     // add the item to the table and get points
     let self = this
     let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
-    let tableNew = this.state.board.table || []
+    let newTable = this.state.board.table || []
     let solution = this.state.rounds[this.state.round].solution
     let userItemsCount = 1
 
     // add item to table
-    tableNew.push(item)
-    let lastItemPlaced = (tableNew.length >= solution.length) ? true : false
+    newTable.push(item)
+    let lastItemPlaced = (newTable.length >= solution.length) ? true : false
 
     // UPDATE SCORE: by checking if all my items are in the correct position
       // loop thru all my  items, then loop thru all items on table to check
@@ -273,7 +275,7 @@ class Pz0 extends Component {
 
     // update the table on the dbase
     firebase.database().ref(refRound).update({
-      table: tableNew
+      table: newTable
     }).then(function(){
       // check if table is valid, if so, end the round
       if(lastItemPlaced) {
@@ -298,6 +300,8 @@ class Pz0 extends Component {
     // score
     let score = new Score(PZ_INDEX)
     let htmlScore = score.htmlSimpleDisplay(this.state.score)
+
+    if(this.state.render) { }
 
     return(
       <div id="xxx-board-wrapper" className='component-wrapper'>

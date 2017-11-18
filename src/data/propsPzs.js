@@ -100,6 +100,23 @@ const propsPzs = [
       numOfRounds: 3,
       roundSec: 200
     }
+  },
+  {
+    name: 'Pz 7 Arm',
+    code: 'pz7',
+    location: {
+      lat: 0,
+      long: 0
+    },
+    mapPos: {
+      floor: 'ground',
+      bottom: '80%',
+      left: '70%'
+    },
+    rounds: {
+      numOfRounds: 5,
+      roundSec: 60
+    }
   }
 ]
 
