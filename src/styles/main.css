@@ -592,6 +592,14 @@ button {
         #spots-board-wrapper #spots-wrapper .rows .cols button.active {
           border: solid white 3px; }
 
+#spots-board-wrapper .color-convert > div {
+  display: inline-block;
+  height: 100px;
+  width: 200px;
+  margin: 10px;
+  font: 600 20px/20px sans-serif;
+  color: #000; }
+
 .clear:after {
   content: "";
   display: table;

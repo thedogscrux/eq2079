@@ -6,6 +6,8 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 import _ from 'underscore'
+import ryb2rgb from 'ryb2rgb'
+
 
 import { shuffleArray, testIfEqualArrays, removeArrayKey } from '../../../utils/Common.js'
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
@@ -31,19 +33,29 @@ const HINTS = [
 const GRID_X = 5
 const GRID_Y = 50
 
+// const BLACK = [0, 0, 0]
+// const RED = [255, 0, 0]
+// const GREEN = [0, 255, 0]
+// const BLUE = [0, 0, 255]
+//
+// const YELLOW = [255, 255, 0] // RED + GREEN
+//
+// const ORANGE = [255, 165, 0]
+
 const BLACK = [0, 0, 0]
 const RED = [255, 0, 0]
-const GREEN = [0, 255, 0]
+const YELLOW = [0, 255, 0]
 const BLUE = [0, 0, 255]
 
-const YELLOW = [255, 255, 0] // RED + GREEN
+const ORANGE = [255, 255, 0] // RED + YELLOW
+const GREEN = [0, 255, 255]
 
-const ORANGE = [255, 165, 0]
+let rgbBlue = ryb2rgb([0, 0, 255])
 
 const COLOR_MAP = [
   BLACK,
   RED,
-  GREEN,
+  YELLOW,
   BLUE
 ]
 
@@ -426,13 +438,18 @@ class Pz5 extends Component {
         let teamItem = false
         let itemTableKey = 0
         let userId = this.props.user.id
+        let rgb = []
 
         if(this.state.board.table && this.state.board.table.length >= 1){
           // loop thru all items on table
           this.state.board.table.map( (item, key) => {
             if(item.x === x && item.y === y) {
               classNames = 'active'
-              css.backgroundColor = 'rgba(' + item.color[0] + ',' + item.color[1] + ',' + item.color[2] + ', .8)'
+              // convert RYB to RGB
+              rgb = []
+              rgb = ryb2rgb(item.color)
+              css.backgroundColor = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ', 1.0)'
+
               // see if i am in this item's user list
               let myUserKey = item.users.indexOf(userId);
               if(myUserKey > -1) {
@@ -483,8 +500,29 @@ class Pz5 extends Component {
     let score = new Score(PZ_INDEX)
     let htmlScore = score.htmlSimpleDisplay(this.state.score)
 
+    // cmyk
+    let cmykRed = [0, 100, 100, 0]
+    let rgbRed = ryb2rgb([255, 0, 0])
+    let cssRed = 'rgb(' + rgbRed[0] + ',' + rgbRed[1] + ',' + rgbRed[2] + ')'
+
+    let cmykYellow = [0, 0, 100, 0]
+    let rgbYellow = ryb2rgb([0, 255, 0])
+    let cssYellow = 'rgb(' + rgbYellow[0] + ',' + rgbYellow[1] + ',' + rgbYellow[2] + ')'
+
+    let cmykBlue = [100, 100, 0, 0]
+    let rgbBlue = ryb2rgb([0, 0, 255])
+    let cssBlue = 'rgb(' + rgbBlue[0] + ',' + rgbBlue[1] + ',' + rgbBlue[2] + ')'
+
+
+
     return(
       <div id="spots-board-wrapper" className='component-wrapper'>
+        <div className='color-convert'>
+          <div style={{ backgroundColor: cssRed }}>rgb red</div>
+          <div style={{ backgroundColor: cssYellow }}>rgb yellow</div>
+          <div style={{ backgroundColor: cssBlue }}>rgb blue</div>
+        </div>
+
         {htmlScore}
         <Hints
           hints={HINTS}
@@ -537,10 +575,10 @@ const genSettingsPz5 = (props) => {
       ]
     ]
   } else if (props.players.length === 2) {
-    solutionColors = [ RED, GREEN ]
+    solutionColors = [ RED, YELLOW ]
     // how many occurances of each user color
-    // [ 4-RED, 4-GREEN ]
-    // [ 4-RED, 4-GREEN ]
+    // [ 4-RED, 4-YELLOW ]
+    // [ 4-RED, 4-YELLOW ]
     solutionUserItemCount = [
       [ 4, 4 ],
       [ 4, 4 ]
@@ -549,18 +587,18 @@ const genSettingsPz5 = (props) => {
       [
         { x:0, y:0, color:RED },
         { x:1, y:0, color:RED },
-        { x:2, y:0, color:GREEN },
-        { x:3, y:0, color:GREEN },
-        { x:4, y:0, color:YELLOW },
-        { x:5, y:0, color:YELLOW }
+        { x:2, y:0, color:YELLOW },
+        { x:3, y:0, color:YELLOW },
+        { x:4, y:0, color:ORANGE },
+        { x:5, y:0, color:ORANGE }
       ],
       [
         { x:0, y:1, color:RED },
         { x:1, y:1, color:RED },
-        { x:2, y:1, color:GREEN },
-        { x:3, y:1, color:GREEN },
-        { x:4, y:1, color:YELLOW },
-        { x:5, y:1, color:YELLOW }
+        { x:2, y:1, color:YELLOW },
+        { x:3, y:1, color:YELLOW },
+        { x:4, y:1, color:ORANGE },
+        { x:5, y:1, color:ORANGE }
       ],
     ]
   }

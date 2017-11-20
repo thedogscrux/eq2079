@@ -313,6 +313,8 @@ class Pz0 extends Component {
           getHint={() => this.getHint()}
         />
 
+        <img src={this.state.clock} width="50px" />
+
         <button onClick={() => this.guess()}>Guess</button>
       </div>
     )
