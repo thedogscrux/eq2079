@@ -12,8 +12,6 @@ import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 
-import imageA00 from './images/imageA00.svg'
-
 const PZ_INDEX = 0
 const PZ_PROPS = propsPzs[PZ_INDEX]
 
@@ -29,11 +27,7 @@ const HINTS = [
   }
 ]
 
-const IMAGE_MAP = new Map([
-    [ 'imageA00', imageA00 ]
-]);
-
-class Pz0 extends Component {
+class Pz8 extends Component {
   constructor(props){
     super(props)
     let score = new Score(PZ_INDEX)
@@ -323,7 +317,7 @@ class Pz0 extends Component {
 
 // FUNCS
 
-const genSettingsPz0 = (props) => {
+const genSettingsPz8 = (props) => {
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed())
   // setup each user for each round
@@ -345,18 +339,16 @@ const genSettingsPz0 = (props) => {
     let solutions = [
       [ 1, 1, 2, 2, 3, 3 ],
       [ 1, 2, 3, 1, 2, 3 ],
-      [ 1, 2, 3, 1, 2, 3 ],
-      [ 1, 2, 3, 1, 2, 3 ],
       [ 1, 2, 3, 1, 2, 3 ]
     ]
     let solution = solutions[round]
     let shuffledItems = shuffleArray([0, 1, 2, 3, 4, 5])
     // pz2
-    let solution = [
-      ['A00', 'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08' ],
-      ['B00', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08' ]
-    ]
-    let shuffledItems = shuffleArray(solution[round])
+    // let solution = [
+    //   ['A00', 'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08' ],
+    //   ['B00', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08' ]
+    // ]
+    //let shuffledItems = shuffleArray(solution[round])
     // DEAL ITEMS to users
     let userIndex = 0
     // pz4
@@ -368,10 +360,10 @@ const genSettingsPz0 = (props) => {
         userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
     })
     // pz2
-    shuffledItems.forEach((index, key) => {
-        settingsUsers[userIndex].items.push(shuffledItems[key])
-        userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
-    })
+    // shuffledItems.forEach((index, key) => {
+    //     settingsUsers[userIndex].items.push(shuffledItems[key])
+    //     userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
+    // })
     // settings = rounds[#][users][#] (with user data)
     // STORE settings
     // pz4
@@ -379,11 +371,11 @@ const genSettingsPz0 = (props) => {
       users: settingsUsers
     })
     // pz2
-    settings.push({
-      users: settingsUsers,
-      table: [],
-      solution: solution[round]
-    })
+    // settings.push({
+    //   users: settingsUsers,
+    //   table: [],
+    //   solution: solution[round]
+    // })
   }
   // calc total score
   let totalScore = 0
@@ -395,8 +387,8 @@ const genSettingsPz0 = (props) => {
   return totalScore
 }
 
-export default Pz0
+export default Pz8
 
 export {
-  genSettingsPz0
+  genSettingsPz8
 }
