@@ -65,12 +65,19 @@ class Story extends Component {
   }
 
   render(){
+    // TODO: for ref, different states of checking chapter in case anything goes wrong
+    /*Sate Chapter {this.state.chapter}<br/>
+    Props Chapter {this.props.chapter}<br/>
+    Dbase Chapter {this.state.dbaseChapter}<br/>
+    {console.log('this.state.chapter',this.state.chapter)}
+    {console.log('this.state.chapterRank',this.state.chapterRank)}*/
+    let rankMsg = (this.state.chapterRank === 1) ? 'Great job!' : 'Not bad cadet.'
+    if (this.state.chapterRank === 3) rankMsg = 'Well, at least you completed the mission.'
+
     return(
       <div className='component-wrapper'>
-        <h2>Story</h2>
-        Sate Chapter {this.state.chapter}<br/>
-        Props Chapter {this.props.chapter}<br/>
-        Dbase Chapter {this.state.dbaseChapter}<br/>
+        <h2>Story Chapter: {this.state.chapter}</h2>
+        {rankMsg}<br/>
         {staticStory[this.state.chapter][this.state.chapterRank-1]}
       </div>
     )
