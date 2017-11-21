@@ -116,7 +116,18 @@ class Pz extends Component {
   endRound() {
     //set the round # and time of next round (if any)
     let newRoundNum = this.state.pz.round+1
-    if (newRoundNum < propsPzs[this.state.pzIndex].rounds.numOfRounds) {
+
+    if (newRoundNum >= propsPzs[this.state.pzIndex].rounds.numOfRounds - 1) {
+      console.log('*** FINAL ROUND ***');
+      let timeNextRound = moment(this.state.pz.timeGameEnds, 'kk:mm:ss') // set the end of the round to the end of the game so the clock works
+      newRoundNum = this.state.pz.round // roll back the round counter, since we are not addng a new round
+      let update = {
+        round: newRoundNum,
+        timeNextRound: timeNextRound.format("kk:mm:ss"),
+        clock: 0
+      }
+      firebase.database().ref('/pzs/' + this.state.pzIndex).update(update)
+    } else if (newRoundNum < propsPzs[this.state.pzIndex].rounds.numOfRounds) {
       console.log('*** END ROUND ***');
       // go to next round
       let timeNextRound = moment().tz('America/Los_Angeles')
