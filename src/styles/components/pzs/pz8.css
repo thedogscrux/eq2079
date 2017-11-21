@@ -1,0 +1,22 @@
+.clear:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.ans-pulse {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse; }
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3); }
+  100% {
+    background-color: rgba(255, 255, 255, 0); } }
+
+#frequency-board-wrapper #radio-message {
+  font: 400 20px/24px monospace; }
+  #frequency-board-wrapper #radio-message .valid-word {
+    text-decoration: underline; }

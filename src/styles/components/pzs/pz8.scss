@@ -1,0 +1,17 @@
+@import "../../imports/imports.scss";
+
+#frequency-board-wrapper {
+
+  #radio-message {
+      font: 400 20px/24px monospace;
+      .valid-word {
+        //color: $colorRed;
+        text-decoration: underline;
+      }
+  }
+
+  #radio-tuner {
+
+  }
+
+}

@@ -13,7 +13,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 25
+      roundSec: 60
     }
   },
   {
@@ -30,7 +30,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 7
+      roundSec: 30
     }
   },
   {
@@ -47,7 +47,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 300
+      roundSec: 60
     }
   },
   {
@@ -64,7 +64,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 7
+      roundSec: 60
     }
   },
   {
@@ -81,7 +81,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 300
+      roundSec: 30
     }
   },
   {
@@ -98,7 +98,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 200
+      roundSec: 60
     }
   },
   {
@@ -114,8 +114,8 @@ const propsPzs = [
       left: '70%'
     },
     rounds: {
-      numOfRounds: 5,
-      roundSec: 60
+      numOfRounds: 2,
+      roundSec: 30
     }
   },
   {
@@ -132,7 +132,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 10
+      roundSec: 60
     }
   }
 ]
