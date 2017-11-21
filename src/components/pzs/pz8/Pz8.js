@@ -12,20 +12,65 @@ import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 
-const PZ_INDEX = 0
+const PZ_INDEX = 7
 const PZ_PROPS = propsPzs[PZ_INDEX]
+
+const HIGH_RANGE = 20
+const LOW_RANGE = 10
 
 const HINTS = [
   {
     title: 'Hint One',
-    body: '...'
+    body: 'Work together to find the message in the noise.'
   },
   {
     title: 'Hint Two',
     subTitle: 'Subtitle',
-    body: '...'
+    body: 'Everyone has to tune in to a different frequency.'
   }
 ]
+
+
+let FILLER = [
+  'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'sed', 'do',
+  'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna',
+  'aliqua', 'Ut', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation',
+  'ullamco', 'laboris', 'nisi', 'ut', 'aliquip', 'ex', 'ea', 'commodo', 'consequat',
+  'Duis', 'aute', 'irure', 'dolor', 'in', 'reprehenderit', 'in', 'voluptate', 'velit', 'esse',
+  'cillum', 'dolore', 'eu', 'fugiat', 'nulla', 'pariatur', 'Excepteur', 'sint', 'occaecat', 'cupidatat',
+  'non', 'proident', 'sunt', 'in', 'culpa', 'qui', 'officia', 'deserunt', 'mollit', 'anim', 'id',
+  'est', 'laborum'
+]
+
+let START_PHRASE = [
+  'you', 'will', 'never', 'find', 'me'
+]
+
+let PHRASE = [
+  [
+    [ 'Do', 'not', 'trust', 'the', 'AI' ],
+    [ 'Find', 'out', 'where', 'the', 'plutonium', 'is' ],
+    [ 'In', 'space', 'no', 'one', 'can', 'hear', 'you', 'scream' ]
+  ],
+  [
+    [ 'Always', 'trust', 'in', 'the', 'AI' ],
+    [ 'Do', 'not', 'touch', 'the', 'plutonium'],
+    [ 'On', 'Calisto', 'no', 'one', 'wants', 'to', 'hear', 'you', 'scream' ]
+  ],
+  [
+    [ 'Always', 'trust', 'in', 'the', 'AI' ],
+    [ 'Do', 'not', 'touch', 'the', 'plutonium'],
+    [ 'On', 'Calisto', 'no', 'one', 'wants', 'to', 'hear', 'you', 'scream' ]
+  ],
+  [
+    [ 'Always', 'trust', 'in', 'the', 'AI' ],
+    [ 'Do', 'not', 'touch', 'the', 'plutonium'],
+    [ 'On', 'Calisto', 'no', 'one', 'wants', 'to', 'hear', 'you', 'scream' ]
+  ]
+]
+
+//[ 'Now', 'is', 'the', 'time', 'for', 'all', 'good', 'men', 'to', 'come', 'to', 'the', 'aid', 'of', 'their', 'country' ]
+
 
 class Pz8 extends Component {
   constructor(props){
@@ -49,28 +94,38 @@ class Pz8 extends Component {
     }
     this.state = {
       ...baseState,
+      sliderValue: 0,
       board: {
-        table: [ 2, 1, 0 ],
-        myItems: [
-          {
-            value: 'A00'
-          }
-        ],
+        table: [ 'Lorum', 'not', 'dolor', 'the', 'amet' ],
+        myFreq: 0
       },
       rounds: [
         {
-          table: [ 2, 1, 0 ],
-          solution: [ 0, 1, 2 ],
+          table: [ ],
+          solution: [ ],
           users: [
             {
-              items: [ 0, 2 ],
-              userId: ''
+              index: 0,
+              freq: 0/10,
+              userId: '',
+              valid: false
             }
           ]
         }
       ]
     }
+    this.onRangeChange = this.onRangeChange.bind(this)
 
+  }
+
+  // HANDLERS
+  onRangeChange(event) {
+    this.setState({
+      board: {
+        ...this.state.board,
+        myFreq: parseInt(event.target.value)
+      }
+    })
   }
 
   // LIFECYCLE
@@ -164,14 +219,17 @@ class Pz8 extends Component {
 
   buildStateBoard(round) {
     // build board
-    // make user has everything they need
-    // table can be updated with a watch
     console.log('* build board *');
     let userId = this.props.user.id
     let roundKey = (round) ? round : this.state.round
     if(!this.state.rounds[roundKey]) return
-    // pz2 - loop thru all user assigned items and add them to state. a table is updated with a db watch
-    // pz5 dots - get properties for this user for this round, reset the table
+    let table = this.state.rounds[roundKey].solution.map( (word, key) => (START_PHRASE[key]) ? START_PHRASE[key] : '' )
+    this.setState({
+      board: {
+        ...this.state.board,
+        table: table
+      }
+    })
   }
 
   getMyUserKey() {
@@ -229,33 +287,37 @@ class Pz8 extends Component {
   // GUESS
 
   guess() {
-    // pz2 has a shared array that gets udpated when each user contributes a tile
-    let points = this.state.points + 1
-    this.setState({
-      points: points
-    })
-  }
-
-  addItemToTable(item) {
     // add the item to the table and get points
     let self = this
     let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
     let newTable = this.state.board.table || []
     let solution = this.state.rounds[this.state.round].solution
-    let userItemsCount = 1
+    let myIndexes = this.state.rounds[this.state.round].users[this.state.userKey].indexes
+    let myFreq = this.state.rounds[this.state.round].users[this.state.userKey].freq
+    let random = new Random(Random.engines.mt19937().autoSeed())
+    let validFreq = false
 
-    // add item to table
-    newTable.push(item)
-    let lastItemPlaced = (newTable.length >= solution.length) ? true : false
+    // check if my frequency is correct.
+    if(this.state.board.myFreq === myFreq) {
+      // if correct, load my solution words
+      myIndexes.forEach(index => {
+        newTable[index] = solution[index]
+      })
+      validFreq = true
+    } else {
+      // if incorrect, load gibberish
+      myIndexes.forEach(index => {
+        newTable[index] = FILLER[random.integer(0, FILLER.length-1)]
+      })
+    }
 
     // UPDATE SCORE: by checking if all my items are in the correct position
       // loop thru all my  items, then loop thru all items on table to check
-      let allMyItemsValid = true
       // if its equal to the number of items a user needs for solution, give em the points
-      allMyItemsValid = (userItemsCount === this.state.rounds[this.state.round].users[this.state.userKey].solutionItemCount[this.state.userKey]) ? true : false
+      //allMyItemsValid = (userItemsCount === this.state.rounds[this.state.round].users[this.state.userKey].solutionItemCount[this.state.userKey]) ? true : false
       // if all my items are valid, give me the round points
       let newRoundScore = 0
-      if (allMyItemsValid) {
+      if (validFreq) {
         newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
       }
       this.setState({
@@ -265,14 +327,12 @@ class Pz8 extends Component {
         }
       })
 
-    // check/set the color of the item
-
     // update the table on the dbase
     firebase.database().ref(refRound).update({
       table: newTable
     }).then(function(){
       // check if table is valid, if so, end the round
-      if(lastItemPlaced) {
+      if(validFreq) {
         firebase.database().ref(refRound).once('value').then(function(snapshot) {
           if(testIfEqualArrays(snapshot.val().table, snapshot.val().solution)) self.endRound()
         })
@@ -295,10 +355,40 @@ class Pz8 extends Component {
     let score = new Score(PZ_INDEX)
     let htmlScore = score.htmlSimpleDisplay(this.state.score)
 
-    if(this.state.render) { }
+    let maxRange = (this.state.round < 1) ? LOW_RANGE : HIGH_RANGE
+    let radioMsg = ''
+    let myFreq = this.state.board.myFreq
+    let userId = this.props.user.id
+    let solutionFreq = -1
+    let validFreq = false
+    let cssStyle = {}
+    let myIndexes = []
+
+    if(this.state.render) {
+      solutionFreq = this.state.rounds[this.state.round].users[this.state.userKey].freq
+      myIndexes = this.state.rounds[this.state.round].users[this.state.userKey].indexes
+
+      // format the range slider
+      if (myFreq === solutionFreq) {
+        //cssStyle.color = 'red'
+        validFreq = true
+      }
+
+      // format the radio msg
+      radioMsg = this.state.board.table.map( (word, key) => {
+        // TODO fix this formatting
+        let newWord = word + ' '
+        if (validFreq && myIndexes.indexOf(key) >= 0 && this.state.hints > 1) {
+          return <span key={key} className='valid-word'>{newWord}</span>
+        } else {
+          return word + ' '
+        }
+      })
+
+    }
 
     return(
-      <div id="xxx-board-wrapper" className='component-wrapper'>
+      <div id="frequency-board-wrapper" className='component-wrapper'>
         {htmlScore}
         <Hints
           hints={HINTS}
@@ -309,7 +399,24 @@ class Pz8 extends Component {
 
         <img src={this.state.clock} width="50px" />
 
-        <button onClick={() => this.guess()}>Guess</button>
+        <div className='phrase' id='radio-message'>{radioMsg}</div>
+
+        this.state.round:{this.state.round}<br/>
+        this.state.user.key:{this.state.user.key}
+
+        val: {myFreq}<br/>
+
+        <input type='range'
+          onMouseUp={() => this.guess()}
+          onTouchEnd={() => this.guess()}
+          onChange={this.onRangeChange}
+          min='0'
+          max={maxRange}
+          value={myFreq}
+          id='radio-tuner'
+          style={cssStyle}
+        />
+
       </div>
     )
   }
@@ -329,53 +436,27 @@ const genSettingsPz8 = (props) => {
         {
           userId: user,
           valid: false,
-          items: []
+          indexes: [],
+          freq: (round < 1) ? random.integer(1, LOW_RANGE) : random.integer(1, HIGH_RANGE)
         }
       )
     })
     // settings = rounds[#][users][#] (without user data)
     // SHUFFLE ITEMS and determine solution
-    // pz4
-    let solutions = [
-      [ 1, 1, 2, 2, 3, 3 ],
-      [ 1, 2, 3, 1, 2, 3 ],
-      [ 1, 2, 3, 1, 2, 3 ]
-    ]
-    let solution = solutions[round]
-    let shuffledItems = shuffleArray([0, 1, 2, 3, 4, 5])
-    // pz2
-    // let solution = [
-    //   ['A00', 'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08' ],
-    //   ['B00', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08' ]
-    // ]
-    //let shuffledItems = shuffleArray(solution[round])
+    let solution = PHRASE[round][random.integer(0, PHRASE[round].length-1)]
     // DEAL ITEMS to users
     let userIndex = 0
     // pz4
-    shuffledItems.forEach(index => {
-        settingsUsers[userIndex].items.push({
-          index: shuffledItems[index],
-          solution: solution[shuffledItems[index]]
-        })
+    solution.forEach((index,key) => {
+        settingsUsers[userIndex].indexes.push(key)
         userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
     })
-    // pz2
-    // shuffledItems.forEach((index, key) => {
-    //     settingsUsers[userIndex].items.push(shuffledItems[key])
-    //     userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
-    // })
-    // settings = rounds[#][users][#] (with user data)
     // STORE settings
-    // pz4
     settings.push({
-      users: settingsUsers
+      users: settingsUsers,
+      table: [],
+      solution: solution
     })
-    // pz2
-    // settings.push({
-    //   users: settingsUsers,
-    //   table: [],
-    //   solution: solution[round]
-    // })
   }
   // calc total score
   let totalScore = 0

@@ -279,7 +279,6 @@ class Pz6 extends Component {
     // loop thru all users in round to find me
     let userKey = -1
     let userId = this.props.user.id
-    console.log('this.state.rd',this.state);
     this.state.rounds[this.state.round].users.filter((user,key) => {
       if (user.userId == userId) userKey = key
       return
