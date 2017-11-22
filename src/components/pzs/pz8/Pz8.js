@@ -15,8 +15,9 @@ import Hints from '../../Hints.js'
 const PZ_INDEX = 7
 const PZ_PROPS = propsPzs[PZ_INDEX]
 
-const HIGH_RANGE = 20
-const LOW_RANGE = 10
+const HIGH_RANGE = 10
+const MID_RANGE = 6
+const LOW_RANGE = 3
 
 const HINTS = [
   {
@@ -30,8 +31,11 @@ const HINTS = [
   }
 ]
 
+let FILLER = [ 'Thats', 'one', 'small', 'step', 'for', 'man', 'one', 'giant', 'leap', 'for', 'mankind',
+'Mystery', 'creates', 'wonder', 'and', 'wonder', 'is', 'the', 'basis', 'of', 'mans', 'desire', 'to', 'understand',
+'Houston', 'Tranquillity', 'Base', 'here', 'The', 'Eagle', 'has', 'landed' ]
 
-let FILLER = [
+let FILLER_LORUM_IPSUM  = [
   'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'sed', 'do',
   'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna',
   'aliqua', 'Ut', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation',
@@ -401,8 +405,7 @@ class Pz8 extends Component {
 
         <div className='phrase' id='radio-message'>{radioMsg}</div>
 
-        this.state.round:{this.state.round}<br/>
-        this.state.user.key:{this.state.user.key}
+
 
         val: {myFreq}<br/>
 
@@ -431,13 +434,21 @@ const genSettingsPz8 = (props) => {
   for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
+    let freq = 0
+    if(round < 1) {
+      random.integer(1, LOW_RANGE)
+    } else if (round < 2) {
+      random.integer(1, MID_RANGE)
+    } else {
+      random.integer(1, HIGH_RANGE)
+    }
     props.players.forEach( (user,key) => {
       settingsUsers.push(
         {
           userId: user,
           valid: false,
           indexes: [],
-          freq: (round < 1) ? random.integer(1, LOW_RANGE) : random.integer(1, HIGH_RANGE)
+          freq: freq
         }
       )
     })
