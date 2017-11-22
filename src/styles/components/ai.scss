@@ -1,0 +1,34 @@
+#ai-component-wrapper {
+  border: solid red 1px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+
+  #full-screen {
+      &.ai-strength-1 {
+        // add css noise?: https://codepen.io/averyvery/pen/ajrzk
+        background: url("../images/ai/noise/noise-1.gif") top left repeat transparent;
+        background-size: contain;
+        height: 100%;
+        opacity: .03;
+      }
+  }
+
+}
+
+body {
+  &.ai-strength-1 {
+    h1, h2, h3, h4, h5 {
+      font-size: 30px;
+    }
+  }
+  &.ai-strength-2 {
+    transform: rotate(180deg);
+  }
+  &.ai-strength-3 {
+    text-align: right;
+  }
+}

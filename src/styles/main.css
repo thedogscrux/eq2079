@@ -164,6 +164,29 @@ button {
     #component-map .map-wrapper .pz:hover {
       background-color: white; }
 
+#ai-component-wrapper {
+  border: solid red 1px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw; }
+  #ai-component-wrapper #full-screen.ai-strength-1 {
+    background: url("../images/ai/noise/noise-1.gif") top left repeat transparent;
+    background-size: contain;
+    height: 100%;
+    opacity: .03; }
+
+body.ai-strength-1 h1, body.ai-strength-1 h2, body.ai-strength-1 h3, body.ai-strength-1 h4, body.ai-strength-1 h5 {
+  font-size: 30px; }
+
+body.ai-strength-2 {
+  transform: rotate(180deg); }
+
+body.ai-strength-3 {
+  text-align: right; }
+
 .clear:after {
   content: "";
   display: table;
