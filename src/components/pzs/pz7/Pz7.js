@@ -6,6 +6,8 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 
+import AI from '../../AI'
+
 import { shuffleArray, testIfEqualArrays } from '../../../utils/Common.js'
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
@@ -65,6 +67,7 @@ class Pz7 extends Component {
       valid: false,
       hints: props.user.pzs[PZ_INDEX].hints,
       userKey: -1,
+      aiStrength: props.user.ai.strength,
       score: {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
         multi: 0 * game.score.mutliplayerMultiplier,
@@ -505,18 +508,26 @@ class Pz7 extends Component {
       // get my controls
       htmlControls = this.state.board.table.controls.filter(control => control.userId === userId)
       htmlControls = htmlControls.map( (control, key) => {
-        if (['up','down','left','right'].indexOf(control.name) >= 0) {
+        let controlName = control.name
+        let controlLabel = control.name
+        // AI factor
+        if(this.state.aiStrength >= 1) {
+          // mix up the control names
+          let random = new Random(Random.engines.mt19937().autoSeed())
+          controlLabel = CONTROLS[random.integer(0, CONTROLS.length-1)]
+        }
+        if (['up','down','left','right'].indexOf(controlName) >= 0) {
           // return two buttons for each direction
           return(
             <div key={key} className='button-wrapper'>
-              <button onClick={() => this.updateArm(control.name)}>{control.name}</button>
-              <button onClick={() => this.updateArm(control.name + 'x')}>{control.name} X</button>
+              <button onClick={() => this.updateArm(controlName)}>{controlLabel}</button>
+              <button onClick={() => this.updateArm(controlName + 'x')}>{controlLabel}{(this.state.aiStrength < 1) ? ' X' : ''}</button>
             </div>
           )
         } else {
           return(
             <div key={key} className='button-wrapper'>
-              <button onClick={() => this.updateArm(control.name)}>{control.name}</button>
+              <button onClick={() => this.updateArm(controlName)}>{controlLabel}</button>
             </div>
           )
         }
@@ -546,6 +557,8 @@ class Pz7 extends Component {
 
     return(
       <div id="arm-board-wrapper" className='component-wrapper'>
+        <AI />
+
         {htmlScore}
         <Hints
           hints={HINTS}

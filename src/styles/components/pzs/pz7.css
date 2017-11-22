@@ -19,6 +19,10 @@
 #arm-board-wrapper #controls-wrapper .button-wrapper {
   display: inline-block;
   margin: 0 10px 0 0; }
+  #arm-board-wrapper #controls-wrapper .button-wrapper button {
+    width: 75px;
+    text-align: center;
+    padding: 5px; }
 
 #arm-board-wrapper #table {
   height: 250px;

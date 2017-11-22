@@ -165,7 +165,6 @@ button {
       background-color: white; }
 
 #ai-component-wrapper {
-  border: solid red 1px;
   pointer-events: none;
   position: absolute;
   top: 0;
@@ -772,6 +771,10 @@ body.ai-strength-3 {
 #arm-board-wrapper #controls-wrapper .button-wrapper {
   display: inline-block;
   margin: 0 10px 0 0; }
+  #arm-board-wrapper #controls-wrapper .button-wrapper button {
+    width: 75px;
+    text-align: center;
+    padding: 5px; }
 
 #arm-board-wrapper #table {
   height: 250px;
