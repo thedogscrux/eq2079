@@ -13,6 +13,7 @@ import { setUserPz } from '../../../actions/userActions'
 
 import PzStart from './PzStart'
 import PzScore from './PzScore'
+import AI from '../../AI'
 
 import { propsPzs } from '../../../data/propsPzs.js'
 
@@ -221,6 +222,7 @@ class Pz extends Component {
     }
     return(
       <div>
+        <AI />
         <h1>round: {this.state.pz.round}</h1>
         {contentScore}
         {content}

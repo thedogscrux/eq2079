@@ -12,9 +12,6 @@
     height: 100%;
     opacity: .03; }
 
-body.ai-strength-1 h1, body.ai-strength-1 h2, body.ai-strength-1 h3, body.ai-strength-1 h4, body.ai-strength-1 h5 {
-  font-size: 30px; }
-
 body.ai-strength-2 {
   transform: rotate(180deg); }
 

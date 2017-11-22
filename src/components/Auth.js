@@ -118,6 +118,8 @@ class Auth extends Component {
       console.log('******************');
       userNameAttempt = 'Lx'
       userPinAttempt = '1111'
+    } else if (!userPinAttempt) {
+      userPinAttempt = '1111'
     }
     // get all users from db
     let dbUsers = firebase.database().ref('/users').once('value').then(function(snapshot){
@@ -161,6 +163,7 @@ class Auth extends Component {
           user.job = 'Engineer'
           user.status = 'active'
           user.launchId = launchId
+          user.ai = { strength: 0 }
           // loop and add games
           let pzs = []
           propsPzs.forEach(function(pz){
