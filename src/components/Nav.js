@@ -12,6 +12,7 @@ class Nav extends Component {
   render(){
     return(
       <div id='component-nav'>
+        <Link to="/dashboard">Dashboard</Link>
         <Link to="/">Root</Link>
         <Link to="/welcome">Welcome</Link>
         <Link to="/login">Login</Link>
@@ -27,6 +28,8 @@ class Nav extends Component {
         <Link to='/pzs/pz6'>Pz 6 (volume)</Link>
         <Link to='/pzs/pz7'>Pz 7 (arm)</Link>
         <Link to='/pzs/pz8'>Pz 8 (freq)</Link>
+        <Link to='/pzs/pz9'>Pz 9 (switch)</Link>
+        <Link to='/pzs/pz10'>Pz 10 (code)</Link>
         <br/>
         <Link to="/mk">Mission Kontrol</Link>
         <Link to="/projector">Projector</Link>
