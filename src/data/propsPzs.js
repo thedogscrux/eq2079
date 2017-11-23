@@ -30,7 +30,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 30
+      roundSec: 60
     }
   },
   {
@@ -81,7 +81,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 30
+      roundSec: 60
     }
   },
   {
@@ -114,13 +114,30 @@ const propsPzs = [
       left: '70%'
     },
     rounds: {
-      numOfRounds: 2,
-      roundSec: 30
+      numOfRounds: 3,
+      roundSec: 60
     }
   },
   {
     name: 'Pz 8 Frequency',
     code: 'pz8',
+    location: {
+      lat: 0,
+      long: 0
+    },
+    mapPos: {
+      floor: 'ground',
+      bottom: '80%',
+      left: '70%'
+    },
+    rounds: {
+      numOfRounds: 2,
+      roundSec: 60
+    }
+  },
+  {
+    name: 'Pz 9 Switch',
+    code: 'pz9',
     location: {
       lat: 0,
       long: 0

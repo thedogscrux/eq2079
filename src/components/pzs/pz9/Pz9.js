@@ -12,71 +12,28 @@ import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 
-const PZ_INDEX = 7
-const PZ_PROPS = propsPzs[PZ_INDEX]
+import imageA00 from './images/imageA00.svg'
 
-const HIGH_RANGE = 10
-const MID_RANGE = 6
-const LOW_RANGE = 3
+const PZ_INDEX = 8
+const PZ_PROPS = propsPzs[PZ_INDEX]
 
 const HINTS = [
   {
     title: 'Hint One',
-    body: 'Work together to find the message in the noise.'
+    body: '...'
   },
   {
     title: 'Hint Two',
     subTitle: 'Subtitle',
-    body: 'Everyone has to tune in to a different frequency.'
+    body: '...'
   }
 ]
 
-let FILLER = [ 'Thats', 'one', 'small', 'step', 'for', 'man', 'one', 'giant', 'leap', 'for', 'mankind',
-'Mystery', 'creates', 'wonder', 'and', 'wonder', 'is', 'the', 'basis', 'of', 'mans', 'desire', 'to', 'understand',
-'Houston', 'Tranquillity', 'Base', 'here', 'The', 'Eagle', 'has', 'landed' ]
+const IMAGE_MAP = new Map([
+    [ 'imageA00', imageA00 ]
+]);
 
-let FILLER_LORUM_IPSUM  = [
-  'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'sed', 'do',
-  'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna',
-  'aliqua', 'Ut', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation',
-  'ullamco', 'laboris', 'nisi', 'ut', 'aliquip', 'ex', 'ea', 'commodo', 'consequat',
-  'Duis', 'aute', 'irure', 'dolor', 'in', 'reprehenderit', 'in', 'voluptate', 'velit', 'esse',
-  'cillum', 'dolore', 'eu', 'fugiat', 'nulla', 'pariatur', 'Excepteur', 'sint', 'occaecat', 'cupidatat',
-  'non', 'proident', 'sunt', 'in', 'culpa', 'qui', 'officia', 'deserunt', 'mollit', 'anim', 'id',
-  'est', 'laborum'
-]
-
-let START_PHRASE = [
-  'you', 'will', 'never', 'find', 'me'
-]
-
-let PHRASE = [
-  [
-    [ 'Do', 'not', 'trust', 'the', 'AI' ],
-    [ 'Find', 'out', 'where', 'the', 'plutonium', 'is' ],
-    [ 'In', 'space', 'no', 'one', 'can', 'hear', 'you', 'scream' ]
-  ],
-  [
-    [ 'Always', 'trust', 'in', 'the', 'AI' ],
-    [ 'Do', 'not', 'touch', 'the', 'plutonium'],
-    [ 'On', 'Calisto', 'no', 'one', 'wants', 'to', 'hear', 'you', 'scream' ]
-  ],
-  [
-    [ 'Always', 'trust', 'in', 'the', 'AI' ],
-    [ 'Do', 'not', 'touch', 'the', 'plutonium'],
-    [ 'On', 'Calisto', 'no', 'one', 'wants', 'to', 'hear', 'you', 'scream' ]
-  ],
-  [
-    [ 'Always', 'trust', 'in', 'the', 'AI' ],
-    [ 'Do', 'not', 'touch', 'the', 'plutonium'],
-    [ 'On', 'Calisto', 'no', 'one', 'wants', 'to', 'hear', 'you', 'scream' ]
-  ]
-]
-
-//[ 'Now', 'is', 'the', 'time', 'for', 'all', 'good', 'men', 'to', 'come', 'to', 'the', 'aid', 'of', 'their', 'country' ]
-
-
-class Pz8 extends Component {
+class Pz9 extends Component {
   constructor(props){
     super(props)
     let score = new Score(PZ_INDEX)
@@ -98,10 +55,12 @@ class Pz8 extends Component {
     }
     this.state = {
       ...baseState,
-      sliderValue: 0,
       board: {
-        table: [ 'Lorum', 'not', 'dolor', 'the', 'amet' ],
-        myFreq: 0
+        table: [
+          [ 0, 1, 0, 1 ],
+          [ 0, 1, 1, 1 ],
+          [ 1, 1, 1, 1 ]
+        ]
       },
       rounds: [
         {
@@ -110,7 +69,6 @@ class Pz8 extends Component {
           users: [
             {
               index: 0,
-              freq: 0/10,
               userId: '',
               valid: false
             }
@@ -118,18 +76,7 @@ class Pz8 extends Component {
         }
       ]
     }
-    this.onRangeChange = this.onRangeChange.bind(this)
 
-  }
-
-  // HANDLERS
-  onRangeChange(event) {
-    this.setState({
-      board: {
-        ...this.state.board,
-        myFreq: parseInt(event.target.value)
-      }
-    })
   }
 
   // LIFECYCLE
@@ -183,6 +130,30 @@ class Pz8 extends Component {
           table: newTable
         }
       })
+      if(this.state.userKey === -1) return
+      // UPDATE SCORE: by checking if all my items are in the correct position
+        let switchGroups = newTable
+        let myIndexes =  this.state.rounds[this.state.round].users[this.state.userKey].indexes
+        // loop thru all my  items, then loop thru all items on table to check
+        let allMySwitchesValid = true
+        for(var i=0; i<=switchGroups.length-1; i++) {
+          for(var j=0; j<=switchGroups[i].length-1; j++) {
+            if(myIndexes.indexOf(j) >= 0 && newTable[i][j] === false) {
+              allMySwitchesValid = false
+            }
+          }
+        }
+        // if all my items are valid, give me the round points
+        let newRoundScore = 0
+        if (allMySwitchesValid) {
+          newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
+        }
+        this.setState({
+          score: {
+            ...this.state.score,
+            round: newRoundScore
+          }
+        })
     }
   }
 
@@ -227,7 +198,7 @@ class Pz8 extends Component {
     let userId = this.props.user.id
     let roundKey = (round) ? round : this.state.round
     if(!this.state.rounds[roundKey]) return
-    let table = this.state.rounds[roundKey].solution.map( (word, key) => (START_PHRASE[key]) ? START_PHRASE[key] : '' )
+    let table = this.state.rounds[roundKey].table
     this.setState({
       board: {
         ...this.state.board,
@@ -248,10 +219,6 @@ class Pz8 extends Component {
       userKey: userKey,
       render: true
     })
-  }
-
-  getMyItemPos() {
-    // might need if you have mutliple positions
   }
 
   // END GAME
@@ -290,38 +257,48 @@ class Pz8 extends Component {
 
   // GUESS
 
-  guess() {
+  toggleSwitch(updateSwitchGroupKey, mySwitchKey) {
     // add the item to the table and get points
     let self = this
     let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
     let newTable = this.state.board.table || []
     let solution = this.state.rounds[this.state.round].solution
-    let myIndexes = this.state.rounds[this.state.round].users[this.state.userKey].indexes
-    let myFreq = this.state.rounds[this.state.round].users[this.state.userKey].freq
-    let random = new Random(Random.engines.mt19937().autoSeed())
-    let validFreq = false
+    let myIndexes =  this.state.rounds[this.state.round].users[this.state.userKey].indexes
+    let switchGroups = this.state.board.table
+    let switchGroup = switchGroups[updateSwitchGroupKey]
 
-    // check if my frequency is correct.
-    if(this.state.board.myFreq === myFreq) {
-      // if correct, load my solution words
-      myIndexes.forEach(index => {
-        newTable[index] = solution[index]
-      })
-      validFreq = true
-    } else {
-      // if incorrect, load gibberish
-      myIndexes.forEach(index => {
-        newTable[index] = FILLER[random.integer(0, FILLER.length-1)]
-      })
-    }
+    // toggle each of my indexes
+    let newSwitchGroup = switchGroup.map( (switchControl, switchKey) => {
+      let newSwitchControl = switchGroup[switchKey]
+      if (switchKey === mySwitchKey || switchKey === mySwitchKey-1 || switchKey === mySwitchKey+1) {
+        // toggle my switch and adjacent switches as well
+        newSwitchControl = !newSwitchControl
+      }
+      return newSwitchControl
+    })
+
+    // update the table
+    newTable[updateSwitchGroupKey] = newSwitchGroup
 
     // UPDATE SCORE: by checking if all my items are in the correct position
       // loop thru all my  items, then loop thru all items on table to check
-      // if its equal to the number of items a user needs for solution, give em the points
-      //allMyItemsValid = (userItemsCount === this.state.rounds[this.state.round].users[this.state.userKey].solutionItemCount[this.state.userKey]) ? true : false
+      let allMySwitchesValid = true
+      let tableValid = true
+      for(var i=0; i<=switchGroups.length-1; i++) {
+        for(var j=0; j<=switchGroup.length-1; j++) {
+          // check if my switches are valid
+          if(j === mySwitchKey && newTable[i][j] === false) {
+            allMySwitchesValid = false
+          }
+          // check if entire table is valid
+          if(newTable[i][j] === false) {
+            tableValid = false
+          }
+        }
+      }
       // if all my items are valid, give me the round points
       let newRoundScore = 0
-      if (validFreq) {
+      if (allMySwitchesValid) {
         newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
       }
       this.setState({
@@ -335,11 +312,9 @@ class Pz8 extends Component {
     firebase.database().ref(refRound).update({
       table: newTable
     }).then(function(){
-      // check if table is valid, if so, end the round
-      if(validFreq) {
-        firebase.database().ref(refRound).once('value').then(function(snapshot) {
-          if(testIfEqualArrays(snapshot.val().table, snapshot.val().solution)) self.endRound()
-        })
+      // if table is valid, end the round
+      if(tableValid) {
+        self.endRound()
       }
     })
   }
@@ -350,40 +325,29 @@ class Pz8 extends Component {
     let score = new Score(PZ_INDEX)
     let htmlScore = score.htmlSimpleDisplay(this.state.score)
 
-    let maxRange = (this.state.round < 1) ? LOW_RANGE : HIGH_RANGE
-    let radioMsg = ''
-    let myFreq = this.state.board.myFreq
-    let userId = this.props.user.id
-    let solutionFreq = -1
-    let validFreq = false
-    let cssStyle = {}
-    let myIndexes = []
+    let htmlSwitchGroups = ''
 
     if(this.state.render) {
-      solutionFreq = this.state.rounds[this.state.round].users[this.state.userKey].freq
-      myIndexes = this.state.rounds[this.state.round].users[this.state.userKey].indexes
-
-      // format the range slider
-      if (myFreq === solutionFreq) {
-        //cssStyle.color = 'red'
-        validFreq = true
-      }
-
-      // format the radio msg
-      radioMsg = this.state.board.table.map( (word, key) => {
-        // TODO fix this formatting
-        let newWord = word + ' '
-        if (validFreq && myIndexes.indexOf(key) >= 0 && this.state.hints > 1) {
-          return <span key={key} className='valid-word'>{newWord}</span>
-        } else {
-          return word + ' '
-        }
+      let myIndexes =  this.state.rounds[this.state.round].users[this.state.userKey].indexes
+      // get the user switches
+      htmlSwitchGroups = this.state.board.table.map( (switchGroup, switchGroupKey) => {
+        let htmlSwitches = switchGroup.map( (switchControl, switchKey) => {
+          // TODO only show my switches indexOf
+          if (myIndexes.indexOf(switchKey) === -1) return
+          let className = (switchControl) ? 'on' : 'off'
+          return (
+            <div key={switchKey} className={'switch ' + className}>
+              <button onClick={() => this.toggleSwitch(switchGroupKey, switchKey)}>{switchKey}</button>
+            </div>
+          )
+        })
+        return (<div key={switchGroupKey} className='switch-group'>{htmlSwitches}</div>)
       })
 
     }
 
     return(
-      <div id="frequency-board-wrapper" className='component-wrapper'>
+      <div id="switch-board-wrapper" className='component-wrapper'>
         {htmlScore}
         <Hints
           hints={HINTS}
@@ -394,23 +358,7 @@ class Pz8 extends Component {
 
         <img src={this.state.clock} width="50px" />
 
-        <div className='phrase' id='radio-message'>{radioMsg}</div>
-
-
-
-        val: {myFreq}<br/>
-
-        <input type='range'
-          onMouseUp={() => this.guess()}
-          onTouchEnd={() => this.guess()}
-          onChange={this.onRangeChange}
-          min='0'
-          max={maxRange}
-          value={myFreq}
-          id='radio-tuner'
-          style={cssStyle}
-        />
-
+        <div className='switch-groups-wrapper'>{htmlSwitchGroups}</div>
       </div>
     )
   }
@@ -418,46 +366,54 @@ class Pz8 extends Component {
 
 // FUNCS
 
-const genSettingsPz8 = (props) => {
+const genSettingsPz9 = (props) => {
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed())
   // setup each user for each round
   for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
-    let freq = 0
-    if(round < 1) {
-      freq = random.integer(1, LOW_RANGE)
-    } else if (round < 2) {
-      freq = random.integer(1, MID_RANGE)
-    } else {
-      freq = random.integer(1, HIGH_RANGE)
-    }
-    props.players.forEach( (user,key) => {
+    props.players.forEach( (user, key) => {
       settingsUsers.push(
         {
           userId: user,
           valid: false,
-          indexes: [],
-          freq: freq
+          indexes: []
         }
       )
     })
     // settings = rounds[#][users][#] (without user data)
     // SHUFFLE ITEMS and determine solution
-    let solution = PHRASE[round][random.integer(0, PHRASE[round].length-1)]
+    // SETUP TABLE
+    let table = []
+    let numOfSwitches = (settingsUsers.length <= 2) ? 2 : settingsUsers.length-1
+    let startingSwitch = random.integer(0, numOfSwitches)
+    let numOfSwitchGroups = 1
+    if(round < 1) {
+      numOfSwitchGroups = 1
+    } else if (round < 2) {
+      numOfSwitchGroups = 2
+    } else {
+      numOfSwitchGroups = 3
+    }
+    for(var i=1; i<=numOfSwitchGroups; i++) {
+      table.push([])
+      for(var j=0; j<=numOfSwitches; j++) {
+        table[i-1].push((j === startingSwitch) ? true : false)
+      }
+    }
     // DEAL ITEMS to users
     let userIndex = 0
-    solution.forEach((index,key) => {
-        settingsUsers[userIndex].indexes.push(key)
-        userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
-    })
+    for(var i=0; i<=numOfSwitches; i++) {
+      settingsUsers[userIndex].indexes.push(i)
+      userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
+    }
     // STORE settings
     settings.push({
       users: settingsUsers,
-      table: [],
-      solution: solution
+      table: table
     })
+
   }
   // calc total score
   let totalScore = 0
@@ -469,8 +425,8 @@ const genSettingsPz8 = (props) => {
   return totalScore
 }
 
-export default Pz8
+  export default Pz9
 
 export {
-  genSettingsPz8
+  genSettingsPz9
 }

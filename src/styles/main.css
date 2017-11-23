@@ -83,6 +83,7 @@ a:hover {
 input,
 button {
   border: solid 1px white;
+  border-radius: 0px;
   display: block;
   margin: 1vh 0;
   padding: 10px 30px;
@@ -824,3 +825,25 @@ body.ai-strength-3 {
   font: 400 20px/24px monospace; }
   #frequency-board-wrapper #radio-message .valid-word {
     text-decoration: underline; }
+
+#switch-board-wrapper .switch-groups-wrapper {
+  display: flex;
+  flex-direction: column; }
+  #switch-board-wrapper .switch-groups-wrapper .switch-group {
+    display: flex;
+    width: 100%;
+    margin-bottom: 50px;
+    padding-bottom: 50px;
+    border-bottom: solid 5px #fff; }
+    #switch-board-wrapper .switch-groups-wrapper .switch-group .switch {
+      flex-grow: 2; }
+      #switch-board-wrapper .switch-groups-wrapper .switch-group .switch button {
+        min-height: 200px;
+        min-width: 200px;
+        width: 100%;
+        border: solid 2px #000;
+        background-color: #fff; }
+      #switch-board-wrapper .switch-groups-wrapper .switch-group .switch.on button {
+        background-color: #fff; }
+      #switch-board-wrapper .switch-groups-wrapper .switch-group .switch.off button {
+        background-color: gray; }

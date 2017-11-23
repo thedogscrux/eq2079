@@ -1,0 +1,36 @@
+#switch-board-wrapper {
+
+  .switch-groups-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    .switch-group {
+      display: flex;
+      width: 100%;
+      margin-bottom: 50px;
+      padding-bottom: 50px;
+      border-bottom: solid 5px #fff;
+      .switch {
+        flex-grow: 2;
+        button {
+          min-height: 200px;
+          min-width: 200px;
+          width: 100%;
+          border: solid 2px #000;
+          background-color: #fff;
+        }
+        &.on {
+          button {
+            background-color: #fff;
+          }
+        }
+        &.off {
+          button {
+            background-color: gray;
+          }
+        }
+      }
+    }
+
+  }
+}
