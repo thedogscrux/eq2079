@@ -1,0 +1,60 @@
+@import "../../imports/imports.scss";
+
+#code-board-wrapper {
+  .table-wrapper {
+    width: 91vw;
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    .tile {
+      border: solid .5px rgba(255,255,255,.5);
+      height: 5vw;
+      width: 5vw;
+      max-width: 150px;
+      max-height: 150px;
+      background-size: contain;
+      display: flex;
+      font-weight: 600;
+      &.code {
+        color: rgba(255, 255, 255, .5);
+        font-weight: 400;
+      }
+      button {
+        border: none;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        animation-name: pulse;
+        width: 100%;
+        padding: 0;
+      }
+    }
+  }
+
+  .my-tiles-wrapper {
+    margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    .tile {
+      display: flex;
+      background-size: contain;
+      margin: 10px;
+      &.disabled {
+        margin: 0px;
+      }
+      button {
+        @extend .ans-pulse;
+        border: none;
+        height: 30px;
+        width: 30px;
+        padding: 0px;
+        color: #fff;
+        font-weight: 600;
+        &:disabled {
+          background-color: rgba(255, 0,0,.5);
+          //display: none;
+          //margin: 0px;
+        }
+      }
+    }
+  }
+}

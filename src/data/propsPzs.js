@@ -115,7 +115,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 60
+      roundSec: 90
     }
   },
   {
@@ -166,7 +166,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 30
+      roundSec: 60
     }
   }
 ]

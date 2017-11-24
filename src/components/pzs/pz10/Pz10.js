@@ -12,7 +12,17 @@ import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 
-import imageA00 from './images/imageA00.svg'
+// TODO possbile show an image for the character
+// import imageA00 from './images/A00.jpg'
+// import imageA01 from './images/A01.jpg'
+// import imageA02 from './images/A02.jpg'
+// import imageA03 from './images/A03.jpg'
+// import imageA04 from './images/A04.jpg'
+// import imageA05 from './images/A05.jpg'
+// import imageA06 from './images/A06.jpg'
+// import imageA07 from './images/A07.jpg'
+// import imageA08 from './images/A08.jpg'
+
 
 const PZ_INDEX = 9
 const PZ_PROPS = propsPzs[PZ_INDEX]
@@ -20,18 +30,53 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: '...'
+    body: 'Fold the paper with the colored bars in half'
   },
   {
     title: 'Hint Two',
-    subTitle: 'Subtitle',
-    body: '...'
+    subTitle: 'This is your last hint.',
+    body: 'The colored bars with red on top is the key.'
   }
 ]
 
-const IMAGE_MAP = new Map([
-    [ 'imageA00', imageA00 ]
-]);
+// TODO possbile show an image for the character
+// const IMAGE_MAP = new Map([
+//     [ 'imageA00', imageA00 ], [ 'imageA01', imageA01 ], [ 'imageA02', imageA02 ],
+//     [ 'imageA03', imageA03 ], [ 'imageA04', imageA04 ], [ 'imageA05', imageA05 ],
+//     [ 'imageA06', imageA06 ], [ 'imageA07', imageA07 ], [ 'imageA08', imageA08 ],
+//     [ 'imageB00', imageB00 ], [ 'imageB01', imageB01 ], [ 'imageB02', imageB02 ],
+//     [ 'imageB03', imageB03 ], [ 'imageB04', imageB04 ], [ 'imageB05', imageB05 ],
+//     [ 'imageB06', imageB06 ], [ 'imageB07', imageB07 ], [ 'imageB08', imageB08 ],
+// ]);
+
+let CIPHER = [
+  ['A','Q'],
+  ['B','W'],
+  ['C','E'],
+  ['D','R'],
+  ['E','T'],
+  ['F','Y'],
+  ['G','U'],
+  ['H','I'],
+  ['I','O'],
+  ['J','P'],
+  ['K','A'],
+  ['L','S'],
+  ['M','D'],
+  ['N','F'],
+  ['O','G'],
+  ['P','H'],
+  ['Q','J'],
+  ['R','K'],
+  ['S','L'],
+  ['T','Z'],
+  ['U','X'],
+  ['V','C'],
+  ['W','V'],
+  ['X','B'],
+  ['Y','N'],
+  ['Z','M']
+]
 
 class Pz10 extends Component {
   constructor(props){
@@ -46,7 +91,7 @@ class Pz10 extends Component {
       userKey: -1,
       render: false,
       score: {
-        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
+        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, this.props.numOfUsers),
         multi: 0 * game.score.mutliplayerMultiplier,
         hintCost: score.calcHintCost(PZ_INDEX),
         round: 0,
@@ -57,7 +102,7 @@ class Pz10 extends Component {
       ...baseState,
       board: {
         table: [ 2, 1, 0 ],
-        myItems: [
+        myTiles: [
           {
             value: 'A00'
           }
@@ -65,11 +110,11 @@ class Pz10 extends Component {
       },
       rounds: [
         {
-          table: [ 2, 1, 0 ],
-          solution: [ 0, 1, 2 ],
+          table: [ 'A', 'A', 'A' ],
+          solution: [ 'A', 'B', 'C' ],
           users: [
             {
-              items: [ 0, 2 ],
+              tiles: [ 'A', 'M', 'Z' ],
               userId: ''
             }
           ]
@@ -121,13 +166,13 @@ class Pz10 extends Component {
     })
   }
 
-  updateStatePz(pzBoard) {
-    let newTable = pzBoard.rounds[this.state.round].table
-    if (newTable != this.state.board.table) {
+  updateStatePz(value) {
+    let tableNew = value.rounds[this.state.round].table
+    if (tableNew != this.state.board.table) {
       this.setState({
         board: {
           ...this.state.board,
-          table: newTable
+          table: tableNew
         }
       })
     }
@@ -138,6 +183,7 @@ class Pz10 extends Component {
     // user cant score higher than max
     newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
     this.setState({
+      ...this.state,
       score: {
         ...this.state.score,
         total: newTotalScore
@@ -170,14 +216,25 @@ class Pz10 extends Component {
 
   buildStateBoard(round) {
     // build board
-    // make user has everything they need
-    // table can be updated with a watch
     console.log('* build board *');
     let userId = this.props.user.id
     let roundKey = (round) ? round : this.state.round
     if(!this.state.rounds[roundKey]) return
-    // pz2 - loop thru all user assigned items and add them to state. a table is updated with a db watch
-    // pz5 dots - get properties for this user for this round, reset the table
+    let roundUser = this.state.rounds[roundKey].users.filter( user => user.userId == userId )
+    let userTiles = roundUser[0].tiles.map( (tile, key) => {
+      return {
+        value: tile
+      }
+    })
+
+    let table = this.state.rounds[roundKey].table
+    this.setState({
+      board: {
+        ...this.state.board,
+        table: table,
+        myTiles: userTiles
+      }
+    })
   }
 
   getMyUserKey() {
@@ -194,14 +251,12 @@ class Pz10 extends Component {
     })
   }
 
-  getMyItemPos() {
-    // might need if you have mutliple positions
-  }
+  getMyItemPos() { }
 
   // END GAME
 
   endRound() {
-    this.props.endRound()
+    this.props.endRound() // parent component ends the round
   }
 
   endGame(){
@@ -214,13 +269,14 @@ class Pz10 extends Component {
   // HINT
 
   getHint() {
-    console.log(' ** GET HINT ** ');
+    console.log(' ** GET HINT ** ')
     let hint = HINTS[this.state.hints]
     let newHintCount = this.state.hints + 1
     // update user max score
     let score = new Score(PZ_INDEX)
     let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
     this.setState({
+      ...this.state,
       hints: newHintCount,
       score: {
         ...this.state.score,
@@ -234,51 +290,52 @@ class Pz10 extends Component {
 
   // GUESS
 
-  guess() {
-    // pz2 has a shared array that gets udpated when each user contributes a tile
-    let points = this.state.points + 1
-    this.setState({
-      points: points
-    })
-  }
-
-  addItemToTable(item) {
-    // add the item to the table and get points
+  updateTableInsertTile(tileValue) {
+    // append tile to table array
     let self = this
-    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
-    let newTable = this.state.board.table || []
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + (this.state.round) + '/'
+    let tableNew = this.state.board.table || []
     let solution = this.state.rounds[this.state.round].solution
-    let userItemsCount = 1
+    // find next empty index in table
+    let nextEmptyIndex = this.state.board.table.indexOf('')
+    if (nextEmptyIndex === -1) return false
+    let lastTilePlaced = (nextEmptyIndex >= solution.length-1) ? true : false
+    // insert my tile in table
+    tableNew[nextEmptyIndex] = tileValue
 
-    // add item to table
-    newTable.push(item)
-    let lastItemPlaced = (newTable.length >= solution.length) ? true : false
-
-    // UPDATE SCORE: by checking if all my items are in the correct position
-      // loop thru all my  items, then loop thru all items on table to check
-      let allMyItemsValid = true
-      // if its equal to the number of items a user needs for solution, give em the points
-      allMyItemsValid = (userItemsCount === this.state.rounds[this.state.round].users[this.state.userKey].solutionItemCount[this.state.userKey]) ? true : false
-      // if all my items are valid, give me the round points
+    // loop thru all tiles and if none are null then check for solution
+    //let lastTilePlaced = (tableNew.length >= solution.length) ? true : false
+    // UPDATE SCORE: by checking if all my tiles are in the correct position
+      // loop thru all my  tiles, then loop thru all tiles on table to check
+      let allMyTilesValid = true
+      this.state.board.myTiles.map( myTile => {
+        // if my tile is not on the table, then i am not 100% valid
+        let tableTiles = tableNew.filter( tableTile => tableTile === myTile.value)
+        if(tableTiles.length < 1) allMyTilesValid = false
+        // loop thru all table tiles, if my tile is on the table, and in the WRONG spot, then i am not 100% valid
+        tableNew.map( (tableTile, key) => {
+          if(tableTile === myTile.value && solution[key] != myTile.value) allMyTilesValid = false
+        })
+      })
+      // if all my tiles are valid, give me the round points
       let newRoundScore = 0
-      if (allMyItemsValid) {
+      if (allMyTilesValid) {
         newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
       }
       this.setState({
+        ...this.state,
         score: {
           ...this.state.score,
           round: newRoundScore
         }
       })
 
-    // check/set the color of the item
-
     // update the table on the dbase
     firebase.database().ref(refRound).update({
-      table: newTable
+      table: tableNew
     }).then(function(){
       // check if table is valid, if so, end the round
-      if(lastItemPlaced) {
+      if(lastTilePlaced) {
         firebase.database().ref(refRound).once('value').then(function(snapshot) {
           if(testIfEqualArrays(snapshot.val().table, snapshot.val().solution)) self.endRound()
         })
@@ -286,12 +343,22 @@ class Pz10 extends Component {
     })
   }
 
-  removeItemFromTable() {
+  updateTableRemoveTile(index) {
+    // remove tile from table array
+    let self = this
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + (this.state.round) + '/'
+    let tableNew = this.state.board.table || []
+    tableNew[index] = ''
+    // set current round score to 0
     this.setState({
+      ...this.state,
       score: {
         ...this.state.score,
         round: 0
       }
+    })
+    firebase.database().ref(refRound).update({
+      table: tableNew
     })
   }
 
@@ -301,10 +368,73 @@ class Pz10 extends Component {
     let score = new Score(PZ_INDEX)
     let htmlScore = score.htmlSimpleDisplay(this.state.score)
 
-    if(this.state.render) { }
+    // build table contents
+    let htmlTable = ''
+    let htmlMyTiles = ''
+
+    if(this.state.render) {
+      let nextEmptyIndex = (this.state.board.table.indexOf('') === -1) ? this.state.board.table.length : this.state.board.table.indexOf('')
+      let lastPlacedIndex = (this.state.board.table[nextEmptyIndex-1] === ' ') ? nextEmptyIndex-2 : nextEmptyIndex-1
+      let alphabet = CIPHER.map(code => code[0])
+
+      htmlTable = this.state.board.table.map( (tile, key) => {
+        let innerHtml = ''
+        let css = {}
+        let className = 'tile '
+
+        // get related cipher code
+        let solutionChar = this.state.rounds[this.state.round].solution[key]
+        let cipherIndex = alphabet.indexOf(solutionChar)
+
+        // insert tile in table array
+        if (tile === ' ') {
+          innerHtml = '[space]'
+        } else if (tile === '') {
+          className += ' code'
+          innerHtml = (cipherIndex != -1) ? CIPHER[cipherIndex][1] : '*'
+        } else {
+          innerHtml = this.state.board.table[key]
+        }
+
+        // TODO possbile show an image for the character
+        // let img = IMAGE_MAP.get('image' + this.state.board.table[key])
+        let img = ''
+        css = { backgroundImage: `url(${img})` }
+
+        let myTiles = this.state.board.myTiles.filter( tile => tile.value === this.state.board.table[key])
+        if(myTiles.length >= 1 && (key === nextEmptyIndex-1 || key === lastPlacedIndex) ) {
+          // if last tile in array, and MY tile, insert as a btn with ability to remove
+          // OR if second to last tile is mine, and last tile is a
+          return (
+            <div key={key} className={className} style={css}>
+              <button onClick={() => this.updateTableRemoveTile(key)} >{innerHtml}</button>
+            </div>
+          )
+        } else {
+          return (<div key={key} className={className} style={css}>{innerHtml}</div>)
+        }
+      })
+
+      // build user tiles
+      htmlMyTiles = this.state.board.myTiles.map( (tile, key) => {
+        let disabled = ''
+        let css = {}
+        // get assoc image
+        // TODO possbile show an image for the character
+        //let img = IMAGE_MAP.get('image' + tile.value)
+        let img = ''
+        css = { backgroundImage: `url(${img})` }
+        return (
+          <div key={key} className={'tile ' + disabled} style={css}>
+            <button onClick={() => this.updateTableInsertTile(tile.value)}>{tile.value}{(this.state.hints>1) ? tile.value : ''}</button>
+          </div>
+        )
+      })
+
+    }
 
     return(
-      <div id="xxx-board-wrapper" className='component-wrapper'>
+      <div id="code-board-wrapper" className='component-wrapper component-pz'>
         {htmlScore}
         <Hints
           hints={HINTS}
@@ -315,7 +445,8 @@ class Pz10 extends Component {
 
         <img src={this.state.clock} width="50px" />
 
-        <button onClick={() => this.guess()}>Guess</button>
+        <div className='table-wrapper'>{htmlTable}</div>
+        <div className='my-tiles-wrapper'>{htmlMyTiles}</div>
       </div>
     )
   }
@@ -334,35 +465,33 @@ const genSettingsPz10 = (props) => {
       settingsUsers.push(
         {
           userId: user,
-          valid: false,
-          items: []
+          tiles: []
         }
       )
     })
-    // settings = rounds[#][users][#] (without user data)
+    // settings = rounds[#][users][#] { } without user data
     // SHUFFLE ITEMS and determine solution
-    let solutions = [
-      [ 1, 1, 2, 2, 3, 3 ],
-      [ 1, 2, 3, 1, 2, 3 ],
-      [ 1, 2, 3, 1, 2, 3 ],
-      [ 1, 2, 3, 1, 2, 3 ],
-      [ 1, 2, 3, 1, 2, 3 ]
+    let solution = [
+      [ 'G', 'O', 'O', 'D', 'B', 'Y', 'E', ' ', 'W', 'O', 'R', 'L', 'D' ],
+      [ 'G', 'O', 'O', 'D', 'B', 'Y', 'E', ' ', 'W', 'O', 'R', 'L', 'D' ],
+      [ 'G', 'O', 'O', 'D', 'B', 'Y', 'E', ' ', 'W', 'O', 'R', 'L', 'D' ]
     ]
-    let solution = solutions[round]
-    let shuffledItems = shuffleArray([0, 1, 2, 3, 4, 5])
     // DEAL ITEMS to users
     let userIndex = 0
-    shuffledItems.forEach(index => {
-        settingsUsers[userIndex].items.push({
-          index: shuffledItems[index],
-          solution: solution[shuffledItems[index]]
-        })
+    let alphabet = CIPHER.map(code => code[0])
+    let shuffledCipher = shuffleArray(alphabet)
+    shuffledCipher.forEach((index, key) => {
+        settingsUsers[userIndex].tiles.push(shuffledCipher[key][0])
         userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
     })
-    // settings = rounds[#][users][#] (with user data)
+    // settings = rounds[#][users][#] {...} with user data
+    // BUILD STARTING TABLE
+    let table = solution[round].map(tile => (tile === ' ') ? ' ' : '')
     // STORE settings
     settings.push({
-      users: settingsUsers
+      users: settingsUsers,
+      table: table,
+      solution: solution[round]
     })
   }
   // calc total score

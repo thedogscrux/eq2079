@@ -345,7 +345,7 @@ class Pz2 extends Component {
       htmlTable = this.state.rounds[this.state.round-0].solution.map( (tile, key) => {
         let innerHtml = ''
         let css = {}
-        if(!this.state.board.table) return (<div key={key} className='cell'></div>)
+        if(!this.state.board.table) return (<div key={key} className='tile'></div>)
         // insert tile in table array
         if(this.state.board.table[key]) {
           //innerHtml = this.state.board.table[key]
