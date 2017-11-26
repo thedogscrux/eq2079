@@ -509,14 +509,16 @@ body.ai-strength-3 {
     width: 30vw;
     max-width: 150px;
     max-height: 150px;
-    background-size: contain;
+    background-size: cover;
     display: flex; }
     #jigsaw-board-wrapper .table-wrapper .tile button {
       border: none;
       animation-duration: 3s;
       animation-iteration-count: infinite;
       animation-name: pulse;
-      width: 100%; }
+      width: 100%;
+      margin: 0;
+      padding: 0; }
 
 #jigsaw-board-wrapper .my-tiles-wrapper {
   margin: 20px auto;
@@ -524,7 +526,7 @@ body.ai-strength-3 {
   flex-wrap: wrap; }
   #jigsaw-board-wrapper .my-tiles-wrapper .tile {
     display: flex;
-    background-size: contain;
+    background-size: cover;
     margin: 10px; }
     #jigsaw-board-wrapper .my-tiles-wrapper .tile.disabled {
       margin: 0px; }
@@ -532,8 +534,9 @@ body.ai-strength-3 {
       border: none;
       height: 50px;
       width: 50px;
-      padding: 5px;
+      padding: 0px;
       color: red;
+      margin: 0px;
       font-weight: 600; }
       #jigsaw-board-wrapper .my-tiles-wrapper .tile button:disabled {
         background-color: rgba(255, 0, 0, 0.5);

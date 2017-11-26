@@ -12,7 +12,7 @@
       width: 30vw;
       max-width: 150px;
       max-height: 150px;
-      background-size: contain;
+      background-size: cover;
       display: flex;
       button {
         border: none;
@@ -20,6 +20,8 @@
         animation-iteration-count: infinite;
         animation-name: pulse;
         width: 100%;
+        margin: 0;
+        padding: 0;
       }
     }
   }
@@ -30,7 +32,7 @@
     flex-wrap: wrap;
     .tile {
       display: flex;
-      background-size: contain;
+      background-size: cover;
       margin: 10px;
       &.disabled {
         margin: 0px;
@@ -40,8 +42,9 @@
         border: none;
         height: 50px;
         width: 50px;
-        padding: 5px;
+        padding: 0px;
         color: red;
+        margin: 0px;
         font-weight: 600;
         &:disabled {
           background-color: rgba(255, 0,0,.5);
