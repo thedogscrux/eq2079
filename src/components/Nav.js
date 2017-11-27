@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
 import {browserHistory, hashHistory} from 'react-router';
+
+import { setDebug } from '../actions/adminActions'
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    debug: state.admin.debug
+  }
+}
 
 class Nav extends Component {
   constructor(props) {
@@ -10,6 +19,7 @@ class Nav extends Component {
   }
 
   render(){
+    if(!this.props.debug) return(<div></div>)
     return(
       <div id='component-nav'>
         <Link to="/dashboard">Dashboard</Link>
@@ -38,4 +48,8 @@ class Nav extends Component {
   }
 }
 
-export default Nav
+const NavContainer = connect(
+  mapStateToProps
+)(Nav)
+
+export default NavContainer

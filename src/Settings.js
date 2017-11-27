@@ -1,7 +1,7 @@
 const game = {
   active: true,
   score: {
-    launch: 1000,
+    launch: 200,
     hintCost: 0.25,
     mutliplayerMultiplier: 0.5,
     round: 15,
@@ -12,10 +12,12 @@ const game = {
     allowAfterPzAttempts: 3
   },
   clock: {
-    pzLoadingSec: 5
+    pzLoadingSec: 2
   },
   ai: {
-
+    triggerStrength1AtPercentComplete: 10,
+    triggerStrength2AtPercentComplete: 50,
+    triggerStrength3AtPercentComplete: 70
   }
 }
 

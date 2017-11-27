@@ -9,6 +9,7 @@ import 'firebase/storage'
 import Cookies from 'js-cookie'
 
 import { setUser } from '../actions/userActions'
+import { setDebug } from '../actions/adminActions'
 
 import { schemaUser } from '../data/schemas.js'
 
@@ -28,7 +29,8 @@ const fakeAuth = {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    user: state.user
+    user: state.user,
+    debug: state.admin.debug
   }
 }
 
@@ -36,6 +38,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     authUser: (user) => {
       dispatch(setUser(user))
+    },
+    setDebug: (debug) => {
+      dispatch(setDebug(debug))
     }
   }
 }
@@ -132,6 +137,9 @@ class Auth extends Component {
             //if name matches, login and load user data
             userResults = users[key]
             userResults.id = key
+            if (userNameAttempt.toLowerCase() === 'lx' || userNameAttempt.toLowerCase().indexOf('debug') >= 0) {
+              self.props.setDebug(true)
+            }
             self.updateUser(userResults)
             self.setCookieUser(userNameAttempt)
             break
@@ -212,10 +220,11 @@ class Auth extends Component {
     let html = ''
     switch(this.state.display) {
       case 'userInfo':
+        if (!this.props.debug) break
         html =
           <div>
-            {/*Code Name: {this.state.user.name} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}&nbsp;&nbsp;
-            <button style={{display: 'inline-block'}} onClick={() => this.updateUser('')}>Logout</button>*/}
+            Code Name: {this.state.user.name} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}&nbsp;&nbsp;
+            <button style={{display: 'inline-block'}} onClick={() => this.updateUser('')}>Logout</button>
           </div>
         break
       case 'formLogin':
