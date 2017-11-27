@@ -504,7 +504,9 @@ class MK extends Component {
   newGame() {
     let self = this
     let newLaunch = schemaLaunch
+    let timeStart = moment().tz('America/Los_Angeles')
     newLaunch.status = 'active'
+    newLaunch.start = timeStart.format("kk:mm:ss")
     firebase.database().ref('/launches/').push(newLaunch, function(error) {
       console.log('*** New game started ***');
       self.updateStateLaunching(false)

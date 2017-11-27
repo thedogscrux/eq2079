@@ -53,11 +53,11 @@ class AI extends Component {
     let percentOfTotal = Math.round((myTotalScore / totalGameScore) * 100)
     let aiStrength = 0
 
-    if(percentOfTotal > 20) {
+    if(percentOfTotal > game.ai.triggerStrength1AtPercentComplete) {
       aiStrength = 1
-    } else if (percentOfTotal > 70) {
+    } else if (percentOfTotal > game.ai.triggerStrength2AtPercentComplete) {
       aiStrength = 2
-    } else if (percentOfTotal > 85) {
+    } else if (percentOfTotal > game.ai.triggerStrength3AtPercentComplete) {
       aiStrength = 3
     }
 
