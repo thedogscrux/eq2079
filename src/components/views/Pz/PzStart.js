@@ -7,7 +7,8 @@ import 'firebase/storage'
 
 const mapStateToProps = (state, props) => {
   return {
-    user: state.user
+    user: state.user,
+    debug: state.admin.debug
   }
 }
 
@@ -117,6 +118,24 @@ class PzStart extends Component {
     })
   }
 
+  htmlAdmin() {
+    return(
+      <div>
+        <h1>Pz Start: {this.state.pzCode}</h1>
+        pz code: {this.props.pzCode}<br/>
+        pz index: {this.props.pzIndex}<br/>
+      </div>
+    )
+  }
+
+  htmlPlayers() {
+    let players = this.state.pzPlayers.map(player => player + ', ')
+    return (
+      <div>
+        pz players: {players}
+      </div>
+    )
+  }
 
   render(){
     const pzStatus = this.props.pzStatus
@@ -129,13 +148,15 @@ class PzStart extends Component {
       content = <button onClick={() => this.joinGame() }>Join</button>
     }
 
+    let htmlAdmin = (this.props.debug) ? this.htmlAdmin() : ''
+
+    let htmlPlayers = (this.state.pzPlayers.length >= 1) ? this.htmlPlayers() : ''
+
     return(
-      <div className='component-wrapper'>
-        <h1>Pz Start: {this.state.pzCode}</h1>
-        pz code: {this.props.pzCode}<br/>
-        pz index: {this.props.pzIndex}<br/>
-        pz attempts: {this.props.pzAttempts}<br/>
-        pz players: { !(this.state.pzPlayers) ? '' : this.state.pzPlayers.map(player => player + ', ') }
+      <div id='component-pz-start' className='component-wrapper'>
+        {htmlAdmin}
+        {/*pz attempts: {this.props.pzAttempts}<br/>*/}
+        {htmlPlayers}
         {content}
       </div>
     )

@@ -26,7 +26,7 @@ class Hints extends Component {
     })
 
     return (
-      <div>
+      <div id='component-hints'>
         {htmlHintButton}
         {htmlHints}
       </div>

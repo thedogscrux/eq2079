@@ -9,9 +9,8 @@ import AI from '../AI'
 class Dashboard extends Component {
   render(){
     return(
-      <div>
+      <div id='component-dashboard'>
         <AI />
-        <h1>Dashboard</h1>
         <Story />
         <Status />
         <CheckPzCode history={this.props.history} />

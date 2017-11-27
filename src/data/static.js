@@ -1,8 +1,11 @@
 const staticStory = [
   [
-    'Perfect! You&#39;re off to a good start. At this rate you&#39;ll be the in Callisto within a blink of an eye. Let&#39;s move on and see what else needs to be fixed.',
-    'Looks good. Things will get more challenging so let&#39;s hope you can fix them as soon as possible. Let&#39;s move on and see what&#39;s out there.',
-    'You Died. Well...not competely. They mistaken your name (team) for another individual (group). I think Callisto might be better if you stayed on Earth. You&#39;ll get another chance but it&#39;s going to be difficult at this rate, let&#39;s see if you&#39;re up for the next challenge!?'
+    'Intro story everyone sees goes here....'
+  ],
+  [
+    'Perfect! You\'re off to a good start. At this rate you\'ll be the in Callisto within a blink of an eye. Let\'s move on and see what else needs to be fixed.',
+    'Looks good. Things will get more challenging so let\'s hope you can fix them as soon as possible. Let\'s move on and see what\'s out there.',
+    'You Died. Well...not competely. They mistaken your name (team) for another individual (group). I think Callisto might be better if you stayed on Earth. You\'ll get another chance but it\'s going to be difficult at this rate, let\'s see if you\'re up for the next challenge!?'
   ],
   [
     'Excellent! You are seeing old photos and  videos of her courageous life before and during the war through a MAV-Sonar NFC scan.',
@@ -27,7 +30,7 @@ const staticStory = [
   [
     'To the Stars! Everyone down at mission kontrol celebrates with a bottle of champagne in their hand and gives you (your team) a toast as the ship prepares for Callisto.',
     'The flight was delayed but everyone feels good about their journey to Callisto.',
-    'Everything shuts down, lights fade out and all you hear is a robotic voice say "Look at me, I am the Captain now". It looks like the Nuvosem Q8&quo;s have taken over the command deck, you see people jump out of the spaceship in horror.'
+    'Everything shuts down, lights fade out and all you hear is a robotic voice say "Look at me, I am the Captain now". It looks like the Nuvosem Q8\'s have taken over the command deck, you see people jump out of the spaceship in horror.'
   ],
   [
     'Good Morning! You wake up can almost see Callisto from your terminal.  Everybody else on the ship is feeling great and happy to get a good night rest.',

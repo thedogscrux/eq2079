@@ -71,14 +71,25 @@ class Story extends Component {
     Dbase Chapter {this.state.dbaseChapter}<br/>
     {console.log('this.state.chapter',this.state.chapter)}
     {console.log('this.state.chapterRank',this.state.chapterRank)}*/
-    let rankMsg = (this.state.chapterRank === 1) ? 'Great job!' : 'Not bad cadet.'
-    if (this.state.chapterRank === 3) rankMsg = 'Well, at least you completed the mission.'
+    let rankMsg = ''
+    if (this.state.chapterRank === 1) {
+      rankMsg = 'Great job!'
+    } else if (this.state.chapterRank === 2) {
+      rankMsg = 'Not bad cadet.'
+    } else if (this.state.chapterRank === 3) {
+      rankMsg = 'Well, at least you completed the mission.'
+    }
+
+    let story = (this.state.chapter === 0) ? staticStory[0] : staticStory[this.state.chapter][this.state.chapterRank-1]
+
+    let welcome = (this.state.chapter === 0) ? 'Welcome to your communications center. blah blah...' : ''
 
     return(
-      <div className='component-wrapper'>
-        <h2>Story Chapter: {this.state.chapter}</h2>
-        {rankMsg}<br/>
-        {staticStory[this.state.chapter][this.state.chapterRank-1]}
+      <div id='component-story' className='component-wrapper'>
+        {welcome}
+        {rankMsg}
+        <br/>
+        {story}
       </div>
     )
   }

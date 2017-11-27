@@ -41,7 +41,7 @@ class InactiveUser extends Component {
         </div>
     }
     return(
-      <div>
+      <div id='component-inactive-user'>
         {content}
       </div>
     )

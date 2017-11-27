@@ -1,10 +1,17 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
 import { staticLocMK, staticPzs } from '../data/static.js'
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    debug: state.admin.debug
+  }
+}
 
 class Map extends Component {
   constructor(props) {
@@ -169,7 +176,7 @@ class Map extends Component {
 
   render(){
     // show info for selected Pz
-    let selectedPz = (this.state.pzs && this.state.selectedPzID) ? this.state.pzs[this.state.selectedPzID] : null
+    let selectedPz = (this.state.pzs && this.state.selectedPzID >= 0) ? this.state.pzs[parseInt(this.state.selectedPzID)] : null
     let htmlSelectedPz = null
     if(selectedPz) {
       htmlSelectedPz = <div>
@@ -179,10 +186,11 @@ class Map extends Component {
       </div>
     }
 
+    let htmlMyLocation = (this.props.debug) ? <div>My location: {this.state.geoLoc.latitude}, {this.state.geoLoc.longitude}</div> : ''
+
     return(
       <div id='component-map' className='component-wrapper'>
-        <h2>Map</h2>
-        My location: {this.state.geoLoc.latitude}, {this.state.geoLoc.longitude}
+        {htmlMyLocation}
         <div className='map-wrapper'>
           {this.getPzs()}
           {this.getMyPos()}
@@ -193,4 +201,8 @@ class Map extends Component {
   }
 }
 
-export default Map
+const MapContainer = connect(
+  mapStateToProps
+)(Map)
+
+export default MapContainer

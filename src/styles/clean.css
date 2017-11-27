@@ -117,11 +117,6 @@ button {
   100% {
     background-color: rgba(255, 255, 255, 0); } }
 
-.component-wrapper {
-  background-color: rgba(255, 255, 255, 0.2);
-  margin: 1vh 0;
-  padding: 1vh 1vw; }
-
 #component-nav a {
   display: inline-block;
   margin-right: 10px; }
@@ -165,14 +160,14 @@ button {
     #component-map .map-wrapper .pz:hover {
       background-color: white; }
 
-#ai-component-wrapper {
+#component-ai {
   pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
   height: 100vh;
   width: 100vw; }
-  #ai-component-wrapper #full-screen.ai-strength-1 {
+  #component-ai #full-screen.ai-strength-1 {
     background: url("../images/ai/noise/noise-1.gif") top left repeat transparent;
     background-size: contain;
     height: 100%;

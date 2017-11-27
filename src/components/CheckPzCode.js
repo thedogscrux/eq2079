@@ -37,8 +37,7 @@ class CheckPzCode extends Component {
 
   render(){
     return(
-      <div className='component-wrapper'>
-        <h1>checkPzCode</h1>
+      <div id='component-check-pz-code' className='component-wrapper'>
         <input type='text' placeholder='Puzzle Code' value={this.state.checkPzCode} onChange={this.handleChangeCheckPzCode} />
         <button onClick={() => this.checkIfPzExists(this.state.checkPzCode)}>Check Code</button>
       </div>

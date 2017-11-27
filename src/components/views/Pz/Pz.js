@@ -53,7 +53,8 @@ const clockMap = {
 
 const mapStateToProps = (state, props) => {
   return {
-    user: state.user
+    user: state.user,
+    debug: state.admin.debug
   }
 }
 
@@ -191,6 +192,16 @@ class Pz extends Component {
     })
   }
 
+  htmlPzInfo() {
+    return(
+      <div>
+        <h1>{this.state.pz.name}</h1>
+        {propsPzs[this.state.pzIndex].desc}<br/>
+        {propsPzs[this.state.pzIndex].instructions}
+      </div>
+    )
+  }
+
   render(){
     const PzCode = pzMap[this.state.pzCode]
     let contentScore = null
@@ -224,10 +235,20 @@ class Pz extends Component {
         pzAttempts={pzAttempts}
       />
     }
+
+    // pz info (dont show if game is active)
+    let htmlPzInfo = (this.state.pz.status === 'active') ? '' : this.htmlPzInfo()
+
+    // debug
+    let htmlRound = (this.props.debug) ? <h1>round: {this.state.pz.round}</h1> : ''
+
     return(
-      <div>
+      <div id='component-pz'>
         <AI />
-        <h1>round: {this.state.pz.round}</h1>
+        {htmlPzInfo}
+
+
+        {htmlRound}
         {contentScore}
         {content}
       </div>

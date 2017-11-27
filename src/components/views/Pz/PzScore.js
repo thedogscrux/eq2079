@@ -11,7 +11,8 @@ import PzStart from './PzStart'
 
 const mapStateToProps = (state, props) => {
   return {
-    userId: state.user.id
+    userId: state.user.id,
+    debug: state.admin.debug
   }
 }
 
@@ -73,12 +74,15 @@ class PzScore extends Component {
       <PzStart pzCode={this.props.pzCode} pzIndex={this.props.pzIndex} pzStatus={this.props.pzStatus} pzPlayerIDs={this.props.pzPlayerIDs}/>
       :
       <button onClick={() => this.setState({playAgain: true})}>Play Again? (add pzs to app state to control -app-state-pzs-0-playAgain: true)</button>
+
+    let htmlAdmin = (this.props.debug) ? <div>Pz Score: {this.state.pzCode}<br/>index: {this.state.pzIndex}</div> : ''
+
     return(
-      <div className='component-wrapper'>
-        <h1>Pz Score: {this.state.pzCode}</h1>
-        index: {this.state.pzIndex}<br/>
+      <div id='component-pz-score' className='component-wrapper'>
+        {htmlAdmin}
+        my score: TODO add this<br/>
         max score: {(this.state.pz) ? this.state.pz.score : ''}<br/>
-        attempts: {(this.state.pz) ? this.state.pz.attempts : ''}
+        my attempts: {(this.state.pz) ? this.state.pz.attempts : ''}
         {/*}{playAgainStart}*/}
       </div>
     )

@@ -83,7 +83,7 @@ class AI extends Component {
     }
 
     return(
-      <div id='ai-component-wrapper'>
+      <div id='component-ai'>
         <div id='full-screen' className={classesFullScreen}></div>
       </div>
     )

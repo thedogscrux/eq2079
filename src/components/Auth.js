@@ -242,7 +242,7 @@ class Auth extends Component {
     }
 
     return(
-      <div>
+      <div id='component-auth'>
         {html}
       </div>
     )

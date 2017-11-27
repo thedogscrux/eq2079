@@ -37,12 +37,23 @@ class Score {
 
   // BUILD HTML
 
-  htmlSimpleDisplay(score) {
-    return(
+  htmlAdmin(score) {
+    return (
       <div>
         <h2>Score:<br/>{score.round} / {score.total} / {score.max}</h2>
         round / total / max<br/>
         hint cost: {score.hintCost}<br/>
+      </div>
+    )
+  }
+
+  htmlSimpleDisplay(score, debug = false) {
+    let htmlAdmin = ''
+    htmlAdmin = (debug) ? this.htmlAdmin(score) : ''
+    return(
+      <div id='component-score'>
+        {htmlAdmin}
+        Score: {score.round}/{score.total}/{score.max} [round/total/max]
       </div>
     )
   }

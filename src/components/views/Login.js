@@ -48,8 +48,7 @@ class Login extends Component {
       </div>
     }
     return(
-      <div>
-        <h1>Signup/Login</h1>
+      <div id='component-login'>
         {content}
         <Auth display='formLogin' />
       </div>

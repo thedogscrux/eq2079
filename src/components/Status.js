@@ -1,10 +1,18 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
 import { staticLaunches } from '../data/static.js'
+import game from '../Settings.js'
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    debug: state.admin.debug
+  }
+}
 
 class Status extends Component {
   constructor(props) {
@@ -47,9 +55,19 @@ class Status extends Component {
   }
 
   getLaunchStatus() {
-    let html = ''
     return(
       <div>
+        Launch Status: {this.state.launch.totalScore}/{game.score.launch}
+      </div>
+    )
+  }
+
+  render(){
+
+    // admin stuff
+    let admin = ''
+    if (this.props.debug) {
+      admin = <div>
         Status: {this.state.launch.status}<br/>
         Start: {this.state.launch.start}<br/>
         End: {this.state.launch.end}<br/>
@@ -57,17 +75,19 @@ class Status extends Component {
         Total Score: {this.state.launch.totalScore}<br/>
         Total Game Plays: {this.state.launch.totalGamePlays}<br/>
       </div>
-    )
-  }
+    }
 
-  render(){
     return(
-      <div className='component-wrapper'>
-        <h2>Launch Status</h2>
+      <div id='component-status' className='component-wrapper'>
         {this.getLaunchStatus()}
+        {admin}
       </div>
     )
   }
 }
 
-export default Status
+const StatusContainer = connect(
+  mapStateToProps
+)(Status)
+
+export default StatusContainer

@@ -17,7 +17,8 @@ import Pzs from './components/views/Pzs'
 import MK from './components/views/MK'
 import Projector from './components/views/Projector'
 
-import './styles/main.css';
+import './styles/clean.css';
+//import './styles/eq2079.css';
 
 import firebase from 'firebase/app'
 import 'firebase/database'
@@ -43,7 +44,7 @@ const App = () => (
       <PrivateRoute path='/pzs' component={Pzs}/>
 
       <Route path="/mk" component={MK}/>
-      <PrivateRoute path="/projector" component={Projector}/>
+      <Route path="/projector" component={Projector}/>
     </div>
   </Router>
 )

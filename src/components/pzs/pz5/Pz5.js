@@ -418,6 +418,10 @@ class Pz5 extends Component {
   }
 
   render(){
+    // score
+    let score = new Score(PZ_INDEX)
+    let htmlScore = score.htmlSimpleDisplay(this.state.score)
+
     // build an array of empty rows/cols
     let htmlRows = []
     for(var y=0; y<=GRID_Y; y++) {
@@ -496,32 +500,28 @@ class Pz5 extends Component {
       )
     })
 
-    // score
-    let score = new Score(PZ_INDEX)
-    let htmlScore = score.htmlSimpleDisplay(this.state.score)
-
     // cmyk
-    let cmykRed = [0, 100, 100, 0]
-    let rgbRed = ryb2rgb([255, 0, 0])
-    let cssRed = 'rgb(' + rgbRed[0] + ',' + rgbRed[1] + ',' + rgbRed[2] + ')'
-
-    let cmykYellow = [0, 0, 100, 0]
-    let rgbYellow = ryb2rgb([0, 255, 0])
-    let cssYellow = 'rgb(' + rgbYellow[0] + ',' + rgbYellow[1] + ',' + rgbYellow[2] + ')'
-
-    let cmykBlue = [100, 100, 0, 0]
-    let rgbBlue = ryb2rgb([0, 0, 255])
-    let cssBlue = 'rgb(' + rgbBlue[0] + ',' + rgbBlue[1] + ',' + rgbBlue[2] + ')'
+    // let cmykRed = [0, 100, 100, 0]
+    // let rgbRed = ryb2rgb([255, 0, 0])
+    // let cssRed = 'rgb(' + rgbRed[0] + ',' + rgbRed[1] + ',' + rgbRed[2] + ')'
+    //
+    // let cmykYellow = [0, 0, 100, 0]
+    // let rgbYellow = ryb2rgb([0, 255, 0])
+    // let cssYellow = 'rgb(' + rgbYellow[0] + ',' + rgbYellow[1] + ',' + rgbYellow[2] + ')'
+    //
+    // let cmykBlue = [100, 100, 0, 0]
+    // let rgbBlue = ryb2rgb([0, 0, 255])
+    // let cssBlue = 'rgb(' + rgbBlue[0] + ',' + rgbBlue[1] + ',' + rgbBlue[2] + ')'
 
 
 
     return(
       <div id="spots-board-wrapper" className='component-wrapper'>
-        <div className='color-convert'>
+        {/*}<div className='color-convert'>
           <div style={{ backgroundColor: cssRed }}>rgb red</div>
           <div style={{ backgroundColor: cssYellow }}>rgb yellow</div>
           <div style={{ backgroundColor: cssBlue }}>rgb blue</div>
-        </div>
+        </div>*/}
 
         {htmlScore}
         <Hints

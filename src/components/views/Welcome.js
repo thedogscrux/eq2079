@@ -42,8 +42,8 @@ class Welcome extends Component {
     }
     return(
       <div id='component-welcome'>
-        <h1>Welcome {this.state.user.name}</h1>
-        <Link to='/login#sci'>Signup/Login</Link>
+        {/*<h1>Welcome {this.state.user.name}</h1>
+        }<Link to='/login#sci'>Signup/Login</Link>*/}
 
         <div className={'ans-show-wrapper intro ' + ((this.state.ans.intro) ? 'play' : '')}>
           <div className='ans show-1' style={{ opactiy: 0 }}>Come in.. Come in...</div>
