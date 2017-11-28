@@ -19,16 +19,19 @@ class Score {
   calcMaxScore(numUserHints = 0, numOfUsers = 1) {
     // total score - hints
     let totalScore = 0
+    let totalBaseScore = 0
     let totalRoundScore = this.numOfRounds * ROUND_SCORE
     let userHintsCost = numUserHints * HINT_COST
-    let totalBaseScore = totalRoundScore - (totalRoundScore * userHintsCost)
+    // totalBaseScore = totalRoundScore - Math.round((totalRoundScore * userHintsCost))
+    totalBaseScore = totalRoundScore - userHintsCost
+
     if(numOfUsers > 1) {
       console.log('XXX adding multi to score for X players:',numOfUsers);
       totalScore = totalBaseScore + (totalBaseScore * MULTI)
     } else {
       totalScore = totalBaseScore
     }
-    return totalScore
+    return Math.round(totalScore)
   }
 
   calcHintCost() {

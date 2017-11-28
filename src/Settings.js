@@ -1,18 +1,20 @@
+//hintCost: 0.25,
+
 const game = {
   active: true,
   score: {
-    launch: 200,
-    hintCost: 0.25,
+    launch: 100,
+    hintCost: 0.99,
     mutliplayerMultiplier: 0.5,
-    round: 15,
-    item: 3,
+    round: 1,
+    item: 1,
     participation: 1
   },
   hints: {
-    allowAfterPzAttempts: 3
+    allowAfterPzAttempts: 1
   },
   clock: {
-    pzLoadingSec: 2
+    pzLoadingSec: 5
   },
   ai: {
     triggerStrength1AtPercentComplete: 10,
