@@ -10,8 +10,25 @@
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }

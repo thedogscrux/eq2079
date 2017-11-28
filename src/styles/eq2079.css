@@ -10,11 +10,28 @@
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 .clear:after {
   content: "";
@@ -28,11 +45,28 @@
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 body {
   background-color: #16161d;
@@ -40,7 +74,7 @@ body {
   font: 100 12px/20px "Avenir Next Ultra-Light", Avenir, Sans-serif;
   padding: 1vw;
   margin: 0;
-  opacity: .4; }
+  opacity: .5; }
 
 img {
   border: none;
@@ -74,11 +108,28 @@ a:hover {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 input,
 button {
@@ -111,11 +162,28 @@ button {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-nav a {
   display: inline-block;
@@ -133,11 +201,28 @@ button {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-map .map-wrapper {
   width: 90vw;
@@ -191,11 +276,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-welcome {
   color: #3a9bc7; }
@@ -402,11 +504,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-mk h2 {
   color: #16161d;
@@ -433,11 +552,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-projector h2 {
   color: #16161d;
@@ -498,11 +634,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 .component-pz .hint {
   background-color: rgba(255, 255, 255, 0.2);
@@ -552,11 +705,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #jigsaw-board-wrapper .table-wrapper {
   width: 91vw;
@@ -615,11 +785,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #soduko-board-wrapper #grid {
   display: flex;
@@ -695,11 +882,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #volume-board-wrapper .solution-key-wrapper {
   display: flex; }
@@ -826,11 +1030,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #arm-board-wrapper #controls-wrapper .button-wrapper {
   display: inline-block;
@@ -878,11 +1099,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #frequency-board-wrapper #radio-message {
   font: 400 20px/24px monospace; }
@@ -923,11 +1161,28 @@ body.ai-strength-3 {
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-fade-out {
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards;
+  display: none; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  80% {
+    opacity: .8; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #code-board-wrapper .table-wrapper {
   width: 91vw;

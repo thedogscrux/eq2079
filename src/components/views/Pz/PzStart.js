@@ -5,6 +5,10 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
+import { showAlert } from '../../Alert'
+
+import { propsPzs } from '../../../data/propsPzs.js'
+
 const mapStateToProps = (state, props) => {
   return {
     user: state.user,
@@ -104,9 +108,12 @@ class PzStart extends Component {
     let pzPlayerIDs = this.props.pzPlayerIDs
     let userID = this.props.user.id
     let pzIndex = this.props.pzIndex
+    let maxPlayers = propsPzs[pzIndex].maxPlayers || 2
     firebase.database().ref('/pzs/' + this.props.pzIndex + '/players/').once('value').then(function(snapshot){
       let userCount = snapshot.val().filter(playerID => playerID == userID)
-      if(userCount < 1) {
+      console.log('snapshot.val().length',snapshot.val().length);
+      console.log('maxPlayers',maxPlayers);
+      if(userCount < 1 && snapshot.val().length < maxPlayers ) {
         let newPlayers = pzPlayerIDs || []
         newPlayers.push(userID)
         firebase.database().ref('/pzs/' + pzIndex).update({
@@ -114,6 +121,8 @@ class PzStart extends Component {
         }).then(function(){
           self.updateUserJoined(true)
         })
+      } else if (snapshot.val().length >= maxPlayers) {
+        showAlert('Maximum Number of Players have already joined.')
       }
     })
   }

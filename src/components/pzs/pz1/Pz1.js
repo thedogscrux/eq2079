@@ -15,21 +15,21 @@ import Hints from '../../Hints.js'
 import clock0 from '../../../images/pz/clock/clock-0.svg'
 import clock4 from '../../../images/pz/clock/clock-4.svg'
 
-import item00 from './images/0-0.jpg'
-import item01 from './images/0-1.jpg'
-import item02 from './images/0-2.jpg'
-import item03 from './images/0-3.jpg'
-import item04 from './images/0-4.jpg'
-import item10 from './images/1-0.jpg'
-import item11 from './images/1-1.jpg'
-import item12 from './images/1-2.jpg'
-import item13 from './images/1-3.jpg'
-import item14 from './images/1-4.jpg'
-import item20 from './images/2-0.jpg'
-import item21 from './images/2-1.jpg'
-import item22 from './images/2-2.jpg'
-import item23 from './images/2-3.jpg'
-import item24 from './images/2-4.jpg'
+import item00 from './images/0-0.png'
+import item01 from './images/0-1.png'
+import item02 from './images/0-2.png'
+import item03 from './images/0-3.png'
+import item04 from './images/0-4.png'
+import item10 from './images/1-0.png'
+import item11 from './images/1-1.png'
+import item12 from './images/1-2.png'
+import item13 from './images/1-3.png'
+import item14 from './images/1-4.png'
+import item20 from './images/2-0.png'
+import item21 from './images/2-1.png'
+import item22 from './images/2-2.png'
+import item23 from './images/2-3.png'
+import item24 from './images/2-4.png'
 
 const PZ_INDEX = 0
 const PZ_PROPS = propsPzs[PZ_INDEX]
@@ -45,6 +45,8 @@ const HINTS = [
     body: '...'
   }
 ]
+
+const WALLART_CODES = [ 123, 456, 789 ]
 
 const itemMap = {
   item00, item01, item02, item03, item04,
@@ -247,6 +249,26 @@ class Pz1 extends Component {
     })
   }
 
+  // HINT
+
+  getHint() {
+    let hint = HINTS[this.state.hints]
+    let newHintCount = this.state.hints + 1
+    // update user max score
+    let score = new Score(PZ_INDEX)
+    let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
+    this.setState({
+      hints: newHintCount,
+      score: {
+        ...this.state.score,
+        max: newMaxScore
+      }
+    })
+    firebase.database().ref('/users/' + this.props.user.id + '/pzs/' + PZ_INDEX).update({
+      hints: newHintCount
+    })
+  }
+
   submitGuess(guess) {
     let self = this
     let userValid = false
@@ -296,7 +318,8 @@ class Pz1 extends Component {
 
     // update the table on the dbase
     firebase.database().ref(refUser).update({
-      ans: ansValid
+      ans: ansValid,
+      valid: true
     }).then(function(){
       // check if table is valid, if so, end the round
       if(userValid) {
@@ -304,36 +327,13 @@ class Pz1 extends Component {
           // loop thru all users and see if any are not valid
           let allUsersValid = true
           snapshot.val().map( (user, userKey) => {
-            if(!user.ans) allUsersValid = false
+            if(!user.valid) allUsersValid = false
           })
           if(allUsersValid) self.endRound()
         })
       }
     })
   }
-
-
-
-  // HINT
-
-  getHint() {
-    let hint = HINTS[this.state.hints]
-    let newHintCount = this.state.hints + 1
-    // update user max score
-    let score = new Score(PZ_INDEX)
-    let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
-    this.setState({
-      hints: newHintCount,
-      score: {
-        ...this.state.score,
-        max: newMaxScore
-      }
-    })
-    firebase.database().ref('/users/' + this.props.user.id + '/pzs/' + PZ_INDEX).update({
-      hints: newHintCount
-    })
-  }
-
 
   render(){
     // score
@@ -359,8 +359,6 @@ class Pz1 extends Component {
           userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
           getHint={() => this.getHint()}
         />
-
-        <img src={this.state.clock} width="50px" />
 
         <div id='pipe-board-wrapper' className='clear'>
 
@@ -450,8 +448,10 @@ const genSettingsPz1 = (props) => {
   // generate user items
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed());
+  let wallartCodes = shuffleArray(WALLART_CODES)
   for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     let cols = []
+    // add players
     props.players.forEach( (player,key) => {
       let code = random.integer(100, 999)
       cols.push(
@@ -465,6 +465,15 @@ const genSettingsPz1 = (props) => {
     })
     // rando the array/row
     let shuffled = shuffle(cols)
+    // add computer always to beginning
+    shuffled.unshift(
+      {
+        user: 'computer',
+        code: wallartCodes[round],
+        ans: false,
+        valid: true
+      }
+    )
     settings.push(shuffled)
   }
   // calc total score
