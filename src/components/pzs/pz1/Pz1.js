@@ -6,6 +6,12 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 
+import { shuffleArray, testIfEqualArrays, removeArrayKey } from '../../../utils/Common.js'
+import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
+import game from '../../../Settings.js'
+import { propsPzs } from '../../../data/propsPzs.js'
+import Hints from '../../Hints.js'
+
 import clock0 from '../../../images/pz/clock/clock-0.svg'
 import clock4 from '../../../images/pz/clock/clock-4.svg'
 
@@ -25,10 +31,20 @@ import item22 from './images/2-2.jpg'
 import item23 from './images/2-3.jpg'
 import item24 from './images/2-4.jpg'
 
-import { propsPzs } from '../../../data/propsPzs.js'
+const PZ_INDEX = 0
+const PZ_PROPS = propsPzs[PZ_INDEX]
 
-const pzIndex = 0
-const pzProps = propsPzs[pzIndex]
+const HINTS = [
+  {
+    title: 'Hint One',
+    body: '...'
+  },
+  {
+    title: 'Hint Two',
+    subTitle: 'Subtitle',
+    body: '...'
+  }
+]
 
 const itemMap = {
   item00, item01, item02, item03, item04,
@@ -40,15 +56,27 @@ const itemMap = {
 class Pz1 extends Component {
   constructor(props){
     super(props)
+    let score = new Score(PZ_INDEX)
     let baseSate = {
       points: 0,
       round: props.round,
       totalScore: 0,
       user: props.user,
-      clock: props.clock
+      clock: props.clock,
+      newKeys: '-------------',
+      valid: false,
+      hints: props.user.pzs[PZ_INDEX].hints,
+      score: {
+        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
+        multi: 0 * game.score.mutliplayerMultiplier,
+        hintCost: score.calcHintCost(PZ_INDEX),
+        round: 0,
+        total: 0
+      }
     }
     this.state = {
       ...baseSate,
+      userKey: -1,
       guessLabel: '',
       guessKey: '',
       guessCode: '',
@@ -74,6 +102,9 @@ class Pz1 extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
+      if (this.props.round != nextProps.round) {
+        this.updateStateScore()
+      }
       this.setState({
         round: nextProps.round,
         clock: nextProps.clock,
@@ -88,8 +119,21 @@ class Pz1 extends Component {
   componentWillUnmount() {
     let self = this
     let score = this.endGame()
-    firebase.database().ref('/pzs/' + pzIndex + '/status').once('value').then(function(snapshot){
+    firebase.database().ref('/pzs/' + PZ_INDEX + '/status').once('value').then(function(snapshot){
       if(snapshot.val() === 'inactive') self.props.endGame(score)
+    })
+  }
+
+  updateStateScore() {
+    let newTotalScore = this.state.score.total + this.state.score.round
+    // user cant score higher than max
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
+    this.setState({
+      score: {
+        ...this.state.score,
+        total: newTotalScore,
+        round: 0
+      }
     })
   }
 
@@ -99,12 +143,9 @@ class Pz1 extends Component {
   getSettings() {
     var self = this
     let once = firebase.database().ref('/boards/pz1/').once('value').then(function(snapshot){
-      if(self._ismounted) {
-        // console.log('gotcha! - setting state 3');
-        // self.setStateBoard(snapshot.val())
-      } else {
-        console.log('gotcha! - setting state 4');
+      if(!self._ismounted) {
         self.setStateBoard(snapshot.val())
+        self.getMyUserKey()
       }
       return
     })
@@ -112,19 +153,25 @@ class Pz1 extends Component {
   }
 
   setStateBoard(settings){
-    if(this._ismounted) {
-      // console.log('setting state 1');
-      // this.setState({
-      //   rounds: settings.rounds
-      // })
-      // this.getMyItemPos()
-    } else {
-      console.log('gotcha! - setting state 2');
+    if(!this._ismounted) {
       this.setState({
         rounds: settings.rounds
       })
       this.getMyItemPos()
     }
+  }
+
+  getMyUserKey() {
+    // loop thru all users in round to find me
+    let userKey = -1
+    let userId = this.props.user.id
+    this.state.rounds[this.state.round].filter((user,key) => {
+      if (user.user == userId) userKey = key
+      return
+    })
+    this.setState({
+      userKey: userKey
+    })
   }
 
   getMyItemPos() {
@@ -149,6 +196,35 @@ class Pz1 extends Component {
     })
   }
 
+  // END GAME
+
+  endRound() {
+    this.props.endRound()
+  }
+
+  endGame(){
+    // NEW METHOD
+    let newTotalScore = this.state.score.round + this.state.score.total
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
+    // calc user score (final score calculated in Pz parent)
+    return newTotalScore
+
+    // OLD METHOD
+    // let userId = this.props.user.id
+    // let score = 0
+    // // calc user score (final score calculated in Pz parent)
+    // Object.keys(this.state.rounds).map((key, round) => {
+    //   Object.keys(this.state.rounds[round]).map((key, userIndex) => {
+    //     let user = this.state.rounds[round][userIndex]
+    //     if(user.ans === true) {
+    //       score++
+    //     }
+    //     return
+    //   })
+    //   return
+    // })
+    // return score
+  }
 
   // GUESS
 
@@ -172,13 +248,17 @@ class Pz1 extends Component {
   }
 
   submitGuess(guess) {
-    console.log('** Guess **');
+    let self = this
+    let userValid = false
+    let ansValid = false
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
+    let refUser = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/' + this.state.userKey + '/'
+
     document.getElementById('msg').innerHTML = ''
     document.getElementById('itemCode').value = ''
-    this.setState({
-      guessCode: ''
-    })
+    this.setState({ guessCode: '' })
     if(parseInt(this.state.guessCode) === parseInt(this.state.ans)) {
+      ansValid = true
       this.setState({
         rounds: {
           ...this.state.rounds,
@@ -191,35 +271,75 @@ class Pz1 extends Component {
           }
         }
       })
+      // check if all my answers are valid
+      userValid = true
     } else {
       alert('wrong')
       document.getElementById('msg').innerHTML = 'wrong'
     }
     document.getElementById('itemCode').focus()
-    return
+
+    if (!ansValid) return
+
+    // UPDATE SCORE: by checking if all my items are in the correct position
+      // if all my items are valid, give me the round points
+      let newRoundScore = 0
+      if (userValid) {
+        newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
+      }
+      this.setState({
+        score: {
+          ...this.state.score,
+          round: newRoundScore
+        }
+      })
+
+    // update the table on the dbase
+    firebase.database().ref(refUser).update({
+      ans: ansValid
+    }).then(function(){
+      // check if table is valid, if so, end the round
+      if(userValid) {
+        firebase.database().ref(refRound).once('value').then(function(snapshot) {
+          // loop thru all users and see if any are not valid
+          let allUsersValid = true
+          snapshot.val().map( (user, userKey) => {
+            if(!user.ans) allUsersValid = false
+          })
+          if(allUsersValid) self.endRound()
+        })
+      }
+    })
   }
 
-  // END GAME
 
-  endGame(){
-    let userId = this.props.user.id
-    let score = 0
-    // calc user score (final score calculated in Pz parent)
-    Object.keys(this.state.rounds).map((key, round) => {
-      Object.keys(this.state.rounds[round]).map((key, userIndex) => {
-        let user = this.state.rounds[round][userIndex]
-        if(user.ans === true) {
-          score++
-        }
-        return
-      })
-      return
+
+  // HINT
+
+  getHint() {
+    let hint = HINTS[this.state.hints]
+    let newHintCount = this.state.hints + 1
+    // update user max score
+    let score = new Score(PZ_INDEX)
+    let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
+    this.setState({
+      hints: newHintCount,
+      score: {
+        ...this.state.score,
+        max: newMaxScore
+      }
     })
-    return score
+    firebase.database().ref('/users/' + this.props.user.id + '/pzs/' + PZ_INDEX).update({
+      hints: newHintCount
+    })
   }
 
 
   render(){
+    // score
+    let score = new Score(PZ_INDEX)
+    let htmlScore = score.htmlSimpleDisplay(this.state.score)
+
     const htmlAns = Object.keys(this.state.rounds).map((key, round) => {
       let htmlInner = Object.keys(this.state.rounds[round]).map((key, userIndex) => {
         let user = this.state.rounds[round][userIndex]
@@ -232,6 +352,16 @@ class Pz1 extends Component {
 
     return(
       <div className='component-wrapper'>
+        {htmlScore}
+        <Hints
+          hints={HINTS}
+          hintsCount={this.state.hints}
+          userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
+          getHint={() => this.getHint()}
+        />
+
+        <img src={this.state.clock} width="50px" />
+
         <div id='pipe-board-wrapper' className='clear'>
 
           {Object.keys(this.state.rounds).map((row, rowIndex) => {
@@ -317,11 +447,10 @@ class Pz1 extends Component {
 // FUNCS
 
 const genSettingsPz1 = (props) => {
-  console.log('** generate settings **')
   // generate user items
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed());
-  for(let round=0; round<pzProps.rounds.numOfRounds; round++){
+  for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     let cols = []
     props.players.forEach( (player,key) => {
       let code = random.integer(100, 999)
@@ -329,7 +458,8 @@ const genSettingsPz1 = (props) => {
         {
           user: player,
           code: code,
-          ans: false
+          ans: false,
+          valid: false
         }
       )
     })
@@ -338,7 +468,7 @@ const genSettingsPz1 = (props) => {
     settings.push(shuffled)
   }
   // calc total score
-  let totalScore = (pzProps.rounds.numOfRounds * props.players.length) - pzProps.rounds.numOfRounds
+  let totalScore = (PZ_PROPS.rounds.numOfRounds * props.players.length) - PZ_PROPS.rounds.numOfRounds
   // store all info in dbase
   firebase.database().ref('/boards/pz1').set({
     rounds: settings

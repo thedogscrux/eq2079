@@ -277,7 +277,7 @@ class MK extends Component {
     //set the round # and time of next round (if any)
     let pz = this.state.pzs[pzIndex]
     let newRoundNum = pz.round + 1
-    let finalRound = (newRoundNum >= propsPzs[pzIndex].rounds.numOfRounds - 1) ? true : false
+    let finalRound = (newRoundNum >= propsPzs[pzIndex].rounds.numOfRounds) ? true : false
     let timeNextRound = moment().tz('America/Los_Angeles')
     if(finalRound) {
       timeNextRound = moment(this.state.pzs[pzIndex].timeGameEnds, 'kk:mm:ss') // set the end of the round to the end of the game so the clock works

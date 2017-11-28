@@ -5,6 +5,7 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
+import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 
 import PzStart from './PzStart'
@@ -19,11 +20,14 @@ const mapStateToProps = (state, props) => {
 class PzScore extends Component {
   constructor(props){
       super(props)
+      let pzIndex = propsPzs.findIndex(pz => pz.code === this.props.pzCode)
+      let score = new Score(pzIndex)
       this.state = {
         pzCode: this.props.pzCode,
-        pzIndex: propsPzs.findIndex(pz => pz.code === this.props.pzCode),
+        pzIndex: pzIndex,
         pz: {},
-        playAgain: false
+        playAgain: false,
+        maxScore: score.calcMaxScore(props.user.pzs[pzIndex].hints, 1),
       }
   }
 
@@ -80,8 +84,8 @@ class PzScore extends Component {
     return(
       <div id='component-pz-score' className='component-wrapper'>
         {htmlAdmin}
-        my score: TODO add this<br/>
-        max score: {(this.state.pz) ? this.state.pz.score : ''}<br/>
+        my score: {(this.state.pz) ? this.state.pz.score : ''}<br/>
+        max score: {this.state.maxScore}<br/>
         my attempts: {(this.state.pz) ? this.state.pz.attempts : ''}
         {/*}{playAgainStart}*/}
       </div>

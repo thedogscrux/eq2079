@@ -16,7 +16,7 @@ class Score {
 
   // CALCS
 
-  calcMaxScore(numUserHints = 0, numOfUsers = 0) {
+  calcMaxScore(numUserHints = 0, numOfUsers = 1) {
     // total score - hints
     let totalScore = 0
     let totalRoundScore = this.numOfRounds * ROUND_SCORE

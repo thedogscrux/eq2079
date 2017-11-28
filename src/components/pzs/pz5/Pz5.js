@@ -235,10 +235,6 @@ class Pz5 extends Component {
     })
   }
 
-  getMyItemPos() {
-    // might need if you have mutliple positions
-  }
-
   // END GAME
 
   endRound() {

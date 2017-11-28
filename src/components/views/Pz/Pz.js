@@ -213,6 +213,7 @@ class Pz extends Component {
         pzIndex={this.state.pzIndex}
         pzStatus={this.state.pz.status}
         pzPlayerIDs={this.state.pz.players}
+        user={this.props.user}
       />
     }
     // see if you are in players list
