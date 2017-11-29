@@ -2,7 +2,7 @@
 
 #component-alert {
   display: none;
-  position: absolute;
+  position: fixed;
   top: 15vh;
   width: 100%;
   opacity: .9;
@@ -29,5 +29,33 @@
   &.error {
     background-color: $colorRed;
     color: $colorWhite;
+  }
+
+  &.success {
+    background-color: $colorGreen;
+    color: $colorWhite;
+    box-shadow: 0px 0px 5px $colorBlack;
+  }
+}
+
+.ans-alert-fade-out {
+  animation-duration: 2.5s;
+  animation-iteration-count: 1;
+  animation-name: alertFadeOut;
+  animation-fill-mode: forwards; // maintains the final frame
+  display: none;
+}
+
+@keyframes alertFadeOut {
+  0% {
+    opacity: 1;
+    display: block;
+  }
+  90% {
+    opacity: .9;
+  }
+  100% {
+    opacity: 0;
+    display: none;
   }
 }

@@ -7,7 +7,7 @@ class Alert extends Component {
   showAlert(msg, type = 'default') {
     let alert =  document.getElementById('component-alert')
     alert.innerHTML = msg
-    alert.className = type + ' ans-fade-out'
+    alert.className = type + ' ans-alert-fade-out'
     alert.style.display = 'block'
 
     let timer = setTimeout(() => {
