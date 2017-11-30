@@ -14,6 +14,7 @@ import { setUserPz } from '../../../actions/userActions'
 import PzStart from './PzStart'
 import PzScore from './PzScore'
 import AI from '../../AI'
+import { showAlert } from '../../Alert'
 
 import { propsPzs } from '../../../data/propsPzs.js'
 
@@ -114,17 +115,35 @@ class Pz extends Component {
   }
 
   updateStatePz(value) {
+    if (value.round != this.state.pz.round) this.pzAlert('roundChange', value.round)
     this.setState({ pz: value })
+  }
+
+  pzAlert(action, val) {
+    let msg = ''
+    let type = 'default'
+    if( action === 'roundChange') {
+      if (val === 0) {
+        msg = 'First Round'
+      } else if (val < propsPzs[this.state.pzIndex].rounds.numOfRounds - 1 && val >= 0) {
+        msg = 'Next Round'
+      } else if (val >= propsPzs[this.state.pzIndex].rounds.numOfRounds - 1) {
+        msg = 'Final Round'
+      }
+    }
+
+    if (msg !== '') showAlert(msg, type)
   }
 
   // CHILD FUNCS
 
-  endRound() {
+  endRound(endGame = false) {
     //set the round # and time of next round (if any)
     let newRoundNum = this.state.pz.round+1
 
-    if (newRoundNum === propsPzs[this.state.pzIndex].rounds.numOfRounds - 1) {
+    if (newRoundNum === propsPzs[this.state.pzIndex].rounds.numOfRounds - 1 && !endGame) {
       console.log('*** FINAL ROUND ***');
+      //showAlert('Final Round')
       let timeNextRound = moment(this.state.pz.timeGameEnds, 'kk:mm:ss') // set the end of the round to the end of the game so the clock works
       //newRoundNum = this.state.pz.round // roll back the round counter, since we are not addng a new round
       let update = {
@@ -133,8 +152,9 @@ class Pz extends Component {
         clock: 0
       }
       firebase.database().ref('/pzs/' + this.state.pzIndex).update(update)
-    } else if (newRoundNum < propsPzs[this.state.pzIndex].rounds.numOfRounds) {
+    } else if (newRoundNum < propsPzs[this.state.pzIndex].rounds.numOfRounds && !endGame) {
       console.log('*** END ROUND ***');
+      //showAlert('Next Round')
       // go to next round
       let timeNextRound = moment().tz('America/Los_Angeles')
       timeNextRound.add(propsPzs[this.state.pzIndex].rounds.roundSec, 's')
@@ -213,6 +233,7 @@ class Pz extends Component {
         pzIndex={this.state.pzIndex}
         pzStatus={this.state.pz.status}
         pzPlayerIDs={this.state.pz.players}
+        user={this.props.user}
       />
     }
     // see if you are in players list
@@ -220,7 +241,7 @@ class Pz extends Component {
       let clockImg = clockMap['clock' +  this.state.pz.clock]
       content = <PzCode
         endGame={(score) => this.endGame(score)}
-        endRound={() => this.endRound()}
+        endRound={(endGame) => this.endRound(endGame)}
         round={this.state.pz.round}
         user={this.props.user}
         clock={clockImg}

@@ -9,6 +9,10 @@
   float: left;
   width: 33%;
   max-width: 110px;
+  img {
+    display: block;
+    margin: 0 auto;
+  }
 }
 
 .pipe-item {
@@ -23,6 +27,8 @@
     min-width: 0px;
     font-size: 12px;
     padding: 0;
+    margin: 0;
+    border: solid 1px #000;
     img {
       max-width: 100%;
     }
@@ -35,5 +41,34 @@
     border: solid red 4px;
     color: #fff;
     cursor: pointer;
+  }
+
+}
+
+#guess-wrapper {
+  float: left;
+  width: 100vw;
+  text-align: center;
+  margin: 50px 0 0;
+  img {
+    max-height: 100px;
+    max-width: 100px;
+    margin: 0 auto 10px;
+  }
+  .select-a-square {
+    height: 100px;
+    width: 100px;
+    border: solid 1px #fff;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto 10px;
+  }
+  input {
+    margin: 0 auto 10px;
+    width: 40px;
+  }
+  button {
+    margin: 0 auto 10px;
   }
 }

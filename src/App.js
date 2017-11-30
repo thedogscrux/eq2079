@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
 import PrivateRoute from './components/PrivateRoute'
+
+import Alert from './components/Alert'
 import User from './components/User'
 import Auth from './components/Auth'
 import Nav from './components/Nav'
@@ -31,6 +33,8 @@ const App = () => (
   <Router>
     <div>
       <InactiveUser />
+
+      <Alert />
 
       <User />
       <Auth display='userInfo'/>

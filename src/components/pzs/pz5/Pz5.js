@@ -235,10 +235,6 @@ class Pz5 extends Component {
     })
   }
 
-  getMyItemPos() {
-    // might need if you have mutliple positions
-  }
-
   // END GAME
 
   endRound() {
@@ -417,6 +413,11 @@ class Pz5 extends Component {
 
   }
 
+  cancelGame() {
+    console.log('cancel game');
+    this.props.endRound(true)
+  }
+
   render(){
     // score
     let score = new Score(PZ_INDEX)
@@ -522,7 +523,7 @@ class Pz5 extends Component {
           <div style={{ backgroundColor: cssYellow }}>rgb yellow</div>
           <div style={{ backgroundColor: cssBlue }}>rgb blue</div>
         </div>*/}
-
+        <button onClick={() => this.cancelGame()}>cancel game</button>
         {htmlScore}
         <Hints
           hints={HINTS}

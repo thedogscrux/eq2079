@@ -3,44 +3,134 @@
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 .clear:after {
   content: "";
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 body {
-  background-color: #16161d;
+  background-color: black;
   color: white;
   font: 100 12px/20px "Avenir Next Ultra-Light", Avenir, Sans-serif;
   padding: 1vw;
   margin: 0;
-  opacity: .8; }
+  opacity: .9; }
 
 img {
   border: none;
@@ -67,18 +157,63 @@ a:hover {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 input,
 button {
@@ -91,7 +226,7 @@ button {
 
 input[type='submit'],
 button {
-  background-color: #16161d;
+  background-color: black;
   color: white; }
 
 .icon {
@@ -104,18 +239,66 @@ button {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
+
+.component-wrapper button.cancel-button {
+  display: inline-block; }
 
 #component-nav a {
   display: inline-block;
@@ -126,18 +309,63 @@ button {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-map .map-wrapper {
   width: 90vw;
@@ -151,7 +379,7 @@ button {
   #component-map .map-wrapper:hover {
     background-color: rgba(255, 255, 255, 0.2); }
   #component-map .map-wrapper .pz {
-    border: solid 1px #16161d;
+    border: solid 1px black;
     border-radius: 50%;
     background-color: rgba(0, 255, 100, 0.5);
     position: absolute;
@@ -184,18 +412,63 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-welcome {
   color: #3a9bc7; }
@@ -395,21 +668,66 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-mk h2 {
-  color: #16161d;
+  color: black;
   background-color: white; }
 
 #component-mk article {
@@ -426,21 +744,66 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-projector h2 {
-  color: #16161d;
+  color: black;
   background-color: white; }
 
 #component-projector article {
@@ -491,18 +854,63 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 .component-pz .hint {
   background-color: rgba(255, 255, 255, 0.2);
@@ -519,6 +927,9 @@ body.ai-strength-3 {
   float: left;
   width: 33%;
   max-width: 110px; }
+  .pipe-round img {
+    display: block;
+    margin: 0 auto; }
 
 .pipe-item {
   display: block;
@@ -530,7 +941,9 @@ body.ai-strength-3 {
   .pipe-item button {
     min-width: 0px;
     font-size: 12px;
-    padding: 0; }
+    padding: 0;
+    margin: 0;
+    border: solid 1px #000; }
     .pipe-item button img {
       max-width: 100%; }
 
@@ -540,23 +953,91 @@ body.ai-strength-3 {
   color: #fff;
   cursor: pointer; }
 
+#guess-wrapper {
+  float: left;
+  width: 100vw;
+  text-align: center;
+  margin: 50px 0 0; }
+  #guess-wrapper img {
+    max-height: 100px;
+    max-width: 100px;
+    margin: 0 auto 10px; }
+  #guess-wrapper .select-a-square {
+    height: 100px;
+    width: 100px;
+    border: solid 1px #fff;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto 10px; }
+  #guess-wrapper input {
+    margin: 0 auto 10px;
+    width: 40px; }
+  #guess-wrapper button {
+    margin: 0 auto 10px; }
+
 .clear:after {
   content: "";
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #jigsaw-board-wrapper .table-wrapper {
   width: 91vw;
@@ -565,17 +1046,13 @@ body.ai-strength-3 {
   flex-wrap: wrap; }
   #jigsaw-board-wrapper .table-wrapper .tile {
     border: solid 0.5px rgba(255, 255, 255, 0.5);
-    height: 30vw;
+    height: 23vw;
     width: 30vw;
     max-width: 150px;
-    max-height: 150px;
+    max-height: 113px;
     background-size: cover;
     display: flex; }
     #jigsaw-board-wrapper .table-wrapper .tile button {
-      border: none;
-      animation-duration: 3s;
-      animation-iteration-count: infinite;
-      animation-name: pulse;
       width: 100%;
       margin: 0;
       padding: 0; }
@@ -592,7 +1069,7 @@ body.ai-strength-3 {
       margin: 0px; }
     #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
       border: none;
-      height: 50px;
+      height: 38px;
       width: 50px;
       padding: 0px;
       color: red;
@@ -608,18 +1085,63 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #soduko-board-wrapper #grid {
   display: flex;
@@ -688,18 +1210,63 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #volume-board-wrapper .solution-key-wrapper {
   display: flex; }
@@ -711,7 +1278,7 @@ body.ai-strength-3 {
     justify-content: center;
     align-items: center; }
     #volume-board-wrapper .solution-key-wrapper .solution-key .dot {
-      color: #16161d;
+      color: black;
       padding: 10px;
       border-radius: 20px;
       background-color: rgba(255, 255, 255, 0.7);
@@ -720,7 +1287,7 @@ body.ai-strength-3 {
 
 #volume-board-wrapper #sliderWrappers {
   height: 250px;
-  border: solid #16161d 1px;
+  border: solid black 1px;
   flex-direction: row;
   flex-flow: row;
   display: flex;
@@ -729,7 +1296,7 @@ body.ai-strength-3 {
     width: 75px;
     height: 250px;
     margin: 0;
-    border: solid #16161d 1px;
+    border: solid black 1px;
     width: auto;
     height: auto;
     position: relative;
@@ -819,18 +1386,63 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #arm-board-wrapper #controls-wrapper .button-wrapper {
   display: inline-block;
@@ -871,18 +1483,63 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #frequency-board-wrapper #radio-message {
   font: 400 20px/24px monospace; }
@@ -916,18 +1573,63 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #jigsaw-board-wrapper .my-tiles-wrapper .tile button, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border, #jigsaw-board-wrapper .table-wrapper .tile button, #jigsaw-board-wrapper .my-tiles-wrapper .tile button {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #code-board-wrapper .table-wrapper {
   width: 91vw;

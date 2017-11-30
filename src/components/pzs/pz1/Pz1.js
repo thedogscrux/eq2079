@@ -6,29 +6,48 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 
+import { shuffleArray, testIfEqualArrays, removeArrayKey } from '../../../utils/Common.js'
+import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
+import game from '../../../Settings.js'
+import { propsPzs } from '../../../data/propsPzs.js'
+import Hints from '../../Hints.js'
+import { showAlert } from '../../Alert'
+
 import clock0 from '../../../images/pz/clock/clock-0.svg'
 import clock4 from '../../../images/pz/clock/clock-4.svg'
 
-import item00 from './images/0-0.jpg'
-import item01 from './images/0-1.jpg'
-import item02 from './images/0-2.jpg'
-import item03 from './images/0-3.jpg'
-import item04 from './images/0-4.jpg'
-import item10 from './images/1-0.jpg'
-import item11 from './images/1-1.jpg'
-import item12 from './images/1-2.jpg'
-import item13 from './images/1-3.jpg'
-import item14 from './images/1-4.jpg'
-import item20 from './images/2-0.jpg'
-import item21 from './images/2-1.jpg'
-import item22 from './images/2-2.jpg'
-import item23 from './images/2-3.jpg'
-import item24 from './images/2-4.jpg'
+import item00 from './images/0-0.png'
+import item01 from './images/0-1.png'
+import item02 from './images/0-2.png'
+import item03 from './images/0-3.png'
+import item04 from './images/0-4.png'
+import item10 from './images/1-0.png'
+import item11 from './images/1-1.png'
+import item12 from './images/1-2.png'
+import item13 from './images/1-3.png'
+import item14 from './images/1-4.png'
+import item20 from './images/2-0.png'
+import item21 from './images/2-1.png'
+import item22 from './images/2-2.png'
+import item23 from './images/2-3.png'
+import item24 from './images/2-4.png'
 
-import { propsPzs } from '../../../data/propsPzs.js'
+const PZ_INDEX = 0
+const PZ_PROPS = propsPzs[PZ_INDEX]
 
-const pzIndex = 0
-const pzProps = propsPzs[pzIndex]
+const HINTS = [
+  {
+    title: 'Hint One',
+    body: '...'
+  },
+  {
+    title: 'Hint Two',
+    subTitle: 'Subtitle',
+    body: '...'
+  }
+]
+
+const WALLART_CODES = [ 123, 456, 789 ]
 
 const itemMap = {
   item00, item01, item02, item03, item04,
@@ -40,12 +59,24 @@ const itemMap = {
 class Pz1 extends Component {
   constructor(props){
     super(props)
+    let score = new Score(PZ_INDEX)
     let baseSate = {
       points: 0,
       round: props.round,
       totalScore: 0,
       user: props.user,
-      clock: props.clock
+      clock: props.clock,
+      newKeys: '-------------',
+      valid: false,
+      hints: props.user.pzs[PZ_INDEX].hints,
+      userKey: -1,
+      score: {
+        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
+        multi: 0 * game.score.mutliplayerMultiplier,
+        hintCost: score.calcHintCost(PZ_INDEX),
+        round: 0,
+        total: 0
+      }
     }
     this.state = {
       ...baseSate,
@@ -67,16 +98,26 @@ class Pz1 extends Component {
   // BIND
 
   handleChangeGuessCode(event) {
-    this.setState({ guessCode: event.target.value });
+    // let newVal = Math.abs(event.target.value)
+    // if (newVal > parseInt(event.target.max)) {
+    //   newVal = parseInt((newVal/(1e1)),0)
+    // }
+    this.setState({ guessCode: event.target.value })
   }
 
   // WATCH
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
+      if (this.props.round != nextProps.round) {
+        this.updateStateScore()
+        this.getMyUserKey(nextProps.round)
+      }
       this.setState({
         round: nextProps.round,
         clock: nextProps.clock,
+        selectedImgSrc: '',
+        valid: false
       })
     }
   }
@@ -88,8 +129,21 @@ class Pz1 extends Component {
   componentWillUnmount() {
     let self = this
     let score = this.endGame()
-    firebase.database().ref('/pzs/' + pzIndex + '/status').once('value').then(function(snapshot){
+    firebase.database().ref('/pzs/' + PZ_INDEX + '/status').once('value').then(function(snapshot){
       if(snapshot.val() === 'inactive') self.props.endGame(score)
+    })
+  }
+
+  updateStateScore() {
+    let newTotalScore = this.state.score.total + this.state.score.round
+    // user cant score higher than max
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
+    this.setState({
+      score: {
+        ...this.state.score,
+        total: newTotalScore,
+        round: 0
+      }
     })
   }
 
@@ -99,12 +153,9 @@ class Pz1 extends Component {
   getSettings() {
     var self = this
     let once = firebase.database().ref('/boards/pz1/').once('value').then(function(snapshot){
-      if(self._ismounted) {
-        // console.log('gotcha! - setting state 3');
-        // self.setStateBoard(snapshot.val())
-      } else {
-        console.log('gotcha! - setting state 4');
+      if(!self._ismounted) {
         self.setStateBoard(snapshot.val())
+        self.getMyUserKey()
       }
       return
     })
@@ -112,19 +163,26 @@ class Pz1 extends Component {
   }
 
   setStateBoard(settings){
-    if(this._ismounted) {
-      // console.log('setting state 1');
-      // this.setState({
-      //   rounds: settings.rounds
-      // })
-      // this.getMyItemPos()
-    } else {
-      console.log('gotcha! - setting state 2');
+    if(!this._ismounted) {
       this.setState({
         rounds: settings.rounds
       })
       this.getMyItemPos()
     }
+  }
+
+  getMyUserKey(round) {
+    // loop thru all users in round to find me
+    let userKey = -1
+    let userId = this.props.user.id
+    let roundKey = (round) ? round : this.state.round
+    this.state.rounds[roundKey].filter((user,key) => {
+      if (user.user == userId) userKey = key
+      return
+    })
+    this.setState({
+      userKey: userKey
+    })
   }
 
   getMyItemPos() {
@@ -149,6 +207,39 @@ class Pz1 extends Component {
     })
   }
 
+  // END GAME
+
+  cancelGame() {
+    this.props.endRound(true)
+  }
+
+  endRound() {
+    this.props.endRound()
+  }
+
+  endGame(){
+    // NEW METHOD
+    let newTotalScore = this.state.score.round + this.state.score.total
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
+    // calc user score (final score calculated in Pz parent)
+    return newTotalScore
+
+    // OLD METHOD
+    // let userId = this.props.user.id
+    // let score = 0
+    // // calc user score (final score calculated in Pz parent)
+    // Object.keys(this.state.rounds).map((key, round) => {
+    //   Object.keys(this.state.rounds[round]).map((key, userIndex) => {
+    //     let user = this.state.rounds[round][userIndex]
+    //     if(user.ans === true) {
+    //       score++
+    //     }
+    //     return
+    //   })
+    //   return
+    // })
+    // return score
+  }
 
   // GUESS
 
@@ -160,7 +251,7 @@ class Pz1 extends Component {
   }
 
   guess(key, item, ans, indexRound, indexColUser, selectedImgSrc) {
-    document.getElementById('itemCode').focus()
+    document.getElementById('item-code').focus()
     this.setState({
       guessKey: key,
       guessLabel: item,
@@ -171,55 +262,116 @@ class Pz1 extends Component {
     })
   }
 
-  submitGuess(guess) {
-    console.log('** Guess **');
-    document.getElementById('msg').innerHTML = ''
-    document.getElementById('itemCode').value = ''
+  // HINT
+
+  getHint() {
+    let hint = HINTS[this.state.hints]
+    let newHintCount = (this.state.hints < HINTS.length) ? this.state.hints + 1 : HINTS.length
+    // update user max score
+    let score = new Score(PZ_INDEX)
+    let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
     this.setState({
-      guessCode: ''
+      hints: newHintCount,
+      score: {
+        ...this.state.score,
+        max: newMaxScore
+      }
     })
+    firebase.database().ref('/users/' + this.props.user.id + '/pzs/' + PZ_INDEX).update({
+      hints: newHintCount
+    })
+  }
+
+  submitGuess(guess) {
+    let self = this
+    let userValid = true
+    let ansValid = false
+    let guessUserKey = this.state.indexColUser
+    let refRound = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/'
+    let refUser = '/boards/' + PZ_PROPS.code + '/rounds/' + this.state.round + '/' + this.state.userKey + '/'
+
+    if (!this.state.selectedImgSrc) {
+      showAlert('Select a piece of pipe first.')
+      return
+    }
+
+    document.getElementById('item-code').value = ''
+    this.setState({ guessCode: '' })
     if(parseInt(this.state.guessCode) === parseInt(this.state.ans)) {
+      ansValid = true
+      let newRounds = this.state.rounds
+      newRounds[this.state.round][this.state.indexColUser].ans = true
+      let newUsers = newRounds[this.state.round]
       this.setState({
-        rounds: {
-          ...this.state.rounds,
-          [this.state.indexRound]: {
-            ...this.state.rounds[this.state.indexRound],
-            [this.state.indexColUser]: {
-              ...this.state.rounds[this.state.indexRound][this.state.indexColUser],
-              ans: true
-            }
-          }
-        }
+        rounds: newRounds
+      })
+      // this.setState({
+      //   rounds: {
+      //     ...this.state.rounds,
+      //     [this.state.indexRound]: {
+      //       ...this.state.rounds[this.state.indexRound],
+      //       [this.state.indexColUser]: {
+      //         ...this.state.rounds[this.state.indexRound][this.state.indexColUser],
+      //         ans: true
+      //       }
+      //     }
+      //   }
+      // })
+      // check if all my answers are valid
+      //let newUsers = this.state.rounds[this.state.round]
+      Object.keys(newUsers).forEach( key => {
+        if(key != this.state.userKey && newUsers[key].ans === false) userValid = false
       })
     } else {
-      alert('wrong')
-      document.getElementById('msg').innerHTML = 'wrong'
+      showAlert('Invalid Code. Try Again.')
     }
-    document.getElementById('itemCode').focus()
-    return
-  }
+    document.getElementById('item-code').focus()
 
-  // END GAME
+    if (!ansValid) return
 
-  endGame(){
-    let userId = this.props.user.id
-    let score = 0
-    // calc user score (final score calculated in Pz parent)
-    Object.keys(this.state.rounds).map((key, round) => {
-      Object.keys(this.state.rounds[round]).map((key, userIndex) => {
-        let user = this.state.rounds[round][userIndex]
-        if(user.ans === true) {
-          score++
-        }
-        return
+    // UPDATE SCORE: by checking if all my items are in the correct position
+      // if all my items are valid, give me the round points
+      let newRoundScore = 0
+      if (userValid) {
+        newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
+      }
+      this.setState({
+        score: {
+          ...this.state.score,
+          round: newRoundScore
+        },
+        valid: userValid
       })
-      return
-    })
-    return score
-  }
 
+    // update the table on the dbase
+    firebase.database().ref(refUser).update({
+      ans: ansValid,
+      valid: userValid
+    }).then(function(){
+      // check if table is valid, if so, end the round
+      if(userValid) {
+        firebase.database().ref(refRound).once('value').then(function(snapshot) {
+          // loop thru all users and see if any are not valid
+          let allUsersValid = true
+          snapshot.val().map( (user, userKey) => {
+            if(!user.valid) allUsersValid = false
+          })
+          if (userValid && !allUsersValid) {
+            showAlert('Valid Code! Help your team to advance to next round.', 'success')
+          } else if(allUsersValid) {
+            showAlert('Great work!', 'success')
+            self.endRound()
+          }
+        })
+      }
+    })
+  }
 
   render(){
+    // score
+    let score = new Score(PZ_INDEX)
+    let htmlScore = score.htmlSimpleDisplay(this.state.score)
+
     const htmlAns = Object.keys(this.state.rounds).map((key, round) => {
       let htmlInner = Object.keys(this.state.rounds[round]).map((key, userIndex) => {
         let user = this.state.rounds[round][userIndex]
@@ -232,6 +384,15 @@ class Pz1 extends Component {
 
     return(
       <div className='component-wrapper'>
+        {htmlScore}
+        <Hints
+          hints={HINTS}
+          hintsCount={this.state.hints}
+          userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
+          getHint={() => this.getHint()}
+        />
+        <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
+
         <div id='pipe-board-wrapper' className='clear'>
 
           {Object.keys(this.state.rounds).map((row, rowIndex) => {
@@ -240,11 +401,19 @@ class Pz1 extends Component {
               let key = rowIndex.toString() + colIndex.toString()
               let userId = this.state.rounds[rowIndex][colIndex].user
               let userCode = this.state.rounds[rowIndex][colIndex].code
+              let userObj = this.state.rounds[rowIndex][user]
               const itemImage = itemMap['item' + rowIndex + colIndex]
               let ansCode = ''
               let myCode = (this.state.myItemPos[rowIndex]) ?this.state.myItemPos[rowIndex].code : ''
               if( ( this.state.myItemPos[this.state.round-0] && (userCode == myCode) ) || this.state.rounds[rowIndex][colIndex].ans ) {
                 ansCode = userCode
+              }
+              let style = {}
+              if(this.props.user.id == userId || userObj.ans) {
+                style.pointerEvents = 'none'
+              }
+              if(this.props.user.id == userId) {
+                style.backgroundColor = 'rgba(0, 0, 255, 1)'
               }
 
               return (
@@ -258,18 +427,10 @@ class Pz1 extends Component {
                     colIndex,
                     itemImage
                   )}
-                  style={(this.props.user.id == userId) ?
-                      {
-                        backgroundColor: 'rgba(0, 0, 255, 1)',
-                        border: 'solid 2px rgba(0, 0, 255, 1)',
-                        pointerEvents: 'none'
-                      }
-                    :
-                      {}
-                  }
+                  style={style}
                   data-ans={userCode}
                   >
-                    <img src={itemImage} /><br/>
+                    <img src={itemImage} />
                       {ansCode}
                       {/*item{rowIndex}{colIndex}.jpg<br/>
                       {userId.substr(userId.length - 5)}*/}
@@ -287,27 +448,31 @@ class Pz1 extends Component {
               clock = clock0
             }
             return (
-              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex) ? {border: 'solid 1px red', opacity: '1'} : {border: 'none', pointerEvents: 'none', opacity: '.2'}}>
+              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex) ? { opacity: '1'} : {border: 'none', pointerEvents: 'none', opacity: '.1'}}>
                 <img src={clock} width="50px" />
                 {inner}
               </div>
             )
           })}
         </div>
-          <hr/>
-          <br/><br/>
           {/*}<div style={{float: 'left', width: '45%', border: 'solid 1px gray', padding: '1%', textAlign: 'center'}}>
             <img src={(typeof this.state.myItemPos[this.state.round-0] !== 'undefined') ? this.state.myItemPos[this.state.round-0].src : ''} /><br/>
             <h2>{(typeof this.state.myItemPos[this.state.round-0] !== 'undefined') ? this.state.myItemPos[this.state.round-0].code : ''}</h2>
           </div>*/}
-          <div style={{float: 'left', width: '45%', border: 'solid 1px gray', padding: '1%', textAlign: 'center'}}>
-            <img src={this.state.selectedImgSrc} /><br/>
-            <input type='text' id='itemCode' placeholder='Item Code' value={this.state.guessCode} onChange={this.handleChangeGuessCode} /><br/>
+          <div id='guess-wrapper' style={{ display: (this.state.valid)?'none':'block' }}>
+            {(!this.state.selectedImgSrc) ? <div className='select-a-square'>Select a Pipe Square</div> : <img src={this.state.selectedImgSrc} />}
+            <input type='text'
+              id='item-code'
+              placeholder='Code'
+              value={this.state.guessCode}
+              onChange={this.handleChangeGuessCode}
+              max={999}
+              min={100}
+              maxLength={3}
+            />
             {/*} {this.state.guessLabel}<br/>*/}
             <button onClick={() => this.submitGuess()}>Guess!</button>
-            <div id='msg'></div>
-            </div>
-          <br/><br/>
+          </div>
 
       </div>
     )
@@ -317,28 +482,39 @@ class Pz1 extends Component {
 // FUNCS
 
 const genSettingsPz1 = (props) => {
-  console.log('** generate settings **')
   // generate user items
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed());
-  for(let round=0; round<pzProps.rounds.numOfRounds; round++){
+  let wallartCodes = shuffleArray(WALLART_CODES)
+  for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     let cols = []
+    // add players
     props.players.forEach( (player,key) => {
       let code = random.integer(100, 999)
       cols.push(
         {
           user: player,
           code: code,
-          ans: false
+          ans: false,
+          valid: false
         }
       )
     })
     // rando the array/row
     let shuffled = shuffle(cols)
+    // add computer always to beginning
+    shuffled.unshift(
+      {
+        user: 'computer',
+        code: wallartCodes[round],
+        ans: false,
+        valid: true
+      }
+    )
     settings.push(shuffled)
   }
   // calc total score
-  let totalScore = (pzProps.rounds.numOfRounds * props.players.length) - pzProps.rounds.numOfRounds
+  let totalScore = (PZ_PROPS.rounds.numOfRounds * props.players.length) - PZ_PROPS.rounds.numOfRounds
   // store all info in dbase
   firebase.database().ref('/boards/pz1').set({
     rounds: settings

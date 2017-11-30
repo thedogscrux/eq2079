@@ -10,11 +10,56 @@
 
 @keyframes pulse {
   0% {
-    background-color: rgba(255, 255, 255, 0); }
+    background-color: rgba(255, 255, 255, 0.1); }
   50% {
     background-color: rgba(255, 255, 255, 0.3); }
   100% {
-    background-color: rgba(255, 255, 255, 0); } }
+    background-color: rgba(255, 255, 255, 0.1); } }
+
+.ans-pulse-border {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulseBorder; }
+
+@keyframes pulseBorder {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); }
+  50% {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: solid 1px #3a9bc7; }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: solid 1px rgba(58, 155, 199, 0.5); } }
+
+.ans-fade-in {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-fill-mode: forwards;
+  display: block !important; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none; }
+  100% {
+    opacity: 1;
+    display: block; } }
+
+.ans-fade-out {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: fadeOut;
+  animation-fill-mode: forwards; }
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    display: block; }
+  100% {
+    opacity: 0;
+    display: none; } }
 
 #component-welcome {
   color: #3a9bc7; }

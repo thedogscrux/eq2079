@@ -1,0 +1,22 @@
+#component-hints {
+  display: inline-block;
+  #hints-popup-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, .7);
+
+    //display: none;
+
+    #hints-popup {
+      background-color: rgba(0, 0, 0, .5);
+      margin: 10vh 3vw;
+      padding:  5vh 2vw;
+    }
+  }
+
+}
