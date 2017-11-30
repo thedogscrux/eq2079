@@ -11,6 +11,15 @@ import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
+import { showAlert } from '../../Alert'
+
+import image0 from './images/0.jpg'
+import image1 from './images/1.jpg'
+import image2 from './images/2.jpg'
+import image3 from './images/3.jpg'
+import image4 from './images/4.jpg'
+import image5 from './images/5.jpg'
+import image6 from './images/6.jpg'
 
 const PZ_INDEX = 2
 const PZ_PROPS = propsPzs[PZ_INDEX]
@@ -26,6 +35,8 @@ const HINTS = [
     body: '...'
   }
 ]
+
+const IMAGE_MAP = { image0, image1, image2, image3, image4, image5, image6 }
 
 const VALUES = [
   'ZERO',
@@ -308,8 +319,15 @@ class Pz3 extends Component {
   }
 
   endGame(){
-    let newTotalScore = this.state.score.round + this.state.score.total
+    // all other Pzs have: let newTotalScore = this.state.score.round + this.state.score.total
+    // dont have time to make legit scoring system for this Pz. instead, just give 'em a point for every round they attempted
+    // TODO upgrade the scoring system
+    console.log('score per round:',game.score.round);
+    console.log('final played round:',this.state.round+1);
+    let newTotalScore = (game.score.round + 1) * this.state.round
+    console.log('score before max=', newTotalScore);
     newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
+    console.log('score after max=', newTotalScore);
     // calc user score (final score calculated in Pz parent)
     return newTotalScore
   }
@@ -337,14 +355,6 @@ class Pz3 extends Component {
 
   // GUESS
 
-  guess() {
-    // pz2 has a shared array that gets udpated when each user contributes a tile
-    let points = this.state.points + 1
-    this.setState({
-      points: points
-    })
-  }
-
   updateItemOnTable(item) {
     // add the item to the table and get points
     let self = this
@@ -353,10 +363,14 @@ class Pz3 extends Component {
     let tableNew = this.state.board.table || []
     let tableSize = this.state.rounds[this.state.round].tableSize
     let solutionRowSum = (tableSize == 3) ? 10 : 21
-    //let userItemsCount = 1
 
     // get the new value
-    let newVal = (item.val > 3) ? 1 : item.val + 1
+    let newVal = 1
+    if (tableSize === 3) {
+      newVal = (item.val > 3) ? 1 : item.val + 1
+    } else if (tableSize === 8) {
+      newVal = (item.val >= 6) ? 1 : item.val + 1
+    }
 
     // UPDATE SCORE: by checking if all my items are in the correct position
       // loop thru all my  items, then loop thru all items on table to check
@@ -411,30 +425,37 @@ class Pz3 extends Component {
           // loop thru my cells and see if this one belongs to me
           let myCell = this.state.board.myCells.filter( (cell, key) => cell.row === rowKey && cell.col === colKey)
           if(myCell.length >= 1) {
+            let onClickFunc = () => showAlert('Locked Cell')
             css.border = 'solid rgba(255, 255, 255, 1.0) .5px'
+            // check for locked cell
+            if (col.locked) {
+              css.opacity = .8
+            } else {
+               onClickFunc = () => this.updateItemOnTable({
+                row: rowKey,
+                col: colKey,
+                val: val
+              })
+            }
             return (
               <div key={'col-'+rowKey+colKey}
-                onClick={() => this.updateItemOnTable({
-                  row: rowKey,
-                  col: colKey,
-                  val: val
-                })}
+                onClick={onClickFunc}
                 className='col my-cell'
                 style={css}
               >
                 <div className='contents'>
-                  {VALUES[val]}
-                  {(this.state.hints>1) ? '<br/>' + rowKey + ',' +  colKey : ''}
+                  <img src={IMAGE_MAP['image' + val]} />
+                  {/*(this.state.hints>1) ? rowKey + ',' +  colKey : ''*/}
                 </div>
               </div>
             )
           } else {
             css.backgroundColor = 'rgba(0, 0, 0, .7)';
             return (
-              <div key={'col-'+rowKey+colKey} className='col' style={css}>
+              <div key={'col-'+rowKey+colKey} className='col not-my-cell' style={css}>
                 <div className='contents'>
-                  {VALUES[val]}
-                  {(this.state.hints>1) ? '<br/>' + rowKey + ',' +  colKey : ''}
+                  <img src={IMAGE_MAP['image' + val]} />
+                  {/*(this.state.hints>1) ? VALUES[val] + '<br/>' + rowKey + ',' +  colKey : ''*/}
                 </div>
               </div>
             )
@@ -457,6 +478,7 @@ class Pz3 extends Component {
           userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
           getHint={() => this.getHint()}
         />
+        <button onClick={() => this.props.endRound(true)} className='cancel-button'>cancel game</button>
 
         {htmlGrid}
       </div>
@@ -470,6 +492,8 @@ const genSettingsPz3 = (props) => {
   let settings = []
   let numOfPlayers = props.players.length
   let tableSize =  (numOfPlayers <= 4) ? 3 : 8
+  let finalRound = false
+  let random = new Random(Random.engines.mt19937().autoSeed());
   // setup each user for each round
   for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     // ADD USERS to pz - create an empty obj for each user
@@ -485,7 +509,8 @@ const genSettingsPz3 = (props) => {
     // settings = rounds[#][users][#] (without user data)
     // DIFFICULTY increase the table size for final round
     if(round >= PZ_PROPS.rounds.numOfRounds - 1){
-      tableSize = (numOfPlayers <= 4) ? 8 : 8
+      tableSize = 8
+      finalRound = true
     }
     // DEAL ZONES to users
     let zones = (tableSize == 3) ? [0,1,2,3] : [0,1,2,3,4,5,6,7,8]
@@ -501,15 +526,29 @@ const genSettingsPz3 = (props) => {
     let gridSize = (tableSize === 3) ? 4 : 6
     // build the raw table struct
     let table = []
+    let val = 0
+    let lockedCellsRow = [random.integer(0, 1), random.integer(2, 3), random.integer(4, 5)]
+    let lockedCellsCol = [random.integer(0, 1), random.integer(2, 3), random.integer(4, 5)]
+    let lockedCell = false
     for(var row=0; row<gridSize; row++) {
       let cols = []
       for(var col=0; col<gridSize; col++) {
+        val = 0
+        lockedCell = false
+        // if last round insert locked items
+        let lockedCellIndex = lockedCellsRow.indexOf(row)
+        if (finalRound && lockedCellsCol[lockedCellIndex] === col) {
+          val = random.integer(0, 5)
+          lockedCell = true
+        }
         cols.push({
-          val: 0
+          val: val,
+          locked: lockedCell
         })
       }
       table.push(cols)
     }
+    //if (finalRound) debugger
     // STORE settings
     settings.push({
       users: settingsUsers,

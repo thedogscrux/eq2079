@@ -6,6 +6,8 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
+import moment from 'moment'
+import tz from 'moment-timezone'
 import Cookies from 'js-cookie'
 
 import { setUser } from '../actions/userActions'
@@ -142,7 +144,12 @@ class Auth extends Component {
             }
             self.updateUser(userResults)
             self.setCookieUser(userNameAttempt)
-            break
+            let timeLastCheckIn = moment().tz('America/Los_Angeles').format("kk:mm:ss")
+            let agent = window.navigator.userAgent
+            firebase.database().ref('/users/' + users[key].id).update({
+              agent: agent,
+              timeLastCheckin: timeLastCheckIn
+            })
           } else {
             self.setMsg('Wrong pin.')
             return

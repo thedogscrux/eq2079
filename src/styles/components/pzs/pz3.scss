@@ -5,6 +5,7 @@
   #grid {
     display: flex;
     flex-direction: column;
+    align-items: center;
     .row {
       display: flex;
       .col {
@@ -14,8 +15,14 @@
         &.my-cell {
           @extend .ans-pulse;
         }
+        &.not-my-cell {
+          opacity: .7;
+        }
         .contents {
           margin: auto;
+          img {
+            max-width: 100%;
+          }
         }
       }
     }

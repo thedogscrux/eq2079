@@ -115,8 +115,6 @@ class PzStart extends Component {
     let maxPlayers = propsPzs[pzIndex].maxPlayers || 2
     firebase.database().ref('/pzs/' + this.props.pzIndex + '/players/').once('value').then(function(snapshot){
       let userCount = snapshot.val().filter(playerID => playerID == userID)
-      console.log('snapshot.val().length',snapshot.val().length);
-      console.log('maxPlayers',maxPlayers);
       if(userCount < 1 && snapshot.val().length < maxPlayers ) {
         let newPlayers = pzPlayerIDs || []
         newPlayers.push(userID)
@@ -156,11 +154,7 @@ class PzStart extends Component {
     if(pzStatus === 'active') {
       content = <button disabled='disabled'>Game in Progress</button>
     } else if( pzStatus === 'inactive') {
-      content =
-      <div>
-        <button onClick={() => this.requestNewGame() }>{(this.props.pzAttempts >= 1) ? 'Play Again' : 'Start'}</button>
-        <button onClick={() => this.linkDashboard() }>Return to Dashboard</button>
-      </div>
+      content = <button onClick={() => this.requestNewGame() }>{(this.props.pzAttempts >= 1) ? 'Play Again' : 'Start'}</button>
     } else if (pzStatus === 'loading' && !this.state.userJoined) {
       content = <button onClick={() => this.joinGame() }>Join</button>
     }
@@ -175,6 +169,7 @@ class PzStart extends Component {
         {/*pz attempts: {this.props.pzAttempts}<br/>*/}
         {htmlPlayers}
         {content}
+        <button onClick={() => this.linkDashboard() }>Return to Dashboard</button>
       </div>
     )
   }

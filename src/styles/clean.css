@@ -130,7 +130,7 @@ body {
   font: 100 12px/20px "Avenir Next Ultra-Light", Avenir, Sans-serif;
   padding: 1vw;
   margin: 0;
-  opacity: .9; }
+  opacity: .2; }
 
 img {
   border: none;
@@ -479,7 +479,9 @@ body.ai-strength-3 {
   text-align: center;
   text-transform: uppercase;
   padding: 5vh 0;
-  font-weight: 600; }
+  font-weight: 600;
+  z-index: 100;
+  left: 0; }
   #component-alert.default {
     background-color: #3a9bc7;
     color: white; }
@@ -1268,15 +1270,20 @@ body.ai-strength-3 {
 
 #soduko-board-wrapper #grid {
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  align-items: center; }
   #soduko-board-wrapper #grid .row {
     display: flex; }
     #soduko-board-wrapper #grid .row .col {
       border: solid rgba(255, 255, 255, 0.5) 0.5px;
       display: flex;
       align-items: center; }
+      #soduko-board-wrapper #grid .row .col.not-my-cell {
+        opacity: .7; }
       #soduko-board-wrapper #grid .row .col .contents {
         margin: auto; }
+        #soduko-board-wrapper #grid .row .col .contents img {
+          max-width: 100%; }
   #soduko-board-wrapper #grid.table-size-3 .row .col {
     width: 12.5vw;
     height: 12.5vw; }

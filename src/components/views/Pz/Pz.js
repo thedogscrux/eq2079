@@ -115,19 +115,19 @@ class Pz extends Component {
   }
 
   updateStatePz(value) {
-    if (value.round != this.state.pz.round) this.pzAlert('roundChange', value.round)
+    if (value.round != this.state.pz.round) this.pzAlert('roundChange', value)
     this.setState({ pz: value })
   }
 
   pzAlert(action, val) {
     let msg = ''
     let type = 'default'
-    if( action === 'roundChange') {
-      if (val === 0) {
+    if(action === 'roundChange' && val.players && val.players.indexOf(this.state.userID) >= 0) {
+      if (val.round=== 0) {
         msg = 'First Round'
-      } else if (val < propsPzs[this.state.pzIndex].rounds.numOfRounds - 1 && val >= 0) {
+      } else if (val.round < propsPzs[this.state.pzIndex].rounds.numOfRounds - 1 && val.round >= 0) {
         msg = 'Next Round'
-      } else if (val >= propsPzs[this.state.pzIndex].rounds.numOfRounds - 1) {
+      } else if (val.round >= propsPzs[this.state.pzIndex].rounds.numOfRounds - 1) {
         msg = 'Final Round'
       }
     }
