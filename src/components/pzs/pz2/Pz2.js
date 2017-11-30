@@ -10,6 +10,8 @@ import { shuffleArray, testIfEqualArrays } from '../../../utils/Common.js'
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
+import Hints from '../../Hints.js'
+import { showAlert } from '../../Alert'
 
 import imageA00 from './images/A00.jpg'
 import imageA01 from './images/A01.jpg'
@@ -31,20 +33,82 @@ import imageB06 from './images/B06.jpg'
 import imageB07 from './images/B07.jpg'
 import imageB08 from './images/B08.jpg'
 
+import imageC00 from './images/C00.jpg'
+import imageC01 from './images/C01.jpg'
+import imageC02 from './images/C02.jpg'
+import imageC03 from './images/C03.jpg'
+import imageC04 from './images/C04.jpg'
+import imageC05 from './images/C05.jpg'
+import imageC06 from './images/C06.jpg'
+import imageC07 from './images/C07.jpg'
+import imageC08 from './images/C08.jpg'
+
+import imageD00 from './images/D00.jpg'
+import imageD01 from './images/D01.jpg'
+import imageD02 from './images/D02.jpg'
+import imageD03 from './images/D03.jpg'
+import imageD04 from './images/D04.jpg'
+import imageD05 from './images/D05.jpg'
+import imageD06 from './images/D06.jpg'
+import imageD07 from './images/D07.jpg'
+import imageD08 from './images/D08.jpg'
+
+import imageE00 from './images/E00.jpg'
+import imageE01 from './images/E01.jpg'
+import imageE02 from './images/E02.jpg'
+import imageE03 from './images/E03.jpg'
+import imageE04 from './images/E04.jpg'
+import imageE05 from './images/E05.jpg'
+import imageE06 from './images/E06.jpg'
+import imageE07 from './images/E07.jpg'
+import imageE08 from './images/E08.jpg'
+
+import imageF00 from './images/F00.jpg'
+import imageF01 from './images/F01.jpg'
+import imageF02 from './images/F02.jpg'
+import imageF03 from './images/F03.jpg'
+import imageF04 from './images/F04.jpg'
+import imageF05 from './images/F05.jpg'
+import imageF06 from './images/F06.jpg'
+import imageF07 from './images/F07.jpg'
+import imageF08 from './images/F08.jpg'
+
+import imageG00 from './images/G00.jpg'
+import imageG01 from './images/G01.jpg'
+import imageG02 from './images/G02.jpg'
+import imageG03 from './images/G03.jpg'
+import imageG04 from './images/G04.jpg'
+import imageG05 from './images/G05.jpg'
+import imageG06 from './images/G06.jpg'
+import imageG07 from './images/G07.jpg'
+import imageG08 from './images/G08.jpg'
+
+import imageH00 from './images/H00.jpg'
+import imageH01 from './images/H01.jpg'
+import imageH02 from './images/H02.jpg'
+import imageH03 from './images/H03.jpg'
+import imageH04 from './images/H04.jpg'
+import imageH05 from './images/H05.jpg'
+import imageH06 from './images/H06.jpg'
+import imageH07 from './images/H07.jpg'
+import imageH08 from './images/H08.jpg'
+
 const PZ_INDEX = 1
 const PZ_PROPS = propsPzs[PZ_INDEX]
 
 const HINTS = [
   {
     title: 'Hint One',
-    body: 'Fold the paper with the colored bars in half'
+    body: '...'
   },
   {
     title: 'Hint Two',
     subTitle: 'This is your last hint.',
-    body: 'The colored bars with red on top is the key.'
+    body: '....'
   }
 ]
+
+//const IMAGE_SET = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ]
 
 const IMAGE_MAP = new Map([
     [ 'imageA00', imageA00 ], [ 'imageA01', imageA01 ], [ 'imageA02', imageA02 ],
@@ -53,6 +117,24 @@ const IMAGE_MAP = new Map([
     [ 'imageB00', imageB00 ], [ 'imageB01', imageB01 ], [ 'imageB02', imageB02 ],
     [ 'imageB03', imageB03 ], [ 'imageB04', imageB04 ], [ 'imageB05', imageB05 ],
     [ 'imageB06', imageB06 ], [ 'imageB07', imageB07 ], [ 'imageB08', imageB08 ],
+    [ 'imageC00', imageC00 ], [ 'imageC01', imageC01 ], [ 'imageC02', imageC02 ],
+    [ 'imageC03', imageC03 ], [ 'imageC04', imageC04 ], [ 'imageC05', imageC05 ],
+    [ 'imageC06', imageC06 ], [ 'imageC07', imageC07 ], [ 'imageC08', imageC08 ],
+    [ 'imageD00', imageD00 ], [ 'imageD01', imageD01 ], [ 'imageD02', imageD02 ],
+    [ 'imageD03', imageD03 ], [ 'imageD04', imageD04 ], [ 'imageD05', imageD05 ],
+    [ 'imageD06', imageD06 ], [ 'imageD07', imageD07 ], [ 'imageD08', imageD08 ],
+    [ 'imageE00', imageE00 ], [ 'imageE01', imageE01 ], [ 'imageE02', imageE02 ],
+    [ 'imageE03', imageE03 ], [ 'imageE04', imageE04 ], [ 'imageE05', imageE05 ],
+    [ 'imageE06', imageE06 ], [ 'imageE07', imageE07 ], [ 'imageE08', imageE08 ],
+    [ 'imageF00', imageF00 ], [ 'imageF01', imageF01 ], [ 'imageF02', imageF02 ],
+    [ 'imageF03', imageF03 ], [ 'imageF04', imageF04 ], [ 'imageF05', imageF05 ],
+    [ 'imageF06', imageF06 ], [ 'imageF07', imageF07 ], [ 'imageF08', imageF08 ],
+    [ 'imageG00', imageG00 ], [ 'imageG01', imageG01 ], [ 'imageG02', imageG02 ],
+    [ 'imageG03', imageG03 ], [ 'imageG04', imageG04 ], [ 'imageG05', imageG05 ],
+    [ 'imageG06', imageG06 ], [ 'imageG07', imageG07 ], [ 'imageG08', imageG08 ],
+    [ 'imageH00', imageH00 ], [ 'imageH01', imageH01 ], [ 'imageH02', imageH02 ],
+    [ 'imageH03', imageH03 ], [ 'imageH04', imageH04 ], [ 'imageH05', imageH05 ],
+    [ 'imageH06', imageH06 ], [ 'imageH07', imageH07 ], [ 'imageH08', imageH08 ]
 ]);
 
 class Pz2 extends Component {
@@ -66,6 +148,7 @@ class Pz2 extends Component {
       valid: false,
       hints: props.user.pzs[PZ_INDEX].hints,
       userKey: -1,
+      render: false,
       score: {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, this.props.numOfUsers),
         multi: 0 * game.score.mutliplayerMultiplier,
@@ -143,7 +226,7 @@ class Pz2 extends Component {
   }
 
   updateStatePz(value) {
-    let tableNew = value.rounds[this.state.round-0].table
+    let tableNew = value.rounds[this.state.round-0].table || []
     if (tableNew != this.state.board.table) {
       this.setState({
         board: {
@@ -172,11 +255,7 @@ class Pz2 extends Component {
   getSettings() {
     var self = this
     let once = firebase.database().ref('/boards/' + PZ_PROPS.code).once('value').then(function(snapshot){
-      if(self._ismounted) {
-        // console.log('1 - SET settings');
-        // self.setStateRounds(snapshot.val())
-      } else {
-        console.log('2 - SET settings');
+      if(!self._ismounted) {
         self.setStateRounds(snapshot.val())
         self.buildStateBoard()
         self.getMyUserKey()
@@ -187,13 +266,7 @@ class Pz2 extends Component {
   }
 
   setStateRounds(settings){
-    if(this._ismounted) {
-      // console.log('3 - SET settings');
-      // this.setState({
-      //   rounds: settings.rounds
-      // })
-    } else {
-      console.log('4 - SET settings');
+    if(!this._ismounted) {
       this.setState({
         rounds: settings.rounds
       })
@@ -206,6 +279,7 @@ class Pz2 extends Component {
     let userId = this.props.user.id
     let roundKey = (round) ? round-0 : this.state.round-0
     if(!this.state.rounds[roundKey]) return
+    console.log('this.state',this.state);
     let roundUser = this.state.rounds[roundKey].users.filter( user => user.userId == userId )
     let userTiles = roundUser[0].tiles.map( (tile, key) => {
       return {
@@ -230,7 +304,8 @@ class Pz2 extends Component {
       return
     })
     this.setState({
-      userKey: userKey
+      userKey: userKey,
+      render: true
     })
   }
 
@@ -339,6 +414,10 @@ class Pz2 extends Component {
   }
 
   render(){
+    // score
+    let score = new Score(PZ_INDEX)
+    let htmlScore = score.htmlSimpleDisplay(this.state.score)
+
     // build table contents
     let htmlTable = ''
     if(this.state.rounds[this.state.round-0]) {
@@ -370,6 +449,7 @@ class Pz2 extends Component {
     let htmlMyTiles = this.state.board.myTiles.map( (tile, key) => {
       let disabled = ''
       let css = {}
+      let tileHintNum = parseInt(tile.value.substr(2)) + 1
       if(this.state.board.table) {
         // see if this tile is on the table, if it is then disable it
         let tableTiles = this.state.board.table.filter( tableTile => tableTile === tile.value)
@@ -380,37 +460,21 @@ class Pz2 extends Component {
       }
       return (
         <div key={key} className={'tile ' + disabled} style={css}>
-          <button onClick={() => this.updateTableInsertTile(tile.value)} disabled={disabled}>{(this.state.hints>1) ? tile.value : ''}</button>
-        </div>
-      )
-    })
-
-    // build hints
-    let hintAttempts = game.hints.allowAfterPzAttempts - this.props.user.pzs[PZ_INDEX].attempts
-    let hintDisabled = (hintAttempts > 0) ? 'disabled' : ''
-    let htmlHintButton = (this.state.hints < HINTS.length) ? <button onClick={() => this.getHint()} disabled={hintDisabled}>Get Hint{(hintDisabled)?' After '+ hintAttempts +' more attempt(s)':''}</button> : ''
-    let htmlHints = HINTS.map( (hint, key) => {
-      // show the hint if its index is LESS than the user hint count
-      if (key >= this.state.hints) return(<div key={key}></div>)
-      return (
-        <div key={key} className='hint'>
-          <h3>{hint.title}</h3>
-          <p>
-            {(hint.subTitle) ? <strong>{hint.subTitle}<br/></strong> : ''}
-            {hint.body}
-          </p>
+          <button onClick={() => this.updateTableInsertTile(tile.value)} disabled={disabled}>{(this.state.hints>1) ? tileHintNum : ''}</button>
         </div>
       )
     })
 
     return(
       <div id="jigsaw-board-wrapper" className='component-wrapper component-pz'>
-        <h2>Score:<br/>{this.state.score.round} / {this.state.score.total} / {this.state.score.max}</h2>
-        round / total / max<br/>
-        hint cost: {this.state.score.hintCost}<br/>
-
-        {htmlHintButton}
-        {htmlHints}
+        {htmlScore}
+        <Hints
+          hints={HINTS}
+          hintsCount={this.state.hints}
+          userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
+          getHint={() => this.getHint()}
+        />
+        <button onClick={() => this.props.endRound(true)} className='cancel-button'>cancel game</button>
 
         <img src={this.state.clock} width="50px" />
 
@@ -442,9 +506,19 @@ const genSettingsPz2 = (props) => {
     // SHUFFLE ITEMS and determine solution
     let solution = [
       ['A00', 'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08' ],
-      ['B00', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08' ]
+      ['B00', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08' ],
+      ['C00', 'C01', 'C02', 'C03', 'C04', 'C05', 'C06', 'C07', 'C08' ],
+      ['D00', 'D01', 'D02', 'D03', 'D04', 'D05', 'D06', 'D07', 'D08' ],
+      ['E00', 'E01', 'E02', 'E03', 'E04', 'E05', 'E06', 'E07', 'E08' ],
+      ['F00', 'F01', 'F02', 'F03', 'F04', 'F05', 'F06', 'F07', 'F08' ],
+      ['G00', 'G01', 'G02', 'G03', 'G04', 'G05', 'G06', 'G07', 'G08' ],
+      ['H00', 'H01', 'H02', 'H03', 'H04', 'H05', 'H06', 'H07', 'H08' ]
     ]
-    let shuffledItems = shuffleArray(solution[round])
+    let maxDifficulty = (round + 1) * 3
+    if (maxDifficulty > solution.length) maxDifficulty = solution.length
+    let solutionIndex = random.integer(maxDifficulty - 3, maxDifficulty - 1)
+    if (solutionIndex === 5 && round === 2) solutionIndex = 6 // hack to avoid getting the same pz twice in a row
+    let shuffledItems = shuffleArray(solution[solutionIndex])
     // DEAL ITEMS to users
     let userIndex = 0
     shuffledItems.forEach((index, key) => {

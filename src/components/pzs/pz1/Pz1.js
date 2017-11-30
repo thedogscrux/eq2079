@@ -11,7 +11,6 @@ import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
-
 import { showAlert } from '../../Alert'
 
 import clock0 from '../../../images/pz/clock/clock-0.svg'
@@ -70,6 +69,7 @@ class Pz1 extends Component {
       newKeys: '-------------',
       valid: false,
       hints: props.user.pzs[PZ_INDEX].hints,
+      userKey: -1,
       score: {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
         multi: 0 * game.score.mutliplayerMultiplier,
@@ -80,7 +80,6 @@ class Pz1 extends Component {
     }
     this.state = {
       ...baseSate,
-      userKey: -1,
       guessLabel: '',
       guessKey: '',
       guessCode: '',

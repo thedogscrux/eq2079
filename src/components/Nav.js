@@ -19,7 +19,7 @@ class Nav extends Component {
   }
 
   render(){
-    //if(!this.props.debug) return(<div></div>)
+    if(!this.props.debug) return(<div></div>)
     return(
       <div id='component-nav'>
         <Link to="/dashboard">Dashboard</Link>
