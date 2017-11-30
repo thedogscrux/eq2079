@@ -125,7 +125,7 @@
     display: none; } }
 
 body {
-  background-color: #16161d;
+  background-color: black;
   color: white;
   font: 100 12px/20px "Avenir Next Ultra-Light", Avenir, Sans-serif;
   padding: 1vw;
@@ -226,7 +226,7 @@ button {
 
 input[type='submit'],
 button {
-  background-color: #16161d;
+  background-color: black;
   color: white; }
 
 .icon {
@@ -379,7 +379,7 @@ button {
   #component-map .map-wrapper:hover {
     background-color: rgba(255, 255, 255, 0.2); }
   #component-map .map-wrapper .pz {
-    border: solid 1px #16161d;
+    border: solid 1px black;
     border-radius: 50%;
     background-color: rgba(0, 255, 100, 0.5);
     position: absolute;
@@ -727,7 +727,7 @@ body.ai-strength-3 {
     display: none; } }
 
 #component-mk h2 {
-  color: #16161d;
+  color: black;
   background-color: white; }
 
 #component-mk article {
@@ -803,7 +803,7 @@ body.ai-strength-3 {
     display: none; } }
 
 #component-projector h2 {
-  color: #16161d;
+  color: black;
   background-color: white; }
 
 #component-projector article {
@@ -1278,7 +1278,7 @@ body.ai-strength-3 {
     justify-content: center;
     align-items: center; }
     #volume-board-wrapper .solution-key-wrapper .solution-key .dot {
-      color: #16161d;
+      color: black;
       padding: 10px;
       border-radius: 20px;
       background-color: rgba(255, 255, 255, 0.7);
@@ -1287,7 +1287,7 @@ body.ai-strength-3 {
 
 #volume-board-wrapper #sliderWrappers {
   height: 250px;
-  border: solid #16161d 1px;
+  border: solid black 1px;
   flex-direction: row;
   flex-flow: row;
   display: flex;
@@ -1296,7 +1296,7 @@ body.ai-strength-3 {
     width: 75px;
     height: 250px;
     margin: 0;
-    border: solid #16161d 1px;
+    border: solid black 1px;
     width: auto;
     height: auto;
     position: relative;

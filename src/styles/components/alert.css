@@ -86,7 +86,7 @@
   #component-alert.success {
     background-color: rgba(0, 100, 0, 0.9);
     color: white;
-    box-shadow: 0px 0px 5px #16161d; }
+    box-shadow: 0px 0px 5px black; }
 
 .ans-alert-fade-out {
   animation-duration: 2.5s;
