@@ -254,6 +254,7 @@ class Pz extends Component {
         pzStatus={this.state.pz.status}
         pzPlayerIDs={this.state.pz.players}
         pzAttempts={pzAttempts}
+        history={this.props.history}
       />
     }
 

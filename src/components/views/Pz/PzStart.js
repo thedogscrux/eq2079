@@ -75,6 +75,10 @@ class PzStart extends Component {
 
   // FUNCS
 
+  linkDashboard() {
+    this.props.history.push('/dashboard')
+  }
+
   requestNewGame() {
     var self = this
     firebase.database().ref('/pzs/' + this.props.pzIndex).once('value').then(function(snapshot){
@@ -152,7 +156,11 @@ class PzStart extends Component {
     if(pzStatus === 'active') {
       content = <button disabled='disabled'>Game in Progress</button>
     } else if( pzStatus === 'inactive') {
-      content = <button onClick={() => this.requestNewGame() }>{(this.props.pzAttempts >= 1) ? 'Play Again' : 'Start'}</button>
+      content =
+      <div>
+        <button onClick={() => this.requestNewGame() }>{(this.props.pzAttempts >= 1) ? 'Play Again' : 'Start'}</button>
+        <button onClick={() => this.linkDashboard() }>Return to Dashboard</button>
+      </div>
     } else if (pzStatus === 'loading' && !this.state.userJoined) {
       content = <button onClick={() => this.joinGame() }>Join</button>
     }
