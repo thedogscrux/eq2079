@@ -45,29 +45,58 @@ class Welcome extends Component {
         {/*<h1>Welcome {this.state.user.name}</h1>
         }<Link to='/login#sci'>Signup/Login</Link>*/}
 
-        <div className={'ans-show-wrapper intro ' + ((this.state.ans.intro) ? 'play' : '')}>
-          <div className='ans show-1' style={{ opactiy: 0 }}>Come in.. Come in...</div>
-          <div className='ans show-2'>
-            This is Mission Kontrol<br/>Can you hear us?
+        <div className={'ans-show-wrapper intro' + ((this.state.ans.intro) ? 'play' : '')}>
+          <div className='welcome-hero'>
+            <div className='hero-planet'></div>
+            <div className='hero-ship'></div>
+            <div className='hero-human'></div>
           </div>
-          <div className='ans show-3'>
-            <button onClick={() => this.setState({ ans: {intro: true, main: true} })}>Yes</button>
+          <div className='intro-block'>
+            <div className='ans show-1 intro-copy' style={{ opactiy: 0 }}>Come&nbsp;in.. Come&nbsp;in...</div>
+            <div className='ans show-2 intro-copy'>
+              This is Mission&nbsp;Kontrol<br/><br/>Can you hear us?
+            </div>
+            <div className='ans show-3 intro-copy'>
+              <button className='-white-metal' onClick={() => this.setState({ ans: {intro: true, main: true} })}>ACCEPT TRANSMISSION</button>
+            </div>
           </div>
         </div>
 
         <div className={'ans-show-wrapper main ' + ((this.state.ans.main) ? 'play' : 'hide')}>
-          <div className='ans show-1'>We are sorry to inform you.</div>
-          <div className='ans show-2'>But humans are under attack.</div>
-          <div className='ans show-3'>From an Artificial Intelligence</div>
-          <div className='ans show-4'>We don’t have much time to explain.</div>
-          <div className='ans show-5'>We are building rockets to get as many humans off the planet as possible. </div>
-          <div className='ans show-6'>We need scientists and engineers.<br/>Will you help us?</div>
+          <div className='ans show-1 intro-copy'>We are sorry to inform you.</div>
+          <div className='ans show-2 intro-copy -white'>But humans are under attack.</div>
+          <div className='ans show-3 intro-copy'>From an Artificial Intelligence</div>
+          <div className='ans show-4 intro-copy -white'>We don’t have much time to explain.</div>
+          <div className='ans show-5 intro-copy'>We are building rockets to get as many humans off the planet as possible. </div>
+          <div className='ans show-6 intro-copy -white-metal -center'>We need</div>
+          <div className='ans show-6 intro-copy -white-metal -center'>scientists and engineers</div>
+          <div className='ans show-6 intro-copy -white-metal -center'>Will you help&nbsp;us?</div>
           <div className='ans show-7'>
-            <Link to='/login#scientist'>Yes, make me a scientist</Link>
-            <Link to='/login#engineer'>Yes, make me an engineer</Link>
-            <Link to='https://developers.giphy.com/docs/'>No, goodluck</Link>
+            <div className='team-block'>
+              <div className='team-tile'>
+                <div className='team-title'>
+                  <Link to='/login#scientist'>scientists</Link>
+                </div>
+              </div>
+            </div>
+            <div className='team-block'>
+              <div className='team-tile'>
+                <div className='team-title'>
+                  <Link to='/login#engineer'>engineers</Link>
+                </div>
+              </div>
+            </div>
+            <div className='optOut'>
+              <Link to='https://developers.giphy.com/docs/'>no, goodluck</Link>
+            </div>
+          </div>
+          <div className='welcome-lower'>
+            <div className='lower-city'></div>
+            <div className='lower-launch'></div>
+            <div className='lower-people'></div>
           </div>
         </div>
+
 
       </div>
     )

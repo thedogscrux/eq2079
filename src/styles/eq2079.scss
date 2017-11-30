@@ -8,6 +8,8 @@
 @import "components/nav.scss";
 @import "components/map.scss";
 @import "components/ai.scss";
+@import "components/alert.scss";
+@import "components/hints.scss";
 
 // views
 @import "components/views/welcome.scss";
@@ -29,25 +31,4 @@
 
 // --------------- EQ2079 THEME STYLES ---------------
 
-// components
-@import "eq2079/components/components.scss";
-@import "eq2079/components/nav.scss";
-@import "eq2079/components/map.scss";
-@import "eq2079/components/ai.scss";
-
-// views
-@import "eq2079/components/views/welcome.scss";
-@import "eq2079/components/views/projector.scss";
-@import "eq2079/components/views/pz.scss";
-
-// pzs
-@import "eq2079/components/pzs/pz1.scss";
-@import "eq2079/components/pzs/pz2.scss";
-@import "eq2079/components/pzs/pz3.scss";
-@import "eq2079/components/pzs/pz4.scss";
-@import "eq2079/components/pzs/pz5.scss";
-@import "eq2079/components/pzs/pz6.scss";
-@import "eq2079/components/pzs/pz7.scss";
-@import "eq2079/components/pzs/pz8.scss";
-@import "eq2079/components/pzs/pz9.scss";
-@import "eq2079/components/pzs/pz10.scss";
+@import "eq2079/eq2079.scss"
