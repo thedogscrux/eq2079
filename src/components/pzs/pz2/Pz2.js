@@ -151,6 +151,7 @@ class Pz2 extends Component {
       hints: props.user.pzs[PZ_INDEX].hints,
       userKey: -1,
       render: false,
+      aiStrength: props.user.ai.strength,
       score: {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, this.props.numOfUsers),
         multi: 0 * game.score.mutliplayerMultiplier,
@@ -470,7 +471,7 @@ class Pz2 extends Component {
     return(
       <div id="jigsaw-board-wrapper" className='component-wrapper component-pz'>
         <AI />
-        
+
         {htmlScore}
         <Hints
           hints={HINTS}

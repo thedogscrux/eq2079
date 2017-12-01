@@ -73,6 +73,7 @@ class Pz5 extends Component {
         clock: props.clock,
         valid: false,
         hints: props.user.pzs[PZ_INDEX].hints,
+        aiStrength: props.user.ai.strength,
         score: {
           max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
           multi: 0 * game.score.mutliplayerMultiplier,
@@ -527,7 +528,7 @@ class Pz5 extends Component {
     return(
       <div id="spots-board-wrapper" className='component-wrapper'>
         <AI />
-        
+
         {/*}<div className='color-convert'>
           <div style={{ backgroundColor: cssRed }}>rgb red</div>
           <div style={{ backgroundColor: cssYellow }}>rgb yellow</div>

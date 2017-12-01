@@ -150,6 +150,7 @@ const propsPzs = [
     name: 'Pz 8 Frequency',
     code: 'pz8',
     site: 'Communications Room',
+    maxPlayers: 6,
     location: {
       lat: 0,
       long: 0
@@ -160,8 +161,8 @@ const propsPzs = [
       left: '70%'
     },
     rounds: {
-      numOfRounds: 2,
-      roundSec: 60
+      numOfRounds: 3,
+      roundSec: 120
     },
     desc: 'desc....',
     instructions: 'instructions....'

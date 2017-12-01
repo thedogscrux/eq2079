@@ -6,6 +6,8 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 
+import AI from '../../AI'
+
 import { shuffleArray, testIfEqualArrays } from '../../../utils/Common.js'
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
@@ -15,9 +17,9 @@ import Hints from '../../Hints.js'
 const PZ_INDEX = 7
 const PZ_PROPS = propsPzs[PZ_INDEX]
 
-const HIGH_RANGE = 10
-const MID_RANGE = 6
-const LOW_RANGE = 3
+const HIGH_RANGE = 8
+const MID_RANGE = 5
+const LOW_RANGE = 2
 
 const HINTS = [
   {
@@ -27,7 +29,7 @@ const HINTS = [
   {
     title: 'Hint Two',
     subTitle: 'Subtitle',
-    body: 'Everyone has to tune in to a different frequency.'
+    body: 'Everyone has to tune in to the same frequency. Unless you have been hacked by the A.I...'
   }
 ]
 
@@ -87,6 +89,7 @@ class Pz8 extends Component {
       valid: false,
       hints: props.user.pzs[PZ_INDEX].hints,
       userKey: -1,
+      aiStrength: props.user.ai.strength,
       render: false,
       score: {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
@@ -256,6 +259,10 @@ class Pz8 extends Component {
 
   // END GAME
 
+  cancelGame() {
+    this.props.endRound(true)
+  }
+
   endRound() {
     this.props.endRound()
   }
@@ -350,7 +357,7 @@ class Pz8 extends Component {
     let score = new Score(PZ_INDEX)
     let htmlScore = score.htmlSimpleDisplay(this.state.score)
 
-    let maxRange = (this.state.round < 1) ? LOW_RANGE : HIGH_RANGE
+    let maxRange = HIGH_RANGE
     let radioMsg = ''
     let myFreq = this.state.board.myFreq
     let userId = this.props.user.id
@@ -358,6 +365,14 @@ class Pz8 extends Component {
     let validFreq = false
     let cssStyle = {}
     let myIndexes = []
+
+    if(this.state.round < 1) {
+      maxRange = LOW_RANGE
+    } else if (this.state.round < 2) {
+      maxRange = MID_RANGE
+    } else {
+      maxRange = HIGH_RANGE
+    }
 
     if(this.state.render) {
       solutionFreq = this.state.rounds[this.state.round].users[this.state.userKey].freq
@@ -382,8 +397,21 @@ class Pz8 extends Component {
 
     }
 
+    // format freq for display
+    let myFreqFromatted = 0
+    // AI factor
+    if(this.state.aiStrength >= 1) {
+      // mix up the control names
+      let random = new Random(Random.engines.mt19937().autoSeed())
+      myFreqFromatted = random.integer(1000, 9999)
+    } else {
+      myFreqFromatted = myFreq * 1000
+    }
+
     return(
       <div id="frequency-board-wrapper" className='component-wrapper'>
+        <AI />
+
         {htmlScore}
         <Hints
           hints={HINTS}
@@ -391,6 +419,7 @@ class Pz8 extends Component {
           userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
           getHint={() => this.getHint()}
         />
+        <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
         <img src={this.state.clock} width="50px" />
 
@@ -398,7 +427,7 @@ class Pz8 extends Component {
 
 
 
-        val: {myFreq}<br/>
+        Frequency: {myFreqFromatted}Hz<br/>
 
         <input type='range'
           onMouseUp={() => this.guess()}

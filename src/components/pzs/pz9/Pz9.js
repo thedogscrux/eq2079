@@ -6,6 +6,8 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 
+import AI from '../../AI'
+
 import { shuffleArray, testIfEqualArrays } from '../../../utils/Common.js'
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
@@ -45,6 +47,7 @@ class Pz9 extends Component {
       hints: props.user.pzs[PZ_INDEX].hints,
       userKey: -1,
       render: false,
+      aiStrength: props.user.ai.strength,
       score: {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
         multi: 0 * game.score.mutliplayerMultiplier,
