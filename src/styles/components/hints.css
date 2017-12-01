@@ -8,7 +8,8 @@
     bottom: 0;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.7); }
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 50; }
     #component-hints #hints-popup-wrapper #hints-popup {
       background-color: rgba(0, 0, 0, 0.5);
       margin: 10vh 3vw;

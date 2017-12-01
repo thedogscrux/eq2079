@@ -130,7 +130,7 @@ body {
   font: 100 12px/20px "Avenir Next Ultra-Light", Avenir, Sans-serif;
   padding: 1vw;
   margin: 0;
-  opacity: .2; }
+  opacity: .9; }
 
 img {
   border: none;
@@ -1165,6 +1165,11 @@ body.ai-strength-3 {
   #soduko-board-wrapper #grid.table-size-8 .row .col {
     width: 16.66vw;
     height: 16.66vw; }
+
+#shape-board-wrapper img.key {
+  width: 100px;
+  margin: auto;
+  display: block; }
 
 #shape-board-wrapper .bar {
   height: 40px;

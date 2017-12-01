@@ -6,24 +6,55 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 
-import clock0 from '../../../images/pz/clock/clock-0.svg'
-import clock4 from '../../../images/pz/clock/clock-4.svg'
+import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
+import game from '../../../Settings.js'
+import { propsPzs } from '../../../data/propsPzs.js'
+import Hints from '../../Hints.js'
 
 import shape01 from './images/PzShape01.svg'
 import shape02 from './images/PzShape02.svg'
 
-import { propsPzs } from '../../../data/propsPzs.js'
+import key00 from './images/key01.png'
+import key01 from './images/key01.png'
+import key02 from './images/key02.png'
+import key03 from './images/key03.png'
+import key04 from './images/key04.png'
 
-const pzIndex = 3
-const pzProps = propsPzs[pzIndex]
+const PZ_INDEX = 3
+const PZ_PROPS = propsPzs[PZ_INDEX]
+
+const HINTS = [
+  {
+    title: 'Hint One',
+    body: 'Use pattern X. Always use pattern X.'
+  },
+  {
+    title: 'Hint Two',
+    subTitle: 'Subtitle',
+    body: '...'
+  }
+]
 
 const shapeMap = [
   shape01, shape02
 ]
 
+const SOLUTION_KEYS = [
+  key00, key01, key02, key03, key04
+]
+
+const SOLUTIONS = [
+  [ 2, 4, 0, 1, 4, 1 ],
+  [ 1, 1, 1, 3, 3, 3 ],
+  [ 2, 3, 1, 4, 1, 4 ],
+  [ 4, 4, 1, 3, 0, 0 ],
+  [ 0, 4, 0, 4, 0, 4 ]
+]
+
 class Pz4 extends Component {
   constructor(props){
     super(props)
+    let score = new Score(PZ_INDEX)
     let baseState = {
       points: 0,
       round: props.round,
@@ -31,7 +62,15 @@ class Pz4 extends Component {
       user: props.user,
       clock: props.clock,
       valid: false,
+      hints: props.user.pzs[PZ_INDEX].hints,
       userKey: -1,
+      score: {
+        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
+        multi: 0 * game.score.mutliplayerMultiplier,
+        hintCost: score.calcHintCost(PZ_INDEX),
+        round: 0,
+        total: 0
+      }
     }
     this.state = {
       ...baseState,
@@ -71,7 +110,10 @@ class Pz4 extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
-      if (this.props.round != nextProps.round) this.buildStateBoard(nextProps.round)
+      if (this.props.round != nextProps.round) {
+          this.updateStateScore()
+        this.buildStateBoard(nextProps.round)
+      }
       this.setState({
         round: nextProps.round,
         clock: nextProps.clock,
@@ -86,8 +128,20 @@ class Pz4 extends Component {
   componentWillUnmount() {
     let self = this
     let score = this.endGame()
-    firebase.database().ref('/pzs/' + pzIndex + '/status').once('value').then(function(snapshot){
+    firebase.database().ref('/pzs/' + PZ_INDEX + '/status').once('value').then(function(snapshot){
       if(snapshot.val() === 'inactive') self.props.endGame(score)
+    })
+  }
+
+  updateStateScore() {
+    let newTotalScore = this.state.score.total + this.state.score.round
+    // user cant score higher than max
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
+    this.setState({
+      score: {
+        ...this.state.score,
+        total: newTotalScore
+      }
     })
   }
 
@@ -162,21 +216,43 @@ class Pz4 extends Component {
 
   // END GAME
 
+  cancelGame() {
+    this.props.endRound(true)
+  }
+
   endRound() {
     this.props.endRound()
   }
 
   endGame(){
-    let score = 0
+    let newTotalScore = this.state.score.round + this.state.score.total
+    newTotalScore = (newTotalScore < this.state.score.max) ? newTotalScore : this.state.score.max
     // calc user score (final score calculated in Pz parent)
-    return score
+    return newTotalScore
+  }
+
+  // HINT
+
+  getHint() {
+    console.log(' ** GET HINT ** ');
+    let hint = HINTS[this.state.hints]
+    let newHintCount = this.state.hints + 1
+    // update user max score
+    let score = new Score(PZ_INDEX)
+    let newMaxScore = score.calcMaxScore(newHintCount, this.props.numOfUsers)
+    this.setState({
+      hints: newHintCount,
+      score: {
+        ...this.state.score,
+        max: newMaxScore
+      }
+    })
+    firebase.database().ref('/users/' + this.props.user.id + '/pzs/' + PZ_INDEX).update({
+      hints: newHintCount
+    })
   }
 
   // GUESS
-
-  guess() { }
-
-  submitGuess(guess) { }
 
   updateBarPos(barKey, index, position) {
     // update the bar position and check if valid
@@ -201,9 +277,17 @@ class Pz4 extends Component {
     })
     if (this.state.valid != valid) {
       let refUsers = '/boards/pz4/rounds/' + (this.state.round-0) + '/users/'
+      let newRoundScore = 0
       if (valid) {
         console.log('*** user items all valid! ***');
-        this.setState({ valid: true })
+        newRoundScore = (game.score.round < this.state.score.max) ? game.score.round : this.state.score.max
+        this.setState({
+          valid: true,
+          score: {
+            ...this.state.score,
+            round: newRoundScore
+          }
+        })
         firebase.database().ref(refUsers + this.state.userKey + '/').update({
           valid: valid
         }).then(function(){
@@ -218,7 +302,13 @@ class Pz4 extends Component {
           })
         })
       } else {
-        this.setState({ valid: false })
+        this.setState({
+          valid: false,
+          score: {
+            ...this.state.score,
+            round: 0
+          }
+        })
         firebase.database().ref(refUsers + this.state.userKey + '/').update({
           valid: false
         })
@@ -227,6 +317,11 @@ class Pz4 extends Component {
   }
 
   render(){
+
+    // score
+    let score = new Score(PZ_INDEX)
+    let htmlScore = score.htmlSimpleDisplay(this.state.score)
+
     // loop thru all user bars
     const htmlBars = Object.keys(this.state.board.bars).map( barKey => {
       let bar = this.state.board.bars[barKey]
@@ -262,13 +357,33 @@ class Pz4 extends Component {
           <button onClick={() => this.updateBarPos(barKey, bar.index, 4)} className={(position === 4) ? 'active' : ''}>{/*index: {bar.index} , pos: {bar.position} , {bar.solution}*/}</button>
         </div>
       )
+
     })
     let shape = shapeMap[this.state.round-0]
+    // get solution key
+    let solutionKeyImage = ''
+    if(this.state.rounds[this.state.round]) {
+      //console.log('this.state.rounds[this.state.round].solutionKey',this.state.rounds[this.state.round].solutionKey);
+      solutionKeyImage = SOLUTION_KEYS[this.state.rounds[this.state.round].solutionKey]
+    }
     return(
       <div id="shape-board-wrapper" className='component-wrapper'>
-        <img src={this.state.clock} width="50px" />
-        {htmlBars}
+        {htmlScore}
+        <Hints
+          hints={HINTS}
+          hintsCount={this.state.hints}
+          userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
+          getHint={() => this.getHint()}
+        />
+        <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
+
+        <img src={this.state.clock} width="50px" /><br/>
+
+        <img src={solutionKeyImage} className='key'/>
+
         {/*}<img src={shape} />*/}
+
+        {htmlBars}
       </div>
     )
   }
@@ -280,8 +395,21 @@ const genSettingsPz4 = (props) => {
   console.log('** generate settings **')
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed());
+  let solutionIndexes = [ 1 ] // always start with teh esiest Pz
+  let solutions = [ SOLUTIONS[1] ] // always start with teh esiest Pz
+  //get solutions
+  for(let i=1; i<PZ_PROPS.rounds.numOfRounds;) {
+    let index = random.integer(0, 5)
+    // keep track of each solution you are using so you dont use the same one twice in a game
+    if(solutionIndexes.indexOf(index) === -1) {
+      solutionIndexes.push(index)
+      solutions.push(SOLUTIONS[index])
+      ++i;
+    }
+  }
+  console.log('solutions',solutions);
   // setup each user for each round
-  for(let round=0; round<pzProps.rounds.numOfRounds; round++){
+  for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
     props.players.forEach( (user,key) => {
@@ -296,10 +424,6 @@ const genSettingsPz4 = (props) => {
     // settings = rounds[#][users][#] (without user data)
     // SHUFFLE BARS and determine solution
     let shuffledBars = shuffle([0, 1, 2, 3, 4, 5])
-    let solutions = [
-      [ 1, 1, 1, 2, 2, 2 ],
-      [ 3, 4, 0, 1, 4, 1 ]
-    ]
     let solution = solutions[round]
     // DEAL BARS to users
     let userIndex = 0
@@ -313,6 +437,7 @@ const genSettingsPz4 = (props) => {
     // settings = rounds[#][users][#] (with user data)
     // STORE settings
     settings.push({
+      solutionKey: solutionIndexes[round],
       users: settingsUsers
     })
   }
