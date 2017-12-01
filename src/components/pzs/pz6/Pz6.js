@@ -18,12 +18,12 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: '...'
+    body: 'Showing your teammates names.'
   },
   {
     title: 'Hint Two',
     subTitle: 'Subtitle',
-    body: '...'
+    body: 'Tell your team to increase their fluids slowly, one unit at a time.'
   }
 ]
 
@@ -290,6 +290,10 @@ class Pz6 extends Component {
   }
 
   // END GAME
+
+  cancelGame() {
+    this.props.endRound(true)
+  }
 
   endRound() {
     this.props.endRound()
@@ -558,10 +562,15 @@ class Pz6 extends Component {
       myVal = this.state.rounds[this.state.round].users[this.state.userKey].val
     }
 
+    // add hints
+    if (this.state.hints > 0) {
+      cssClassSlideContainer += ' hint-1'
+    }
+
     if (difficulty >= 2) {
       htmlSliderHard =
         <div className={'slidecontainer ' + cssClassSlideContainer}>
-          B:{beakerBVal}/{solutionB}
+          {(this.state.hints>0) ? 'name B:' : ''}{beakerBVal}/{solutionB}
           <input type='range'
             min={minRange}
             max={maxRange}
@@ -586,15 +595,14 @@ class Pz6 extends Component {
           userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
           getHint={() => this.getHint()}
         />
+        <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
-        difficulty: {difficulty}<br/>
+        {/*difficulty: {difficulty}<br/>
         slider Value: {this.state.sliderValue}<br/>
         db val: {myVal}<br/>
-        solutionA: {solutionA}<br/>
+        solutionA: {solutionA}<br/>*/}
 
-        <div className='solution-key-wrapper'>{htmlSolutionKey}</div>
-
-        <br/><br/>
+        {/*}<div className='solution-key-wrapper'>{htmlSolutionKey}</div>*/}
 
         <div id='sliderWrappers'>
 
@@ -615,7 +623,7 @@ class Pz6 extends Component {
           </div>
 
           <div className={'slidecontainer ' + cssClassSlideContainer}>
-            A:{beakerAVal}/{solutionA}
+            {(this.state.hints>0) ? 'name A:' : ''}{beakerAVal}/{solutionA}
             <input type='range'
               min={minRange}
               max={maxRange}

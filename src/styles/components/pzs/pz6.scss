@@ -46,6 +46,10 @@ $offset: $sliderThickness * 2;
       position: relative;
       font: 100 50px/70px $fontAvenir;
 
+      &.hint-1 {
+        font-size: 20px;
+      }
+
       .slider {
           -webkit-appearance: none;
           width: $sliderSize;

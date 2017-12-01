@@ -108,6 +108,7 @@ const propsPzs = [
     name: 'Pz 6 Volume',
     code: 'pz6',
     site: 'Storage Room',
+    maxPlayers: 5,
     location: {
       lat: 0,
       long: 0
@@ -119,7 +120,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 7
+      roundSec: 120
     },
     desc: 'desc....',
     instructions: 'instructions....'

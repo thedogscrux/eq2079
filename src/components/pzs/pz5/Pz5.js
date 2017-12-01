@@ -538,11 +538,11 @@ class Pz5 extends Component {
           userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
           getHint={() => this.getHint()}
         />
-        <button onClick={() => this.cancelGame()}>cancel game</button>
+        <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
         <img src={this.state.clock} width="50px" />
 
-        {solutionKey}
+        <div id='solution-key'>{solutionKey}</div>
 
         <div id='spots-wrapper'>{htmlButtons}</div>
       </div>
@@ -599,6 +599,27 @@ const genSettingsPz5 = (props) => {
       [ 3, 3, 3 ],
       [ 3, 3, 3 ],
     ]
+  } else if (props.players.length === 4) {
+    solutionUserItems = [
+      [ 2, 3, 3,
+        2 ],
+      [ 2, 3, 3,
+        2 ],
+    ]
+  } else if (props.players.length === 5) {
+    solutionUserItems = [
+      [ 2, 2, 3,
+        2, 2 ],
+      [ 2, 2, 3,
+        2, 2 ],
+    ]
+  } else if (props.players.length === 5) {
+    solutionUserItems = [
+      [ 2, 2, 2,
+        2, 2, 2 ],
+      [ 2, 2, 2,
+        2, 2, 2 ],
+    ]
   }
 
   let solutionIndexes = [ 0 ] // always start with teh esiest Pz
@@ -623,24 +644,27 @@ const genSettingsPz5 = (props) => {
     })
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
+    let colorIndex = 0
     props.players.forEach( (user,key) => {
       settingsUsers.push(
         {
           userId: user,
           items: solutionUserItems[round][key],
-          color: 0,
+          color: SOLUTION_COLORS[colorIndex],
           solutionItemCount: solutionUserItems[round]
         }
       )
+      colorIndex = (colorIndex >= SOLUTION_COLORS.length - 1) ? 0 : colorIndex + 1
     })
     // settings = rounds[#][users][#] (without user data)
     // DEAL colors to users
-    let userIndex = 0
-    SOLUTION_COLORS.some((color, key) => {
-      settingsUsers[userIndex].color = color
-      userIndex ++
-      return key+1 >= props.players.length
-    })
+    // let userIndex = 0
+    // SOLUTION_COLORS.some((color, key) => {
+    //   settingsUsers[userIndex].color = SOLUTION_COLORS[key]
+    //   //userIndex = (userIndex >= prop.players.length) ? 0 :
+    //   userIndex ++
+    //   return key+1 >= props.players.length
+    // })
     // settings = rounds[#][users][#] (with user data)
     // STORE settings
     settings.push({
