@@ -129,6 +129,7 @@ const propsPzs = [
     name: 'Pz 7 Arm',
     code: 'pz7',
     site: 'Mission Kontrol',
+    maxPlayers: 6,
     location: {
       lat: 0,
       long: 0
@@ -140,7 +141,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 10
+      roundSec: 120
     },
     desc: 'desc....',
     instructions: 'instructions....'

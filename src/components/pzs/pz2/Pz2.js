@@ -13,6 +13,8 @@ import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 import { showAlert } from '../../Alert'
 
+import AI from '../../AI'
+
 import imageA00 from './images/A00.jpg'
 import imageA01 from './images/A01.jpg'
 import imageA02 from './images/A02.jpg'
@@ -467,6 +469,8 @@ class Pz2 extends Component {
 
     return(
       <div id="jigsaw-board-wrapper" className='component-wrapper component-pz'>
+        <AI />
+        
         {htmlScore}
         <Hints
           hints={HINTS}

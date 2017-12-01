@@ -13,6 +13,8 @@ import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 import { showAlert } from '../../Alert'
 
+import AI from '../../AI'
+
 import image0 from './images/0.jpg'
 import image1 from './images/1.jpg'
 import image2 from './images/2.jpg'
@@ -471,6 +473,8 @@ class Pz3 extends Component {
 
     return(
       <div id="soduko-board-wrapper" className='component-wrapper'>
+        <AI />
+        
         {htmlScore}
         <Hints
           hints={HINTS}

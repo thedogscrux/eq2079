@@ -13,6 +13,7 @@ import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
+import { showAlert } from '../../Alert'
 
 import imageA00 from './images/imageA00.svg'
 
@@ -22,7 +23,7 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: '...'
+    body: 'Move your circle over the red dot. OPEN and CLOSE while above the red dot.  Then bring it back to the bay.  When above the bay, OPEN to drop the dot in the bay.'
   },
   {
     title: 'Hint Two',
@@ -296,6 +297,10 @@ class Pz7 extends Component {
 
   // END GAME
 
+  cancelGame() {
+    this.props.endRound(true)
+  }
+
   endRound() {
     this.props.endRound()
   }
@@ -447,7 +452,11 @@ class Pz7 extends Component {
               snapshot.val().forEach( user => {
                 if(!user.valid) allUsersValid = false
               })
-              if(allUsersValid) self.endRound()
+              if(allUsersValid) {
+                self.endRound()
+              } else {
+                showAlert('Great work! Keep adding items for points till your teammates catch up.')
+              }
             })
           }
         })
@@ -496,6 +505,7 @@ class Pz7 extends Component {
     let styleBay = {}
 
     let classNamesArm = ''
+    let classNamesItem = ''
 
     let htmlControls = ''
 
@@ -541,11 +551,12 @@ class Pz7 extends Component {
       classNamesArm = (arm.open) ? 'open' : ''
 
       // get the item coords
+      // if its in the arm, make it match the arm
       styleItem = {
         bottom: item.y + 'px',
         left: item.x + 'px'
       }
-        // if its in the arm, make it match the arm
+      classNamesItem = (item.status === 'captured') ? 'captured' : ''
 
       // get the bay
       styleBay = {
@@ -566,6 +577,7 @@ class Pz7 extends Component {
           userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
           getHint={() => this.getHint()}
         />
+        <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
         <div id='controls-wrapper'>
           {htmlControls}
@@ -573,7 +585,7 @@ class Pz7 extends Component {
 
         <div id='table'>
           <div className={'element ' + classNamesArm} id='arm' style={styleArm} ></div>
-          <div className='element' id='item' style={styleItem} ></div>
+          <div className={'element ' + classNamesItem} id='item' style={styleItem} ></div>
           <div className='element' id='bay' style={styleBay} >{bayItemCount}</div>
         </div>
       </div>

@@ -8,12 +8,13 @@ import Random from 'random-js'
 import _ from 'underscore'
 import ryb2rgb from 'ryb2rgb'
 
-
 import { shuffleArray, testIfEqualArrays, removeArrayKey } from '../../../utils/Common.js'
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
+
+import AI from '../../AI'
 
 const PZ_INDEX = 4
 const PZ_PROPS = propsPzs[PZ_INDEX]
@@ -525,6 +526,8 @@ class Pz5 extends Component {
 
     return(
       <div id="spots-board-wrapper" className='component-wrapper'>
+        <AI />
+        
         {/*}<div className='color-convert'>
           <div style={{ backgroundColor: cssRed }}>rgb red</div>
           <div style={{ backgroundColor: cssYellow }}>rgb yellow</div>

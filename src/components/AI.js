@@ -51,6 +51,7 @@ class AI extends Component {
     let pzScores = this.props.userPzs.map(pz => pz.score)
     let myTotalScore = pzScores.reduce((total, score) => total + score)
     let percentOfTotal = Math.round((myTotalScore / totalGameScore) * 100)
+    console.log('AI: myTotalScore/totalGameScore/percentOfTotal',myTotalScore,'/',totalGameScore,'/',percentOfTotal);
     let aiStrength = 0
 
     if(percentOfTotal > game.ai.triggerStrength1AtPercentComplete) {

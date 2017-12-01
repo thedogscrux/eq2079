@@ -227,12 +227,18 @@ class Auth extends Component {
     let html = ''
     switch(this.state.display) {
       case 'userInfo':
-        if (!this.props.debug) break
-        html =
-          <div>
-            Code Name: {this.state.user.name} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}&nbsp;&nbsp;
-            <button style={{display: 'inline-block'}} onClick={() => this.updateUser('')}>Logout</button>
-          </div>
+        if (!this.props.debug) {
+          html =
+            <div>
+              {(this.state.user.name) ? 'Code Name: ' + this.state.user.name : ''} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}
+            </div>
+        } else {
+          html =
+            <div>
+              Code Name: {this.state.user.name} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}&nbsp;&nbsp;
+              <button style={{display: 'inline-block'}} onClick={() => this.updateUser('')}>Logout</button>
+            </div>
+        }
         break
       case 'formLogin':
         html =

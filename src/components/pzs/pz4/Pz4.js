@@ -11,6 +11,8 @@ import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 
+import AI from '../../AI'
+
 import shape01 from './images/PzShape01.svg'
 import shape02 from './images/PzShape02.svg'
 
@@ -368,6 +370,8 @@ class Pz4 extends Component {
     }
     return(
       <div id="shape-board-wrapper" className='component-wrapper'>
+        <AI />
+        
         {htmlScore}
         <Hints
           hints={HINTS}

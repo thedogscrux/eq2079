@@ -12,6 +12,8 @@ import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 
+import AI from '../../AI'
+
 const PZ_INDEX = 5
 const PZ_PROPS = propsPzs[PZ_INDEX]
 
@@ -588,6 +590,8 @@ class Pz6 extends Component {
 
     return(
       <div id="volume-board-wrapper" className='component-wrapper'>
+        <AI />
+        
         {htmlScore}
         <Hints
           hints={HINTS}

@@ -13,6 +13,8 @@ import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 import { showAlert } from '../../Alert'
 
+import AI from '../../AI'
+
 import clock0 from '../../../images/pz/clock/clock-0.svg'
 import clock4 from '../../../images/pz/clock/clock-4.svg'
 
@@ -384,6 +386,8 @@ class Pz1 extends Component {
 
     return(
       <div className='component-wrapper'>
+        <AI />
+        
         {htmlScore}
         <Hints
           hints={HINTS}
