@@ -3,6 +3,7 @@ const propsPzs = [
     name: 'Pipes',
     code: 'pz1',
     site: 'Water Treatment',
+    maxPlayers: 7,
     location: {
       lat: 0,
       long: 0
@@ -23,6 +24,7 @@ const propsPzs = [
     name: 'Pz Two Jigsaw',
     code: 'pz2',
     site: 'Engine Room',
+    maxPlayers: 9,
     location: {
       lat: 0,
       long: 0
@@ -33,8 +35,8 @@ const propsPzs = [
       left: '25%'
     },
     rounds: {
-      numOfRounds: 2,
-      roundSec: 60
+      numOfRounds: 3,
+      roundSec: 5
     },
     desc: 'desc....',
     instructions: 'instructions....'
@@ -43,6 +45,7 @@ const propsPzs = [
     name: 'Pz Three Soduko',
     code: 'pz3',
     site: 'Electrical Room',
+    maxPlayers: 9,
     location: {
       lat: 0,
       long: 0
@@ -54,7 +57,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 60
+      roundSec: 600
     },
     desc: 'desc....',
     instructions: 'instructions....'
@@ -62,6 +65,8 @@ const propsPzs = [
   {
     name: 'Pz Four Shape',
     code: 'pz4',
+    site: 'what site is this Kn?',
+    maxPlayers: 6,
     location: {
       lat: 0,
       long: 0
@@ -72,8 +77,8 @@ const propsPzs = [
       left: '20%'
     },
     rounds: {
-      numOfRounds: 2,
-      roundSec: 60
+      numOfRounds: 3,
+      roundSec: 600
     },
     desc: 'desc....',
     instructions: 'instructions....'
@@ -82,6 +87,7 @@ const propsPzs = [
     name: 'Pz 5 Spots',
     code: 'pz5',
     site: 'Living Quarters',
+    maxPlayers: 6,
     location: {
       lat: 0,
       long: 0
@@ -113,7 +119,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 60
+      roundSec: 7
     },
     desc: 'desc....',
     instructions: 'instructions....'
@@ -133,7 +139,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 90
+      roundSec: 10
     },
     desc: 'desc....',
     instructions: 'instructions....'
