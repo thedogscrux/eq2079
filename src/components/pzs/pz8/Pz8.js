@@ -13,6 +13,7 @@ import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
+import { showAlert } from '../../Alert'
 
 const PZ_INDEX = 7
 const PZ_PROPS = propsPzs[PZ_INDEX]
@@ -139,7 +140,17 @@ class Pz8 extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
-      if (this.props.round != nextProps.round) {
+      if (this.props.round != nextProps.round  && nextProps.round >= 1) {
+        if(testIfEqualArrays(this.state.board.table, this.state.rounds[this.state.round].solution)) {
+          // pause so user can read msg before next round
+          document.getElementById('radio-message-ending-overlay').style.display = 'block'
+          let timer = setTimeout(() => {
+            this.updateStateScore()
+            this.buildStateBoard(nextProps.round)
+            document.getElementById('radio-message-ending-overlay').style.display = 'none'
+          }, PZ_PROPS.alerts.nextRoundDelaySec * 1000)
+        }
+      } else if (this.props.round != nextProps.round) {
         this.updateStateScore()
         this.buildStateBoard(nextProps.round)
       }
@@ -159,6 +170,10 @@ class Pz8 extends Component {
     let self = this
     let score = this.endGame()
     this.unwatchDB()
+    if (!this.props.expired && this.props.round >= PZ_PROPS.rounds.numOfRounds-1) {
+      let radioMsg = this.state.board.table.map(word => word)
+      showAlert(radioMsg.join(' '))
+    }
     firebase.database().ref('/pzs/' + PZ_INDEX + '/status').once('value').then(function(snapshot){
       if(snapshot.val() === 'inactive') self.props.endGame(score)
     })
@@ -425,7 +440,7 @@ class Pz8 extends Component {
 
         <div className='phrase' id='radio-message'>{radioMsg}</div>
 
-
+        <div id='radio-message-ending-overlay'>{radioMsg}</div>
 
         Frequency: {myFreqFromatted}Hz<br/>
 

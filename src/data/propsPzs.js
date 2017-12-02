@@ -162,10 +162,13 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 120
+      roundSec: 60
     },
     desc: 'desc....',
-    instructions: 'instructions....'
+    instructions: 'instructions....',
+    alerts: {
+      nextRoundDelaySec: 5
+    }
   },
   {
     name: 'Pz 9 Switch',
@@ -182,7 +185,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 2,
-      roundSec: 60
+      roundSec: 600
     },
     desc: 'desc....',
     instructions: 'instructions....'

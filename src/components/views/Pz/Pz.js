@@ -122,14 +122,24 @@ class Pz extends Component {
   pzAlert(action, val) {
     let msg = ''
     let type = 'default'
+    let pzProps = propsPzs[this.state.pzIndex]
     if(action === 'roundChange' && val.players && val.players.indexOf(this.state.userID) >= 0) {
       if (val.round=== 0) {
         msg = 'First Round'
-      } else if (val.round < propsPzs[this.state.pzIndex].rounds.numOfRounds - 1 && val.round >= 0) {
+      } else if (val.round < pzProps.rounds.numOfRounds - 1 && val.round >= 0) {
         msg = 'Next Round'
-      } else if (val.round >= propsPzs[this.state.pzIndex].rounds.numOfRounds - 1) {
+      } else if (val.round >= pzProps.rounds.numOfRounds - 1) {
         msg = 'Final Round'
       }
+      let delay = (pzProps.alerts && pzProps.alerts.nextRoundDelaySec) ? pzProps.alerts.nextRoundDelaySec : 0
+      if (msg === 'Next Round' && delay > 0) {
+        let timer = setTimeout(() => {
+          showAlert(msg, type)
+        }, delay * 1000)
+      } else {
+        showAlert(msg, type)
+      }
+      return
     }
 
     if (msg !== '') showAlert(msg, type)
@@ -171,7 +181,8 @@ class Pz extends Component {
       let timeInPast = moment().tz('America/Los_Angeles')
       timeInPast.subtract(1, 's')
       firebase.database().ref('/pzs/' + this.state.pzIndex).update({
-        timeGameEnds: timeInPast.format("kk:mm:ss")
+        timeGameEnds: timeInPast.format("kk:mm:ss"),
+        expired: endGame
       })
     }
   }
@@ -246,6 +257,7 @@ class Pz extends Component {
         user={this.props.user}
         clock={clockImg}
         numOfUsers={(this.state.pz) ? this.state.pz.players.length : 1}
+        expired={this.state.pz.expired}
       />
     } else {
       content = <PzStart

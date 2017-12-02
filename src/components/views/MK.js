@@ -254,6 +254,7 @@ class MK extends Component {
       status: 'active',
       round: 0,
       clock: 0,
+      expired: true,
       timeNextRound: (propsPzs[pzIndex].rounds.numOfRounds > 1) ? timeNextRound.format("kk:mm:ss") : '00:00:00'
     }
     firebase.database().ref('/pzs/' + pzIndex + '/players').once('value').then(function(snapshot){
