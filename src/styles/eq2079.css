@@ -130,7 +130,7 @@ body {
   font: 100 12px/20px "Avenir Next Ultra-Light", Avenir, Sans-serif;
   padding: 1vw;
   margin: 0;
-  opacity: .9; }
+  opacity: .5; }
 
 img {
   border: none;
@@ -1662,20 +1662,18 @@ body.ai-strength-3 {
     display: flex;
     width: 100%;
     margin-bottom: 50px;
-    padding-bottom: 50px;
-    border-bottom: solid 5px #fff; }
+    padding-bottom: 50px; }
     #switch-board-wrapper .switch-groups-wrapper .switch-group .switch {
-      flex-grow: 2; }
+      flex-grow: 2;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center; }
       #switch-board-wrapper .switch-groups-wrapper .switch-group .switch button {
         min-height: 200px;
         min-width: 200px;
         width: 100%;
         border: solid 2px #000;
-        background-color: #fff; }
-      #switch-board-wrapper .switch-groups-wrapper .switch-group .switch.on button {
-        background-color: #fff; }
-      #switch-board-wrapper .switch-groups-wrapper .switch-group .switch.off button {
-        background-color: gray; }
+        background-color: transparent; }
 
 .clear:after {
   content: "";

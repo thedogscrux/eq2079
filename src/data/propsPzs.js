@@ -174,6 +174,7 @@ const propsPzs = [
     name: 'Pz 9 Switch',
     code: 'pz9',
     site: 'Flight Deck',
+    maxPlayers: 6,
     location: {
       lat: 0,
       long: 0
@@ -184,8 +185,8 @@ const propsPzs = [
       left: '25%'
     },
     rounds: {
-      numOfRounds: 2,
-      roundSec: 600
+      numOfRounds: 3,
+      roundSec: 60
     },
     desc: 'desc....',
     instructions: 'instructions....'

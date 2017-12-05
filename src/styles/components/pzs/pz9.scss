@@ -9,24 +9,26 @@
       width: 100%;
       margin-bottom: 50px;
       padding-bottom: 50px;
-      border-bottom: solid 5px #fff;
       .switch {
         flex-grow: 2;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
         button {
           min-height: 200px;
           min-width: 200px;
           width: 100%;
           border: solid 2px #000;
-          background-color: #fff;
+          background-color: transparent;
         }
         &.on {
           button {
-            background-color: #fff;
+            //background-color: #fff;
           }
         }
         &.off {
           button {
-            background-color: gray;
+            //background-color: gray;
           }
         }
       }

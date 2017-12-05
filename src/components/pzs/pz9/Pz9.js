@@ -16,6 +16,13 @@ import Hints from '../../Hints.js'
 
 import imageA00 from './images/imageA00.svg'
 
+import toggle0 from './images/toggle-0.jpg'
+import toggle1 from './images/toggle-1.jpg'
+import knob0 from './images/knob-0.jpg'
+import knob1 from './images/knob-1.jpg'
+import slider0 from './images/slider-0.jpg'
+import slider1 from './images/slider-1.jpg'
+
 const PZ_INDEX = 8
 const PZ_PROPS = propsPzs[PZ_INDEX]
 
@@ -31,8 +38,13 @@ const HINTS = [
   }
 ]
 
-const IMAGE_MAP = new Map([
-    [ 'imageA00', imageA00 ]
+const CONTROL_IMAGE_MAP = new Map([
+    [ 'toggle0', toggle0 ],
+    [ 'toggle1', toggle1 ],
+    [ 'knob0', knob0 ],
+    [ 'knob1', knob1 ],
+    [ 'slider0', slider0 ],
+    [ 'slider1', slider1 ],
 ]);
 
 class Pz9 extends Component {
@@ -226,6 +238,10 @@ class Pz9 extends Component {
 
   // END GAME
 
+  cancelGame() {
+    this.props.endRound(true)
+  }
+
   endRound() {
     this.props.endRound()
   }
@@ -322,7 +338,7 @@ class Pz9 extends Component {
     })
   }
 
-  render(){
+  render() {
 
     // score
     let score = new Score(PZ_INDEX)
@@ -332,20 +348,35 @@ class Pz9 extends Component {
 
     if(this.state.render) {
       let myIndexes =  this.state.rounds[this.state.round].users[this.state.userKey].indexes
+      // show images either randomly or based on index
+      let controlImageIndex = 0
       // get the user switches
       htmlSwitchGroups = this.state.board.table.map( (switchGroup, switchGroupKey) => {
+        let imgType = ''
+        //console.log('controlImageIndex',controlImageIndex);
+        if(controlImageIndex === 0) {
+          imgType = 'toggle'
+        } else if (controlImageIndex === 1){
+          imgType = 'knob'
+        } else {
+          imgType = 'slider'
+        }
         let htmlSwitches = switchGroup.map( (switchControl, switchKey) => {
           // TODO only show my switches indexOf
           if (myIndexes.indexOf(switchKey) === -1) return
           let className = (switchControl) ? 'on' : 'off'
+          let img = CONTROL_IMAGE_MAP.get(imgType + ((switchControl) ? '1' : '0') )
+          let css = { backgroundImage: `url(${img})` }
           return (
-            <div key={switchKey} className={'switch ' + className}>
+            <div key={switchKey} className={'switch ' + className} style={css}>
               <button onClick={() => this.toggleSwitch(switchGroupKey, switchKey)}>{switchKey}</button>
             </div>
           )
         })
+        controlImageIndex = controlImageIndex + 1
         return (<div key={switchGroupKey} className='switch-group'>{htmlSwitches}</div>)
       })
+
 
     }
 
@@ -358,6 +389,7 @@ class Pz9 extends Component {
           userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
           getHint={() => this.getHint()}
         />
+        <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
         <img src={this.state.clock} width="50px" />
 
