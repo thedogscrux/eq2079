@@ -130,7 +130,7 @@ body {
   font: 100 12px/20px "Avenir Next Ultra-Light", Avenir, Sans-serif;
   padding: 1vw;
   margin: 0;
-  opacity: .5; }
+  opacity: .8; }
 
 img {
   border: none;
@@ -1800,6 +1800,23 @@ body.ai-strength-3 {
         width: 100%;
         border: solid 2px #000;
         background-color: transparent; }
+        #switch-board-wrapper .switch-groups-wrapper .switch-group .switch button .hint-text {
+          background-color: #000;
+          border-radius: 30px;
+          padding: 5px;
+          font-weight: 600;
+          text-shadow: 0px 0px 2px #000;
+          font-weight: 600;
+          font-size: 20px;
+          border: solid 2px #fff;
+          width: 30px;
+          height: 30px;
+          margin: auto;
+          line-height: 29px; }
+      #switch-board-wrapper .switch-groups-wrapper .switch-group .switch.on button {
+        color: #60ea60; }
+      #switch-board-wrapper .switch-groups-wrapper .switch-group .switch.off button {
+        color: #f64235; }
 
 .clear:after {
   content: "";

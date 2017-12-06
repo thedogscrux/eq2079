@@ -369,7 +369,7 @@ class Pz9 extends Component {
           let css = { backgroundImage: `url(${img})` }
           return (
             <div key={switchKey} className={'switch ' + className} style={css}>
-              <button onClick={() => this.toggleSwitch(switchGroupKey, switchKey)}>{switchKey}</button>
+              <button onClick={() => this.toggleSwitch(switchGroupKey, switchKey)}><div className='hint-text'>{(switchControl) ? 'ON' : 'OFF'}</div></button>
             </div>
           )
         })
