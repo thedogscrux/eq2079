@@ -31,3 +31,36 @@ body {
     text-align: right;
   }
 }
+
+.ai-upsidedown {
+  transform: rotate(180deg);
+}
+
+// Animations
+
+.ai-flicker {
+  animation-name: ansFlicker;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes ansFlicker {
+  0%   { opacity: 1; }
+  10%   { opacity: 0; }
+  20%   { opacity: 1; }
+  100%   { opacity: 1; }
+}
+
+.ai-throb {
+  animation-name: ansThrob;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes ansThrob {
+  0%   { opacity: 1; }
+  10%   { opacity: 0; }
+  20%   { opacity: 1; }
+  100%   { opacity: 1; }
+}

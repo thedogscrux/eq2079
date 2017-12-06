@@ -385,6 +385,15 @@ class Pz1 extends Component {
         return <div key={key}>round:{round}<div>{htmlInner}</div><hr/></div>
     })
 
+    let pipeBoardClassNames = 'clear'
+    
+    // AI factor
+    if(this.state.aiStrength === 1) {
+      pipeBoardClassNames += ' ai-throb'
+    } else if(this.state.aiStrength >= 2) {
+      pipeBoardClassNames += ' ai-upsidedown ai-throb'
+    }
+
     return(
       <div className='component-wrapper'>
         <AI />
@@ -398,7 +407,7 @@ class Pz1 extends Component {
         />
         <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
-        <div id='pipe-board-wrapper' className='clear'>
+        <div id='pipe-board-wrapper' className={pipeBoardClassNames}>
 
           {Object.keys(this.state.rounds).map((row, rowIndex) => {
 
@@ -453,7 +462,7 @@ class Pz1 extends Component {
               clock = clock0
             }
             return (
-              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex) ? { opacity: '1'} : {border: 'none', pointerEvents: 'none', opacity: '.1'}}>
+              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex) ? { opacity: '1'} : {border: 'none', pointerEvents: 'none', opacity: '.3'}}>
                 <img src={clock} width="50px" />
                 {inner}
               </div>
