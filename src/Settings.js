@@ -14,6 +14,9 @@ const game = {
   hints: {
     allowAfterPzAttempts: 1
   },
+  story: {
+    chapterRanks: false
+  },
   clock: {
     pzLoadingSec: 7
   },

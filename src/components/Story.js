@@ -6,6 +6,7 @@ import 'firebase/database'
 import 'firebase/storage'
 
 import { staticStory } from '../data/static.js'
+import game from '../Settings.js'
 
 const mapStateToProps = (state, props) => {
   return {
@@ -71,24 +72,32 @@ class Story extends Component {
     Dbase Chapter {this.state.dbaseChapter}<br/>
     {console.log('this.state.chapter',this.state.chapter)}
     {console.log('this.state.chapterRank',this.state.chapterRank)}*/
-    let rankMsg = ''
-    if (this.state.chapterRank === 1) {
-      rankMsg = 'Great job!'
-    } else if (this.state.chapterRank === 2) {
-      rankMsg = 'Not bad cadet.'
-    } else if (this.state.chapterRank === 3) {
-      rankMsg = 'Well, at least you completed the mission.'
-    }
 
-    let story = (this.state.chapter === 0) ? staticStory[0] : staticStory[this.state.chapter][this.state.chapterRank-1]
+    let rankMsg = ''
+    let story = ''
+
+    if(game.story.chapterRanks) {
+      // show a rank msg and chapter on the dashboard. make sure there are three msgs in chapter array
+      if (this.state.chapterRank === 1) {
+        rankMsg = 'Great job!'
+      } else if (this.state.chapterRank === 2) {
+        rankMsg = 'Not bad cadet.'
+      } else if (this.state.chapterRank === 3) {
+        rankMsg = 'Well, at least you completed the mission.'
+      }
+
+      story = (this.state.chapter === 0) ? staticStory[0] : staticStory[this.state.chapter][this.state.chapterRank-1]
+    } else {
+      // everybody gets the same chapters
+      story = staticStory[this.state.chapter][0]
+    }
 
     let welcome = (this.state.chapter === 0) ? 'Welcome to your communications center. blah blah...' : ''
 
     return(
       <div id='component-story' className='component-wrapper'>
         {welcome}
-        {rankMsg}
-        <br/>
+        { (rankMsg) ? rankMsg + '/<br/>' : '' }
         {story}
       </div>
     )
