@@ -51,15 +51,14 @@ class AI extends Component {
     let pzScores = this.props.userPzs.map(pz => pz.score)
     let myTotalScore = pzScores.reduce((total, score) => total + score)
     let percentOfTotal = Math.round((myTotalScore / totalGameScore) * 100)
-    //console.log('AI: myTotalScore/totalGameScore/percentOfTotal',myTotalScore,'/',totalGameScore,'/',percentOfTotal);
     let aiStrength = 0
 
-    if(percentOfTotal > game.ai.triggerStrength1AtPercentComplete) {
-      aiStrength = 1
+    if (percentOfTotal > game.ai.triggerStrength3AtPercentComplete) {
+      aiStrength = 3
     } else if (percentOfTotal > game.ai.triggerStrength2AtPercentComplete) {
       aiStrength = 2
-    } else if (percentOfTotal > game.ai.triggerStrength3AtPercentComplete) {
-      aiStrength = 3
+    } else if(percentOfTotal > game.ai.triggerStrength1AtPercentComplete) {
+      aiStrength = 1
     }
 
     return aiStrength
@@ -81,6 +80,8 @@ class AI extends Component {
     } else if (aiStrength === 3) {
       classesFullScreen = 'ai-strength-3'
       document.body.className += ' ' + 'ai-strength-3';
+    } else {
+      document.body.className += ' ' + 'ai-strength-0';
     }
 
     return(
