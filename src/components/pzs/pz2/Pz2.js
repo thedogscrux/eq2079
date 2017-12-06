@@ -519,6 +519,7 @@ const genSettingsPz2 = (props) => {
       ['G00', 'G01', 'G02', 'G03', 'G04', 'G05', 'G06', 'G07', 'G08' ],
       ['H00', 'H01', 'H02', 'H03', 'H04', 'H05', 'H06', 'H07', 'H08' ]
     ]
+    // determine which jigsaw to use
     let maxDifficulty = (round + 1) * 3
     if (maxDifficulty > solution.length) maxDifficulty = solution.length
     let solutionIndex = random.integer(maxDifficulty - 3, maxDifficulty - 1)
@@ -535,7 +536,7 @@ const genSettingsPz2 = (props) => {
     settings.push({
       users: settingsUsers,
       table: [],
-      solution: solution[round]
+      solution: solution[solutionIndex]
     })
   }
   // calc total score
