@@ -7,6 +7,7 @@ import 'firebase/storage'
 
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import { propsPzs } from '../../../data/propsPzs.js'
+import { staticPzEndMsg } from '../../../data/static.js'
 
 import PzStart from './PzStart'
 
@@ -84,9 +85,13 @@ class PzScore extends Component {
     return(
       <div id='component-pz-score' className='component-wrapper'>
         {htmlAdmin}
+        <h2>Score</h2>
+        {staticPzEndMsg[this.state.pz.rank-1]}<br/>
+        {propsPzs[this.state.pzIndex].rankMsg[this.state.pz.rank-1]}<br/>
+
         my score: {(this.state.pz) ? this.state.pz.score : ''}<br/>
         max score: {this.state.maxScore}<br/>
-        my attempts: {(this.state.pz) ? this.state.pz.attempts : ''}
+
         {/*}{playAgainStart}*/}
       </div>
     )

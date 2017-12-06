@@ -13,9 +13,12 @@ import { setUserPz } from '../../../actions/userActions'
 
 import PzStart from './PzStart'
 import PzScore from './PzScore'
+
+import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import AI from '../../AI'
 import { showAlert } from '../../Alert'
 
+import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 
 import pz1 from '../../pzs/pz1/Pz1'
@@ -150,6 +153,7 @@ class Pz extends Component {
   endRound(endGame = false) {
     //set the round # and time of next round (if any)
     let newRoundNum = this.state.pz.round+1
+    this.setState({ endGame: endGame })
 
     if (newRoundNum === propsPzs[this.state.pzIndex].rounds.numOfRounds - 1 && !endGame) {
       console.log('*** FINAL ROUND ***');
@@ -191,27 +195,33 @@ class Pz extends Component {
     console.log('*** END GAME ***');
     let attempts = this.props.user.pzs[this.state.pzIndex].attempts + 1
     let oldScore = this.props.user.pzs[this.state.pzIndex].score
-    let totalScore = this.state.pz.totalScore
-    let rank = (score/totalScore > .50) ? ( (score/totalScore > .85) ? 1 : 2 ) : 3
+    // add user points to base (thanks-for-playing) points
+      let basePoints = game.score.pz - (this.state.pz.rounds.numOfRounds * game.score.round)
+      let scoreUtil = new Score(this.state.pzIndex)
+      let maxScore = scoreUtil.calcMaxScore(this.props.user.pzs[this.state.pzIndex].hints, 1)
+      let newScore = ((basePoints + score) > maxScore) ? maxScore : basePoints + score
+      if (this.state.endGame) newScore = 1 // give them one point for finding the Pz
+    let totalScore = game.score.pz // use method 2 flat score, as opposed to: this.state.pz.totalScore
+    let rank = (newScore/totalScore > .50) ? ( (newScore/totalScore > .85) ? 1 : 2 ) : 3
     let chapter = (attempts === 1) ? this.props.user.chapter + 1 : this.props.user.chapter
     let pzCode = this.state.pzCode
     let refPz = '/users/' + this.props.user.id + '/pzs/' + this.state.pzIndex
     let refUser = '/users/' + this.props.user.id
-    if(attempts > 1 && score <= oldScore) {
-      console.log('You didnt beat your last score of: ' + oldScore)
-      score = oldScore
+    if(attempts > 1 && newScore <= oldScore) {
+      //showAlert('You didnt beat your last score')
+      newScore = oldScore
     }
     let val = {
       attempts: attempts,
       code: pzCode,
-      score: score/totalScore,
+      score: newScore,
       rank: rank
     }
     this.props.setUserPz(this.state.pzIndex, val) // update app state for user pz
     this.forceUpdate() // because new attempts value isnt recognized
     // update the user score
     firebase.database().ref(refPz).update({
-      score: score,
+      score: newScore,
       code: pzCode,
       attempts: attempts,
       rank: rank
