@@ -3,7 +3,7 @@
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -66,7 +66,7 @@
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -157,7 +157,7 @@ a:hover {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -239,7 +239,7 @@ button {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -309,7 +309,7 @@ button {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -412,7 +412,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -668,7 +668,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -744,7 +744,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -854,7 +854,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -981,7 +981,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -1085,7 +1085,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -1191,7 +1191,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -1296,7 +1296,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -1474,7 +1474,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -1574,7 +1574,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -1697,7 +1697,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
@@ -1759,31 +1759,49 @@ body.ai-strength-3 {
   width: 91vw;
   max-width: 100%;
   display: flex;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  justify-content: center; }
   #code-board-wrapper .table-wrapper .tile {
-    border: solid 0.5px rgba(255, 255, 255, 0.5);
     height: 5vw;
     width: 5vw;
     max-width: 150px;
     max-height: 150px;
     background-size: contain;
     display: flex;
-    font-weight: 600; }
+    font-weight: 600;
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 30px; }
     #code-board-wrapper .table-wrapper .tile.code {
-      color: rgba(255, 255, 255, 0.5);
-      font-weight: 400; }
-    #code-board-wrapper .table-wrapper .tile button {
+      background-color: #fff;
+      color: #000;
+      font-size: 12px; }
+    #code-board-wrapper .table-wrapper .tile.space {
+      background-color: transparent;
       border: none;
+      display: block;
+      width: 100%;
+      max-width: 100%; }
+    #code-board-wrapper .table-wrapper .tile button {
+      border: solid 0.5px rgba(255, 255, 255, 0.5);
       animation-duration: 3s;
       animation-iteration-count: infinite;
       animation-name: pulse;
       width: 100%;
-      padding: 0; }
+      padding: 0;
+      font-size: 30px;
+      font-weight: 600;
+      background-color: #000;
+      color: #fff; }
 
 #code-board-wrapper .my-tiles-wrapper {
   margin: 20px auto;
   display: flex;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  justify-content: center; }
   #code-board-wrapper .my-tiles-wrapper .tile {
     display: flex;
     background-size: contain;
@@ -1796,7 +1814,8 @@ body.ai-strength-3 {
       width: 30px;
       padding: 0px;
       color: #fff;
-      font-weight: 600; }
+      font-weight: 600;
+      border: solid 1px rgba(255, 255, 255, 0.5); }
       #code-board-wrapper .my-tiles-wrapper .tile button:disabled {
         background-color: rgba(255, 0, 0, 0.5); }
 

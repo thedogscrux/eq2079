@@ -6,6 +6,8 @@ import 'firebase/storage'
 
 import Random from 'random-js'
 
+import AI from '../../AI'
+
 import { shuffleArray, testIfEqualArrays } from '../../../utils/Common.js'
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
@@ -90,8 +92,9 @@ class Pz10 extends Component {
       hints: props.user.pzs[PZ_INDEX].hints,
       userKey: -1,
       render: false,
+      aiStrength: props.user.ai.strength,
       score: {
-        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, this.props.numOfUsers),
+        max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
         multi: 0 * game.score.mutliplayerMultiplier,
         hintCost: score.calcHintCost(PZ_INDEX),
         round: 0,
@@ -255,6 +258,10 @@ class Pz10 extends Component {
 
   // END GAME
 
+  cancelGame() {
+    this.props.endRound(true)
+  }
+
   endRound() {
     this.props.endRound() // parent component ends the round
   }
@@ -388,7 +395,8 @@ class Pz10 extends Component {
 
         // insert tile in table array
         if (tile === ' ') {
-          innerHtml = '[space]'
+          innerHtml = '' // <!-- space -->
+          className += ' space'
         } else if (tile === '') {
           className += ' code'
           innerHtml = (cipherIndex != -1) ? CIPHER[cipherIndex][1] : '*'
@@ -442,6 +450,7 @@ class Pz10 extends Component {
           userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
           getHint={() => this.getHint()}
         />
+        <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
         <img src={this.state.clock} width="50px" />
 
@@ -479,7 +488,12 @@ const genSettingsPz10 = (props) => {
     // DEAL ITEMS to users
     let userIndex = 0
     let alphabet = CIPHER.map(code => code[0])
-    let shuffledCipher = shuffleArray(alphabet)
+    let shuffledCipher = []
+    if (round < 1) {
+      shuffledCipher = alphabet
+    } else {
+      shuffledCipher = shuffleArray(alphabet)
+    }
     shuffledCipher.forEach((index, key) => {
         settingsUsers[userIndex].tiles.push(shuffledCipher[key][0])
         userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
