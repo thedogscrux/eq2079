@@ -421,15 +421,17 @@ const genSettingsPz9 = (props) => {
     // SHUFFLE ITEMS and determine solution
     // SETUP TABLE
     let table = []
-    let numOfSwitches = (settingsUsers.length <= 2) ? 2 : settingsUsers.length-1
+    let numOfSwitches = (settingsUsers.length <= 2) ? 4 : settingsUsers.length
     let startingSwitch = random.integer(0, numOfSwitches)
     let numOfSwitchGroups = 1
+
     if(round < 1) {
       numOfSwitchGroups = 1
     } else if (round < 2) {
       numOfSwitchGroups = 2
     } else {
       numOfSwitchGroups = 3
+      numOfSwitches = settingsUsers.length * 2
     }
     for(var i=1; i<=numOfSwitchGroups; i++) {
       table.push([])
@@ -439,7 +441,7 @@ const genSettingsPz9 = (props) => {
     }
     // DEAL ITEMS to users
     let userIndex = 0
-    for(var i=0; i<=numOfSwitches; i++) {
+    for(var i=0; i<=numOfSwitches-1; i++) {
       settingsUsers[userIndex].indexes.push(i)
       userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
     }

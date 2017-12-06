@@ -186,7 +186,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 600
+      roundSec: 60
     },
     desc: 'desc....',
     instructions: 'instructions....'
