@@ -78,8 +78,8 @@
         #soduko-board-wrapper #grid .row .col .contents img {
           max-width: 100%; }
   #soduko-board-wrapper #grid.table-size-3 .row .col {
-    width: 12.5vw;
-    height: 12.5vw; }
+    width: 25vw;
+    height: 25vw; }
   #soduko-board-wrapper #grid.table-size-8 .row .col {
     width: 16.66vw;
     height: 16.66vw; }

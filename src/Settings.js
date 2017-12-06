@@ -3,6 +3,7 @@
 const game = {
   active: true,
   score: {
+    flat: true,
     launch: 100,
     hintCost: 0.99,
     mutliplayerMultiplier: 0.5,
@@ -21,9 +22,9 @@ const game = {
     pzLoadingSec: 7
   },
   ai: {
-    triggerStrength1AtPercentComplete: 40,
-    triggerStrength2AtPercentComplete: 55,
-    triggerStrength3AtPercentComplete: 70
+    triggerStrength1AtPercentComplete: 60,
+    triggerStrength2AtPercentComplete: 75,
+    triggerStrength3AtPercentComplete: 90
   }
 }
 

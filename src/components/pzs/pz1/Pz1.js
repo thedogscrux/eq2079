@@ -112,14 +112,16 @@ class Pz1 extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
+      let newImage = this.state.selectedImgSrc
       if (this.props.round != nextProps.round) {
         this.updateStateScore()
         this.getMyUserKey(nextProps.round)
+        newImage = ''
       }
       this.setState({
         round: nextProps.round,
         clock: nextProps.clock,
-        selectedImgSrc: '',
+        selectedImgSrc: newImage,
         valid: false
       })
     }
@@ -386,7 +388,7 @@ class Pz1 extends Component {
     })
 
     let pipeBoardClassNames = 'clear'
-    
+
     // AI factor
     if(this.state.aiStrength === 1) {
       pipeBoardClassNames += ' ai-throb'

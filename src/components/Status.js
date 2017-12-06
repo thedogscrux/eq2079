@@ -7,10 +7,12 @@ import 'firebase/storage'
 
 import { staticLaunches } from '../data/static.js'
 import game from '../Settings.js'
+import { propsPzs } from '../data/propsPzs.js'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    debug: state.admin.debug
+    debug: state.admin.debug,
+    userPzs: state.user.pzs
   }
 }
 
@@ -64,6 +66,13 @@ class Status extends Component {
 
   render(){
 
+    // calc my total score
+    let pzScores = this.props.userPzs.map(pz => pz.score)
+    let myTotalScore = pzScores.reduce((total, score) => total + score)
+
+    // calc total launc score
+    let totalPossibleUserScore = (game.score.flat) ? game.score.pz * propsPzs.length : ''
+
     // admin stuff
     let admin = ''
     if (this.props.debug) {
@@ -79,6 +88,7 @@ class Status extends Component {
 
     return(
       <div id='component-status' className='component-wrapper'>
+        My Score: {myTotalScore}/{totalPossibleUserScore}<br/>
         {this.getLaunchStatus()}
         {admin}
       </div>

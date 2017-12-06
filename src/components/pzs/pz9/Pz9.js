@@ -369,7 +369,9 @@ class Pz9 extends Component {
           let css = { backgroundImage: `url(${img})` }
           return (
             <div key={switchKey} className={'switch ' + className} style={css}>
-              <button onClick={() => this.toggleSwitch(switchGroupKey, switchKey)}><div className='hint-text'>{(switchControl) ? 'ON' : 'OFF'}</div></button>
+              <button onClick={() => this.toggleSwitch(switchGroupKey, switchKey)}>
+                { (this.state.hints > 1) ? <div className='hint-text'>{(switchControl) ? 'ON' : 'OFF'}</div> : '' }
+              </button>
             </div>
           )
         })
@@ -421,21 +423,32 @@ const genSettingsPz9 = (props) => {
     // SHUFFLE ITEMS and determine solution
     // SETUP TABLE
     let table = []
-    let numOfSwitches = (settingsUsers.length <= 2) ? 4 : settingsUsers.length
+    let numOfSwitches = 0
+    if(round === 0) {
+
+
+    } else {
+
+    }
     let startingSwitch = random.integer(0, numOfSwitches)
     let numOfSwitchGroups = 1
 
     if(round < 1) {
       numOfSwitchGroups = 1
+      numOfSwitches = (settingsUsers.length <= 2) ? 4 : settingsUsers.length
+      if (settingsUsers.length === 1) numOfSwitches = 3
     } else if (round < 2) {
       numOfSwitchGroups = 2
+      numOfSwitches = (settingsUsers.length <= 2) ? 4 : settingsUsers.length
+      if (settingsUsers.length === 1) numOfSwitches = 4
     } else {
       numOfSwitchGroups = 3
       numOfSwitches = settingsUsers.length * 2
+      if (settingsUsers.length === 1) numOfSwitches = 5
     }
     for(var i=1; i<=numOfSwitchGroups; i++) {
       table.push([])
-      for(var j=0; j<=numOfSwitches; j++) {
+      for(var j=0; j<=numOfSwitches-1; j++) {
         table[i-1].push((j === startingSwitch) ? true : false)
       }
     }

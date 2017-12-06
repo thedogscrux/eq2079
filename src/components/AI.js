@@ -67,21 +67,21 @@ class AI extends Component {
   render(){
     let classesFullScreen = ''
     let aiStrength = this.calcAIStrength()
-
+    
     // set the css classses based on AI strength
     if(aiStrength === 1) {
       classesFullScreen = 'ai-strength-1'
-      document.body.className += ' ' + 'ai-strength-1';
+      document.body.classList.add('ai-strength-1');
 
     } else if (aiStrength === 2) {
       classesFullScreen = 'ai-strength-2'
-      document.body.className += ' ' + 'ai-strength-2';
+      document.body.classList.add('ai-strength-2');
 
     } else if (aiStrength === 3) {
       classesFullScreen = 'ai-strength-3'
-      document.body.className += ' ' + 'ai-strength-3';
+      document.body.classList.add('ai-strength-3');
     } else {
-      document.body.className += ' ' + 'ai-strength-0';
+      document.body.classList.add('ai-strength-0');
     }
 
     return(
