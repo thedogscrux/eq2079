@@ -22,6 +22,14 @@ import knob0 from './images/knob-0.jpg'
 import knob1 from './images/knob-1.jpg'
 import slider0 from './images/slider-0.jpg'
 import slider1 from './images/slider-1.jpg'
+import dialB0 from './images/dialB-0.jpg'
+import dialB1 from './images/dialB-1.jpg'
+import dialC0 from './images/dialC-0.jpg'
+import dialC1 from './images/dialC-1.jpg'
+import knobB0 from './images/knobB-0.jpg'
+import knobB1 from './images/knobB-1.jpg'
+import button0 from './images/button-0.jpg'
+import button1 from './images/button-1.jpg'
 
 const PZ_INDEX = 8
 const PZ_PROPS = propsPzs[PZ_INDEX]
@@ -38,6 +46,10 @@ const HINTS = [
   }
 ]
 
+const CONTROL_STYLES = [
+  'toggle', 'knob', 'slider', 'dialB', 'dialC', 'knobB', 'button'
+]
+
 const CONTROL_IMAGE_MAP = new Map([
     [ 'toggle0', toggle0 ],
     [ 'toggle1', toggle1 ],
@@ -45,6 +57,14 @@ const CONTROL_IMAGE_MAP = new Map([
     [ 'knob1', knob1 ],
     [ 'slider0', slider0 ],
     [ 'slider1', slider1 ],
+    [ 'dialB0', dialB0 ],
+    [ 'dialB1', dialB1 ],
+    [ 'dialC0', dialC0 ],
+    [ 'dialC1', dialC1 ],
+    [ 'knobB0', knobB0 ],
+    [ 'knobB1', knobB1 ],
+    [ 'button0', button0 ],
+    [ 'button1', button1 ],
 ]);
 
 class Pz9 extends Component {
@@ -79,6 +99,7 @@ class Pz9 extends Component {
       },
       rounds: [
         {
+          controlStyles: [ ],
           table: [ ],
           solution: [ ],
           users: [
@@ -348,19 +369,13 @@ class Pz9 extends Component {
 
     if(this.state.render) {
       let myIndexes =  this.state.rounds[this.state.round].users[this.state.userKey].indexes
+
       // show images either randomly or based on index
       let controlImageIndex = 0
       // get the user switches
       htmlSwitchGroups = this.state.board.table.map( (switchGroup, switchGroupKey) => {
-        let imgType = ''
-        //console.log('controlImageIndex',controlImageIndex);
-        if(controlImageIndex === 0) {
-          imgType = 'toggle'
-        } else if (controlImageIndex === 1){
-          imgType = 'knob'
-        } else {
-          imgType = 'slider'
-        }
+        let imgType = CONTROL_STYLES[ this.state.rounds[this.state.round].controlStyles[switchGroupKey] ]
+
         let htmlSwitches = switchGroup.map( (switchControl, switchKey) => {
           // TODO only show my switches indexOf
           if (myIndexes.indexOf(switchKey) === -1) return
@@ -419,6 +434,7 @@ const genSettingsPz9 = (props) => {
         }
       )
     })
+
     // settings = rounds[#][users][#] (without user data)
     // SHUFFLE ITEMS and determine solution
     // SETUP TABLE
@@ -452,16 +468,30 @@ const genSettingsPz9 = (props) => {
         table[i-1].push((j === startingSwitch) ? true : false)
       }
     }
+
     // DEAL ITEMS to users
     let userIndex = 0
     for(var i=0; i<=numOfSwitches-1; i++) {
       settingsUsers[userIndex].indexes.push(i)
       userIndex = (userIndex < props.players.length-1) ? userIndex + 1 : 0
     }
+
+    // SET CONTROL STYLES
+    let controlStyles = []
+    for(var i=0; i<=numOfSwitchGroups-1;) {
+      let styleKey = random.integer(0, CONTROL_STYLES.length-1)
+      if (controlStyles.indexOf(styleKey) === -1) {
+        // dont use the same control style more than once
+        controlStyles.push(styleKey)
+        i++
+      }
+    }
+
     // STORE settings
     settings.push({
       users: settingsUsers,
-      table: table
+      table: table,
+      controlStyles: controlStyles
     })
 
   }
