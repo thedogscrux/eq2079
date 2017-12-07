@@ -236,7 +236,8 @@ class Pz extends Component {
   htmlPzInfo() {
     return(
       <div>
-        <h1>{this.state.pz.name}</h1>
+        <h1>{propsPzs[this.state.pzIndex].title}</h1>
+        {propsPzs[this.state.pzIndex].site}<br/>
         {propsPzs[this.state.pzIndex].desc}<br/>
         {propsPzs[this.state.pzIndex].instructions}
       </div>

@@ -8,7 +8,20 @@ import { staticLaunches, staticUsers } from '../../data/static.js'
 import game from '../../Settings.js'
 import { propsPzs } from '../../data/propsPzs.js'
 
+import video00 from '../../video/00.mp4'
+import video01 from '../../video/01.mp4'
+import video02 from '../../video/02.mp4'
+import video03 from '../../video/03.mp4'
+
+const VIDEO_CHAPTERS = [
+  video00,
+  video01,
+  video02,
+  video03
+]
+
 const LEADERBAR_COLORS = [
+  'white',
   'red',
   'yellow',
   'cyan',
@@ -29,7 +42,8 @@ class Projector extends Component {
       launches: [],
       users: [],
       pzs: [],
-      render: false
+      render: false,
+      videoChapter: 0
     }
   }
 
@@ -79,7 +93,14 @@ class Projector extends Component {
     if (activeLaunch.length <= 0) return
     activeLaunch = activeLaunch[0]
     activeLaunch.totalScore = this.calcTotalLaunchScore()
-    this.setState({ activeLaunch: activeLaunch })
+    // update video chapter
+    let videoBreakPoints = game.score.launch / VIDEO_CHAPTERS.length
+    let videoChapter = Math.round(this.calcTotalLaunchScore() / videoBreakPoints)
+    if(activeLaunch.players > 0 && videoChapter === 0) videoChapter = 1
+    this.setState({
+      activeLaunch: activeLaunch,
+      videoChapter: videoChapter
+     })
   }
 
   updateStateUsers(users) {
@@ -100,7 +121,7 @@ class Projector extends Component {
     let html = ''
     let launchId = ''
     return(
-      <div>
+      <div id='active-launch-stats'>
         Start: {this.state.activeLaunch.start}<br/>
         Players: {this.state.activeLaunch.players}<br/>
         Total Score: {this.state.activeLaunch.totalScore} / {game.score.launch}<br/>
@@ -163,7 +184,7 @@ class Projector extends Component {
       // get bar info
       let cssBar = {}
       cssBar.backgroundColor = LEADERBAR_COLORS[colorIndex]
-      colorIndex = (colorIndex >= LEADERBAR_COLORS.length - 1) ? 0 : colorIndex + 1
+      //colorIndex = (colorIndex >= LEADERBAR_COLORS.length - 1) ? 0 : colorIndex + 1
       return(
         <div key={key} className='user' style={cssUser}>
           <div className='bar-segment' style={cssBar}></div>
@@ -171,7 +192,19 @@ class Projector extends Component {
         </div>
       )
     })
-    return html
+    return (
+      <div id='leaderbar'>{html}</div>
+    )
+  }
+
+  htmlVideo() {
+     return(
+       <div id='video-wrapper'>
+         <video src={VIDEO_CHAPTERS[this.state.videoChapter]} autoPlay loop poster="posterimage.jpg">
+           No browser, no video!
+         </video>
+       </div>
+     )
   }
 
   render(){
@@ -179,27 +212,26 @@ class Projector extends Component {
     let htmlLaunchStatus = ''
     let htmlLeaderbar = ''
     let htmlPastLaunches = ''
+    let htmlVideo = ''
 
-    if(this.state.render) {
+    //if(this.state.render) {
       console.log('updating...');
       htmlLaunchStatus = this.getLaunchStatus()
       htmlLeaderbar = this.htmlLeaderbar()
       htmlPastLaunches = this.getPastLaunches()
-    }
+      htmlVideo = this.htmlVideo()
+    //}
 
     return(
       <div id='component-projector'>
-        <h1>Projector</h1>
-
         <div id='status-wrapper'>
-          <div id='active-launch-stats'>{htmlLaunchStatus}</div>
-          <div id='leaderbar'>{htmlLeaderbar}</div>
+          {htmlLaunchStatus}
+          {htmlLeaderbar}
+          {htmlVideo}
         </div>
 
-
-
-        <h2>Past Launches</h2>
-        {htmlPastLaunches}
+        {/*}<h2>Past Launches</h2>
+        {htmlPastLaunches}*/}
       </div>
     )
   }

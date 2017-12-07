@@ -77,11 +77,13 @@
 #component-projector #status-wrapper {
   display: flex;
   flex-direction: row;
-  padding: 1vw; }
+  position: relative;
+  height: 100vh; }
   #component-projector #status-wrapper #active-launch-stats {
     padding: 1vw;
     flex-grow: 1;
-    background-color: rgba(255, 255, 255, 0.3); }
+    position: relative;
+    z-index: 10; }
   #component-projector #status-wrapper #leaderbar {
     padding: 1vw;
     border: solid #fff 1px;
@@ -93,7 +95,9 @@
     min-height: 300px;
     min-width: 20vw;
     justify-content: flex-end;
-    padding: 0 5px 0; }
+    padding: 0 5px 0;
+    position: relative;
+    z-index: 10; }
     #component-projector #status-wrapper #leaderbar .user {
       line-height: 16px;
       min-height: 16px;
@@ -107,3 +111,10 @@
       #component-projector #status-wrapper #leaderbar .user .text {
         flex-grow: 1;
         text-align: right; }
+  #component-projector #status-wrapper #video-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0; }
+    #component-projector #status-wrapper #video-wrapper video {
+      width: 98vw;
+      height: 98vh; }

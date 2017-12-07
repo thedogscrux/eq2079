@@ -19,11 +19,14 @@
   #status-wrapper {
     display: flex;
     flex-direction: row;
-    padding: 1vw;
+    position: relative;
+    height: 100vh;
     #active-launch-stats {
       padding: 1vw;
       flex-grow: 1;
-      background-color: rgba(255, 255, 255, .3);
+      //background-color: rgba(255, 255, 255, .3);
+      position: relative;
+      z-index: 10;
     }
     #leaderbar {
       padding: 1vw;
@@ -37,6 +40,8 @@
       min-width: 20vw;
       justify-content: flex-end;
       padding: 0 5px 0;
+      position: relative;
+      z-index: 10;
       .user {
         line-height: 16px;
         min-height: 16px;
@@ -52,6 +57,17 @@
           flex-grow: 1;
           text-align: right;
         }
+      }
+    }
+    #video-wrapper {
+      //border: solid #fff 1px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      video {
+        //border: solid red 1px;
+        width: 98vw;
+        height: 98vh;
       }
     }
 
