@@ -5,10 +5,14 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
+import moment from 'moment'
+import tz from 'moment-timezone'
+
 import { staticLocMK, staticPzs } from '../data/static.js'
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    userId: state.user.id,
     debug: state.admin.debug
   }
 }
@@ -117,6 +121,7 @@ class Map extends Component {
       // TODO add my coords to firebase for MK to see
       let sizePx = 25
       let translateCenter = `translate(-${sizePx/2}px,-${sizePx/2}px)`
+      this.saveLocation()
       return(
         <div
             className='pz'
@@ -136,6 +141,27 @@ class Map extends Component {
       return
     }
 
+  }
+
+  saveLocation() {
+    let userId = this.props.userId
+    let timeNow = moment().tz('America/Los_Angeles')
+    let location = {
+      longitude: this.state.geoLoc.longitude,
+      latitude: this.state.geoLoc.latitude,
+      time: timeNow.format('kk:mm:ss')
+    }
+    firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+      if(timeNow.diff(moment(snapshot.val().pathUpdated, 'kk:mm:ss'), 'minutes') > 10) {
+        // if ten mins has past since last checking, save location
+        let newPaths = snapshot.val().paths
+        newPaths.push(location)
+        firebase.database().ref('/users/' + userId).update({
+          pathUpdated: timeNow.format('kk:mm:ss'),
+          paths: newPaths
+        })
+      }
+    })
   }
 
   getPzs() {

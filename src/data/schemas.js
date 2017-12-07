@@ -20,11 +20,20 @@ const schemaUser = {
     lat: 0,
     long: 0
   },
+  pathUpdated: '00:00:00',
+  paths: [
+    {
+      time: '00:00:00',
+      lat: 0,
+      long: 0
+    }
+  ],
   pzs: [
     {
       name: '',
       attempts: 0,
-      score: 0.00
+      score: 0.00,
+      lastAttempt: '00:00:00'
     }
   ]
 }

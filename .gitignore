@@ -21,3 +21,5 @@ yarn-error.log*
 
 # configs
 src/config/*
+
+.mp4
