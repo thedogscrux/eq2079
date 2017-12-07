@@ -57,6 +57,25 @@ let CONTROLS = [
   'open', 'close'
 ]
 
+const ITEMS = [
+  {
+    color: 'blue',
+    valid: true
+  },
+  {
+    color: 'red',
+    valid: false
+  },
+  {
+    color: 'yellow',
+    valid: false
+  },
+  {
+    color: 'green',
+    valid: false
+  }
+]
+
 class Pz7 extends Component {
   constructor(props){
     super(props)
@@ -99,11 +118,15 @@ class Pz7 extends Component {
             { name: 'open', userId: '' },
             { name: 'close', userId: '' }
           ],
-          item: {
-            x: 0,
-            y: 0,
-            status: 'free | captured | bay'
-          },
+          items: [
+            {
+              x: 0,
+              y: 0,
+              status: 'free | captured | bay',
+              valid: false,
+              color: 'blue'
+            },
+          ],
           bay: {
             x: 0,
             y: 0,
@@ -385,30 +408,47 @@ class Pz7 extends Component {
         break;
     }
 
-    // check item status
-    let armAboveItem = (Math.abs(newTable.arm.x - newTable.item.x) <= 5 && Math.abs(newTable.arm.y - newTable.item.y) <= 5) ? true : false
+    // get any items within range
+    let itemsInRange = []
+    newTable.items.forEach( (item, key) => {
+      let newItem = item
+      newItem.key = key
+      if (Math.abs(newTable.arm.x - item.x) <= 5 && Math.abs(newTable.arm.y - item.y) <= 5) {
+        // arm above item
+        itemsInRange.push(newItem)
+      } else if (!newTable.arm.open  && item.status === 'captured') {
+        // item moving with arm
+        itemsInRange.push(newItem)
+      }
+    })
+
+    // is arm above bay?
     let armAboveBay = (Math.abs(newTable.arm.x - newTable.bay.x) <= 10 && Math.abs(newTable.arm.y - newTable.bay.y) <= 10) ? true : false
-    if(armAboveItem && !newTable.arm.open && armOpen) {
-      // item isnewly  captured ( above the item, previous open and now closed )
-      newTable.item.status = 'captured'
-    } else if (!newTable.arm.open  && this.state.board.table.item.status === 'captured') {
-      // item is moving with arm
-      newTable.item.x = newTable.arm.x
-      newTable.item.y = newTable.arm.y
-    } else if(!armOpen && newTable.arm.open && armAboveBay && newTable.item.status === 'captured') {
-      // item has been dropped in bay
-      newTable.item.status = 'bay'
-      itemInBay = true
-      newTable.bay.itemCount = ++newTable.bay.itemCount
-    } else {
-      this.state.board.table.item.status = 'free'
-    }
+
+    // decide what to do with items in range
+    itemsInRange.forEach( (item, key) => {
+      if(!newTable.arm.open && armOpen) {
+        // item isnewly  captured ( above the item, previous open and now closed )
+        newTable.items[item.key].status = 'captured'
+      } else if (!newTable.arm.open  && this.state.board.table.items[item.key].status === 'captured') {
+        // item is moving with arm
+        newTable.items[item.key].x = newTable.arm.x
+        newTable.items[item.key].y = newTable.arm.y
+      } else if(!armOpen && newTable.arm.open && armAboveBay && item.status === 'captured') {
+        // item has been dropped in bay
+        newTable.items[item.key].status = 'bay'
+        if (item.valid) itemInBay = true
+        newTable.bay.itemCount = ++newTable.bay.itemCount
+      } else {
+        newTable.items[item.key].status = 'free'
+      }
+    })
 
     // update table
 
     // UPDATE SCORE: by checking if all my items are in the correct position
       // loop thru all my  items, then loop thru all items on table to check
-      let allMyItemsValid = true
+      let allMyItemsValid = itemInBay
       // if its equal to the number of items a user needs for solution, give em the points
       //allMyItemsValid = (userItemsCount === this.state.rounds[this.state.round].users[this.state.userKey].solutionItemCount[this.state.userKey]) ? true : false
       // if all my items are valid, give me the round points
@@ -428,9 +468,14 @@ class Pz7 extends Component {
       // if item is placed in bay, generate a new item
       if (bayItemCount != newTable.bay.itemCount) {
         let random = new Random(Random.engines.mt19937().autoSeed())
-        newTable.item.x = random.integer(MIN_X, MAX_X)
-        newTable.item.y = random.integer(MIN_Y, MAX_Y)
-        newTable.item.status = 'bay'
+        let newItem = {
+          x: random.integer(MIN_X, MAX_X),
+          y: random.integer(MIN_Y, MAX_Y),
+          status: 'free',
+          color: ITEMS[random.integer(1, ITEMS.length-1)].color
+        }
+        newTable.items.push(newItem)
+        //newTable.item.status = 'bay'
       }
       this.setState({
         board: {
@@ -439,7 +484,7 @@ class Pz7 extends Component {
         }
       })
       // update DB if needed
-      if(bayItemCount === 0 && newTable.bay.itemCount >= 1) {
+      if(bayItemCount != newTable.bay.itemCount && newTable.bay.itemCount >= 1) {
         // if this is my first item in bay, check if ending round for all
         firebase.database().ref(refUser).update({
           itemCount: newTable.bay.itemCount,
@@ -459,11 +504,6 @@ class Pz7 extends Component {
               }
             })
           }
-        })
-      } else if(bayItemCount != newTable.bay.itemCount) {
-        // just add an item to my bay
-        firebase.database().ref(refUser).update({
-          itemCount: newTable.bay.itemCount
         })
       }
       return
@@ -508,11 +548,12 @@ class Pz7 extends Component {
     let classNamesItem = ''
 
     let htmlControls = ''
+    let htmlItems = ''
 
     if(this.state.render && this.state.board.table.controls) {
 
       let arm = this.state.board.table.arm
-      let item = this.state.board.table.item
+      let items = this.state.board.table.items
       let bay = this.state.board.table.bay
 
       // get my controls
@@ -550,13 +591,22 @@ class Pz7 extends Component {
       }
       classNamesArm = (arm.open) ? 'open' : ''
 
-      // get the item coords
-      // if its in the arm, make it match the arm
-      styleItem = {
-        bottom: item.y + 'px',
-        left: item.x + 'px'
-      }
-      classNamesItem = (item.status === 'captured') ? 'captured' : ''
+      // get the items
+      htmlItems = items.map( (item, key) => {
+
+        // get the item coords
+        // if its in the arm, make it match the arm
+        styleItem = {
+          bottom: item.y + 'px',
+          left: item.x + 'px'
+        }
+        classNamesItem = (item.status === 'captured') ? 'captured' : ''
+        classNamesItem += (' item color-' + item.color)
+
+        return(
+          <div key={key} className={'element ' + classNamesItem} id={(item.valid) ? 'item-valid' : ''} style={styleItem} ></div>
+        )
+      })
 
       // get the bay
       styleBay = {
@@ -585,7 +635,7 @@ class Pz7 extends Component {
 
         <div id='table'>
           <div className={'element ' + classNamesArm} id='arm' style={styleArm} ></div>
-          <div className={'element ' + classNamesItem} id='item' style={styleItem} ></div>
+          {htmlItems}
           <div className='element' id='bay' style={styleBay} >{bayItemCount}</div>
         </div>
       </div>
@@ -644,6 +694,26 @@ const genSettingsPz7 = (props) => {
       })
     }
 
+    // BUILD ITEMS
+    let items = []
+    let numOfItems = (round === 0) ? 1 : (round === 1) ? 3 : 5
+    // add the main valid blue item
+    items.push({
+      x: random.integer(MIN_X, MAX_X),
+      y: random.integer(MIN_Y, MAX_Y),
+      status: 'free',
+      color: ITEMS[0].color,
+      valid: true
+    })
+    for(var i=0; i<numOfItems; i++) {
+      items.push({
+        x: random.integer(MIN_X, MAX_X),
+        y: random.integer(MIN_Y, MAX_Y),
+        status: 'free',
+        color: ITEMS[random.integer(1, ITEMS.length-1)].color
+      })
+    }
+
     // SETUP TABLE
     let table = {
       arm: {
@@ -652,11 +722,7 @@ const genSettingsPz7 = (props) => {
         open: false
       },
       controls: {},
-      item: {
-        x: random.integer(MIN_X, MAX_X),
-        y: random.integer(MIN_Y, MAX_Y),
-        status: 'free'
-      },
+      items: items,
       bay: {
         x: random.integer(MIN_X, MAX_X),
         y: random.integer(MIN_Y, MAX_Y),

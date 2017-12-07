@@ -1590,13 +1590,32 @@ body.ai-strength-3 {
     #arm-board-wrapper #table #arm.open {
       height: 20px;
       width: 20px; }
-  #arm-board-wrapper #table #item {
+  #arm-board-wrapper #table .item {
+    height: 10px;
+    width: 10px;
+    border-radius: 10px; }
+    #arm-board-wrapper #table .item.color-red {
+      background-color: rgba(255, 0, 0, 0.7); }
+    #arm-board-wrapper #table .item.color-green {
+      background-color: rgba(0, 255, 0, 0.7); }
+    #arm-board-wrapper #table .item.color-yellow {
+      background-color: rgba(255, 255, 0, 0.7); }
+    #arm-board-wrapper #table .item.captured {
+      height: 15px;
+      width: 15px; }
+      #arm-board-wrapper #table .item.captured.color-red {
+        background-color: red; }
+      #arm-board-wrapper #table .item.captured.color-green {
+        background-color: lime; }
+      #arm-board-wrapper #table .item.captured.color-yellow {
+        background-color: yellow; }
+  #arm-board-wrapper #table #item-valid {
     height: 10px;
     width: 10px;
     border-radius: 10px;
-    background-color: rgba(255, 0, 0, 0.8); }
-    #arm-board-wrapper #table #item.captured {
-      background-color: rgba(255, 255, 255, 0.9); }
+    background-color: rgba(0, 0, 255, 0.7); }
+    #arm-board-wrapper #table #item-valid.captured {
+      background-color: blue; }
   #arm-board-wrapper #table #bay {
     height: 20px;
     width: 20px;
