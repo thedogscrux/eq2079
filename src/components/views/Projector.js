@@ -188,7 +188,11 @@ class Projector extends Component {
       return(
         <div key={key} className='user' style={cssUser}>
           <div className='bar-segment' style={cssBar}></div>
-          <div className='text'>{user.name}{(user.ai.strength > 0) ? ' [AI'+user.ai.strength+']' : ''} : {user.score}</div>
+          <div className='text'>
+            {user.name}
+            {(user.ai.strength > 0) ? ' [AI'+user.ai.strength+']' : ''} : {user.score}
+            {(user.uranium.numOfPickups > 0) ? ' [Ur'+user.uranium.numOfPickups+']' : ''}
+          </div>
         </div>
       )
     })

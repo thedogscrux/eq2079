@@ -25,6 +25,10 @@ const game = {
     triggerStrength1AtPercentComplete: 60,
     triggerStrength2AtPercentComplete: 75,
     triggerStrength3AtPercentComplete: 90
+  },
+  uranium: {
+    handleTimeSeconds: 10,
+    offLimitsTimeSeconds: 10
   }
 }
 

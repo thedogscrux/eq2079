@@ -377,6 +377,10 @@ button {
   background-size: contain; }
   #component-map .map-wrapper:hover {
     background-color: rgba(255, 255, 255, 0.2); }
+  #component-map .map-wrapper .location {
+    background-color: yellow;
+    position: absolute;
+    padding: 0; }
   #component-map .map-wrapper .pz {
     border: solid 1px black;
     border-radius: 50%;
@@ -386,6 +390,12 @@ button {
     padding: 0; }
     #component-map .map-wrapper .pz:hover {
       background-color: white; }
+  #component-map .map-wrapper #uranium {
+    background-color: red;
+    border-radius: 15px;
+    position: absolute;
+    transition-duration: .5s;
+    padding: 0; }
 
 #component-ai {
   pointer-events: none;

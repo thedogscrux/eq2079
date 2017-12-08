@@ -113,6 +113,7 @@ class MK extends Component {
   updateStateLaunches(launches) {
     let activeLaunchKey = launches.findIndex(launch => launch.status === 'active')
     let activeLaunch = launches[activeLaunchKey]
+    if (this.state.activeLaunch.uranium && this.state.activeLaunch.uranium.status != activeLaunch.uranium.status) this.updateStateUranium(activeLaunch.uranium)
     this.setState({
       pastLaunches: launches,
       activeLaunch: activeLaunch
@@ -161,6 +162,18 @@ class MK extends Component {
     })
   }
 
+  updateStateUranium(uranium) {
+    if (uranium.status === 'drop') {
+      firebase.database().ref('/launches/' + this.state.activeLaunch.id + '/uranium/').update({
+        status: 'free',
+        userId: '',
+        pickedUp: '00:00:00'
+      })
+    } else if (uranium.status === 'captured') {
+      console.log('just captured uranium');
+    }
+  }
+
   // updateStatePz(pzIndex, pzUpdates) {
   //   let pzs = this.state.pzs
   //   let pz = Object.assign({}, this.state.pzs[pzIndex], pzUpdates);
@@ -201,6 +214,13 @@ class MK extends Component {
         }
       }
     })
+
+    // check up on uranium if its enabled/picked up
+    if(this.state.activeLaunch.uranium && this.state.activeLaunch.uranium.status === 'captured') {
+      if(timeNow.diff(moment(this.state.activeLaunch.uranium.pickedUp, 'kk:mm:ss'), 'seconds') > game.uranium.handleTimeSeconds) {
+        this.updateStateUranium({ status: 'drop'})
+      }
+    }
 
     // for debugging set timer to randomly update for realism
     // let random = new Random(Random.engines.mt19937().autoSeed())
@@ -440,7 +460,7 @@ class MK extends Component {
                 Time Last Checkin: {user.timeLastCheckin}<br/>
                 IP: {user.ip}<br/>
                 Agent: {user.agent}<br/>
-                Location: {user.loc.lat}, {user.loc.long}<br/>
+                Location: {user.location.latitude}, {user.location.longitude}<br/>
                 <button>Block User IP</button>
                 <button>Delete User</button>
                 <button>Reset User</button>

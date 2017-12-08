@@ -70,25 +70,29 @@ const staticPzEndMsg = [
   'you did a terrible job. maybe try again'
 ]
 
-const staticLocMK = {
-  name: 'Mission Kontrol',
-  location: {
-    lat: 0,
-    long: 0
+const staticLocations = {
+  missionKontrol: {
+    name: 'Mission Kontrol',
+    id: 'mk',
+    mapPos: {
+      floor: 'ground',
+      bottom: 90,
+      left: 69
+    }
   },
-  mapPos: {
-    floor: 'ground',
-    top: '0px',
-    left: '0px'
-  },
-  state: 'inactive',
-  yourStatus: 'new',
-  attempts: 0,
-  score: 0
+  uraniumBay: {
+    name: 'Uranium Bay',
+    id: 'ub',
+    mapPos: {
+      floor: 'ground',
+      bottom: 10,
+      left: 89
+    }
+  }
 }
 
 export {
-  staticLocMK,
+  staticLocations,
   staticStory,
   staticPzEndMsg
 }

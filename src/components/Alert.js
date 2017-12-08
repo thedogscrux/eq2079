@@ -4,7 +4,7 @@ class Alert extends Component {
 
   // FUNCS
 
-  showAlert(msg, type = 'default') {
+  showAlert(msg, type = 'default', delay = 6000) {
     let alert =  document.getElementById('component-alert')
     alert.innerHTML = msg
     alert.className = type + ' ans-alert-fade-out'
@@ -14,7 +14,7 @@ class Alert extends Component {
       let alert =  document.getElementById('component-alert')
       alert.className = ''
       alert.style.display = 'none'
-    }, 6000)
+    }, delay)
   }
 
   render() {

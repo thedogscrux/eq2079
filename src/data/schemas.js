@@ -4,7 +4,16 @@ const schemaLaunch = {
     players: 0,
     totalScore: 0,
     totalGamePlays: 0,
-    status: 'active|complete'
+    status: 'active|complete',
+    uranium: {
+      status: 'free',
+      userId: '',
+      pickedUp: '00:00:00',
+      mapPos: {
+        bottom: 90,
+        left: 50
+      }
+    }
 }
 
 const schemaUser = {
@@ -16,16 +25,16 @@ const schemaUser = {
   ip: '000.000.000.00',
   agent: '',
   chapter: 0,
-  loc: {
-    lat: 0,
-    long: 0
+  location: {
+    latitude: 0,
+    longitude: 0
   },
   pathUpdated: '00:00:00',
   paths: [
     {
       time: '00:00:00',
-      lat: 0,
-      long: 0
+      latitude: 0,
+      longitude: 0
     }
   ],
   pzs: [
@@ -35,7 +44,11 @@ const schemaUser = {
       score: 0.00,
       lastAttempt: '00:00:00'
     }
-  ]
+  ],
+  uranium: {
+    numOfPickups: 0,
+    timeLastPickup: '00:00:00'
+  }
 }
 
 const schemaPz = {
