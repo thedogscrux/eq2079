@@ -31,7 +31,7 @@ const HINTS = [
   }
 ]
 
-const SOLUTION_KEYS = [ 'A', 'B', 'C', 'D' ]
+const SOLUTION_KEYS = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' ]
 
 const GRID_X = 5
 const GRID_Y = 50
@@ -696,41 +696,50 @@ const genSettingsPz5 = (props) => {
   if(props.players.length === 1) {
     solutionUserItems = [
       // RED
-      [ 1 ],
-      [ 1 ],
+      [ 10 ],
+      [ 10 ],
+      [ 10 ],
     ]
   } else if (props.players.length === 2) {
     // RED, YELLOW
     solutionUserItems = [
-      [ 2, 2 ],
-      [ 2, 2 ],
+      [ 10, 10 ],
+      [ 10, 10 ],
+      [ 10, 10 ],
     ]
   } else if (props.players.length === 3) {
     // RED, YELLOW, BLUE
     solutionUserItems = [
-      [ 3, 3, 3 ],
-      [ 3, 3, 3 ],
+      [ 10, 10, 10 ],
+      [ 10, 10, 10 ],
+      [ 10, 10, 10 ],
     ]
   } else if (props.players.length === 4) {
     solutionUserItems = [
-      [ 2, 3, 3,
-        2 ],
-      [ 2, 3, 3,
-        2 ],
+      [ 5, 10, 10,
+        5 ],
+      [ 5, 10, 10,
+        5 ],
+      [ 5, 10, 10,
+        5 ],
     ]
   } else if (props.players.length === 5) {
     solutionUserItems = [
-      [ 2, 2, 3,
-        2, 2 ],
-      [ 2, 2, 3,
-        2, 2 ],
+      [ 5, 5, 10,
+        5, 5 ],
+      [ 5, 5, 10,
+        5, 5 ],
+      [ 5, 5, 10,
+        5, 5 ],
     ]
   } else if (props.players.length === 5) {
     solutionUserItems = [
-      [ 2, 2, 2,
-        2, 2, 2 ],
-      [ 2, 2, 2,
-        2, 2, 2 ],
+      [ 5, 5, 5,
+        5, 5, 5 ],
+      [ 5, 5, 5,
+        5, 5, 5 ],
+      [ 5, 5, 5,
+        5, 5, 5 ],
     ]
   }
 
