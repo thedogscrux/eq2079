@@ -520,7 +520,9 @@ body.ai-strength-3 {
   text-align: center;
   text-transform: uppercase;
   padding: 5vh 0;
-  font-weight: 600; }
+  font-weight: 600;
+  z-index: 100;
+  left: 0; }
   #component-alert.default {
     background-color: #3a9bc7;
     color: white; }
@@ -565,7 +567,8 @@ body.ai-strength-3 {
     bottom: 0;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.7); }
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 50; }
     #component-hints #hints-popup-wrapper #hints-popup {
       background-color: rgba(0, 0, 0, 0.5);
       margin: 10vh 3vw;
@@ -576,7 +579,7 @@ body.ai-strength-3 {
   display: table;
   clear: both; }
 
-.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .my-tiles-wrapper .tile button {
+.ans-pulse, #soduko-board-wrapper #grid .row .col.my-cell, #code-board-wrapper .table-wrapper .tile button, #code-board-wrapper .my-tiles-wrapper .tile button {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-name: pulse; }
