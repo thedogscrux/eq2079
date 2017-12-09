@@ -65,10 +65,9 @@
   width: 90vw;
   padding-bottom: 180vw;
   margin: auto;
-  border: solid 1px white;
   position: relative;
   transition-duration: 0.3s;
-  background: url("../images/global/map.png") top left no-repeat transparent;
+  background: url("../images/map.svg") center center no-repeat transparent;
   background-size: contain; }
   #component-map .map-wrapper:hover {
     background-color: rgba(255, 255, 255, 0.2); }

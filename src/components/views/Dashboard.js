@@ -11,10 +11,26 @@ class Dashboard extends Component {
     return(
       <div id='component-dashboard'>
         <AI />
-        <Story />
-        <Status />
-        <CheckPzCode history={this.props.history} />
-        <Map />
+        <div class='console-wrapper'>
+          <div class='story-top'></div>
+          <Story />
+          <div class='story-bottom'></div>
+        </div>
+        <div class='console-wrapper -white'>
+          <div class='launch-top'></div>
+            <Status />
+          <div class='launch-bottom'></div>
+        </div>
+        <div class='console-wrapper'>
+          <div class='puzzle-top'></div>
+          <CheckPzCode history={this.props.history} />
+          <div class='puzzle-bottom'></div>
+        </div>
+        <div class='console-wrapper'>
+          <div class='map-top'></div>
+          <Map />
+          <div class='map-bottom'></div>
+        </div>
       </div>
     )
   }

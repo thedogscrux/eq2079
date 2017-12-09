@@ -84,6 +84,7 @@ class PzScore extends Component {
 
     return(
       <div id='component-pz-score' className='component-wrapper'>
+        [Sn]/Pz/PzScore.js
         {htmlAdmin}
         <h2>Score</h2>
         {staticPzEndMsg[this.state.pz.rank-1]}<br/>

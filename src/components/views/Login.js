@@ -37,20 +37,21 @@ class Login extends Component {
     }
     let content = ''
     if(this.state.job) {
-      content = <div>
-        <h2>Great! We need more {this.state.job}&apos;s</h2>
-        <p>First things first.  We need you to enter a code name and secret pin.</p>
+      content = <div class="team-gate-wrapper">
+        <h2 class="-white-metal">Great! We need more {this.state.job}s</h2>
+        <p>enter a code name and secret&nbsp;pin.</p>
       </div>
     } else {
-      content = <div>
-        <h2>Good to see you again.</h2>
-        <p>What's your secret code {this.state.returningUser}?</p>
+      content = <div class="team-gate-wrapper">
+        <h2 class="-white-metal">Welcome Back</h2>
+        <p>What&#39;s your secret code {this.state.returningUser}?</p>
       </div>
     }
     return(
       <div id='component-login'>
         {content}
         <Auth display='formLogin' />
+        <div class="team-image -engineer"></div>
       </div>
     )
   }

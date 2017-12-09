@@ -19,8 +19,8 @@ import Pzs from './components/views/Pzs'
 import MK from './components/views/MK'
 import Projector from './components/views/Projector'
 
-import './styles/clean.css';
-//import './styles/eq2079.css';
+//import './styles/clean.css';
+import './styles/eq2079.css';
 
 import firebase from 'firebase/app'
 import 'firebase/database'

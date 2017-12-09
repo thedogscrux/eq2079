@@ -165,6 +165,7 @@ class PzStart extends Component {
 
     return(
       <div id='component-pz-start' className='component-wrapper'>
+        [Sn]/Pz/PzStart.js
         {htmlAdmin}
         {/*pz attempts: {this.props.pzAttempts}<br/>*/}
         {htmlPlayers}

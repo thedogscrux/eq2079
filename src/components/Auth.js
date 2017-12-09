@@ -246,7 +246,7 @@ class Auth extends Component {
           <div>
             <input id='login-name' className='login-input' type='text' value={this.state.userNameInput} onChange={this.handleChangeUserName} placeholder='Code Name'/>
             <input id='login-pin' className='login-input' type='password' value={this.state.userPinInput} onChange={this.handleChangeUserPin} min='0000' max='9999' step='1' maxLength='4' placeholder='Secret Pin'/>
-            <button id='login-button' className='login-input' onClick={() => this.login()}>Login/Start</button>
+            <button id='login-button' className='login-input' onClick={() => this.login()}>Initiate</button>
             <div style={{color: 'red'}}>{this.state.msg}</div>
           </div>
         break

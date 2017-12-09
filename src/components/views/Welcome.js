@@ -54,10 +54,10 @@ class Welcome extends Component {
           <div className='intro-block'>
             <div className='ans show-1 intro-copy' style={{ opactiy: 0 }}>Come&nbsp;in.. Come&nbsp;in...</div>
             <div className='ans show-2 intro-copy'>
-              This is Mission&nbsp;Kontrol<br/><br/>Can you hear us?
+              This is Mission&nbsp;Kontrol<br/>Can you hear us?
             </div>
             <div className='ans show-3 intro-copy'>
-              <button className='-white-metal' onClick={() => this.setState({ ans: {intro: true, main: true} })}>ACCEPT TRANSMISSION</button>
+              <button className='-white-metal -spaced-copy' onClick={() => this.setState({ ans: {intro: true, main: true} })}>ACCEPT TRANSMISSION</button>
             </div>
           </div>
         </div>
@@ -66,11 +66,12 @@ class Welcome extends Component {
           <div className='ans show-1 intro-copy'>We are sorry to inform you.</div>
           <div className='ans show-2 intro-copy -white'>But humans are under attack.</div>
           <div className='ans show-3 intro-copy'>From an Artificial Intelligence</div>
-          <div className='ans show-4 intro-copy -white'>We don’t have much time to explain.</div>
+          <div className='ans show-4 intro-copy -white'>We don&#39;t have much time to explain.</div>
           <div className='ans show-5 intro-copy'>We are building rockets to get as many humans off the planet as possible. </div>
-          <div className='ans show-6 intro-copy -white-metal -center'>We need</div>
-          <div className='ans show-6 intro-copy -white-metal -center'>scientists and engineers</div>
-          <div className='ans show-6 intro-copy -white-metal -center'>Will you help&nbsp;us?</div>
+          <br />
+          <div className='ans show-6 intro-copy -white-metal -spaced-copy -center'>We need</div>
+          <div className='ans show-6 intro-copy -white-metal -spaced-copy -center'>scientists and engineers</div>
+          <div className='ans show-6 intro-copy -white-metal -spaced-copy -center'>Will you help&nbsp;us?</div>
           <div className='ans show-7'>
             <div className='team-block'>
               <div className='team-tile'>
