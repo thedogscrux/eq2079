@@ -75,6 +75,10 @@ class PzStart extends Component {
 
   // FUNCS
 
+  linkDashboard() {
+    this.props.history.push('/dashboard')
+  }
+
   requestNewGame() {
     var self = this
     firebase.database().ref('/pzs/' + this.props.pzIndex).once('value').then(function(snapshot){
@@ -111,8 +115,6 @@ class PzStart extends Component {
     let maxPlayers = propsPzs[pzIndex].maxPlayers || 2
     firebase.database().ref('/pzs/' + this.props.pzIndex + '/players/').once('value').then(function(snapshot){
       let userCount = snapshot.val().filter(playerID => playerID == userID)
-      console.log('snapshot.val().length',snapshot.val().length);
-      console.log('maxPlayers',maxPlayers);
       if(userCount < 1 && snapshot.val().length < maxPlayers ) {
         let newPlayers = pzPlayerIDs || []
         newPlayers.push(userID)
@@ -167,6 +169,7 @@ class PzStart extends Component {
         {/*pz attempts: {this.props.pzAttempts}<br/>*/}
         {htmlPlayers}
         {content}
+        <button onClick={() => this.linkDashboard() }>Return to Dashboard</button>
       </div>
     )
   }

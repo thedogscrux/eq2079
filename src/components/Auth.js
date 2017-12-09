@@ -6,6 +6,8 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/storage'
 
+import moment from 'moment'
+import tz from 'moment-timezone'
 import Cookies from 'js-cookie'
 
 import { setUser } from '../actions/userActions'
@@ -142,7 +144,12 @@ class Auth extends Component {
             }
             self.updateUser(userResults)
             self.setCookieUser(userNameAttempt)
-            break
+            let timeLastCheckIn = moment().tz('America/Los_Angeles').format("kk:mm:ss")
+            let agent = window.navigator.userAgent
+            firebase.database().ref('/users/' + users[key].id).update({
+              agent: agent,
+              timeLastCheckin: timeLastCheckIn
+            })
           } else {
             self.setMsg('Wrong pin.')
             return
@@ -179,7 +186,8 @@ class Auth extends Component {
               code: pz.code,
               attempts: 0,
               score: 0.00,
-              hints: 0
+              hints: 0,
+              lastAttempt: '00:00:00'
             })
           })
           user.pzs = pzs
@@ -220,12 +228,18 @@ class Auth extends Component {
     let html = ''
     switch(this.state.display) {
       case 'userInfo':
-        if (!this.props.debug) break
-        html =
-          <div>
-            Code Name: {this.state.user.name} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}&nbsp;&nbsp;
-            <button style={{display: 'inline-block'}} onClick={() => this.updateUser('')}>Logout</button>
-          </div>
+        if (!this.props.debug) {
+          html =
+            <div>
+              {(this.state.user.name) ? 'Code Name: ' + this.state.user.name : ''} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}
+            </div>
+        } else {
+          html =
+            <div>
+              Code Name: {this.state.user.name} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}&nbsp;&nbsp;
+              <button style={{display: 'inline-block'}} onClick={() => this.updateUser('')}>Logout</button>
+            </div>
+        }
         break
       case 'formLogin':
         html =

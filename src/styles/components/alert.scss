@@ -10,6 +10,8 @@
   text-transform: uppercase;
   padding: 5vh 0;
   font-weight: 600;
+  z-index: 100;
+  left: 0;
 
   &.default {
     background-color: $colorBlueEquinox;

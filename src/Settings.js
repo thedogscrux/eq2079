@@ -3,9 +3,11 @@
 const game = {
   active: true,
   score: {
+    flat: true,
     launch: 100,
     hintCost: 0.99,
     mutliplayerMultiplier: 0.5,
+    pz: 5,
     round: 1,
     item: 1,
     participation: 1
@@ -13,13 +15,20 @@ const game = {
   hints: {
     allowAfterPzAttempts: 1
   },
+  story: {
+    chapterRanks: false
+  },
   clock: {
-    pzLoadingSec: 5
+    pzLoadingSec: 7
   },
   ai: {
-    triggerStrength1AtPercentComplete: 10,
-    triggerStrength2AtPercentComplete: 50,
-    triggerStrength3AtPercentComplete: 70
+    triggerStrength1AtPercentComplete: 60,
+    triggerStrength2AtPercentComplete: 75,
+    triggerStrength3AtPercentComplete: 90
+  },
+  uranium: {
+    handleTimeSeconds: 10,
+    offLimitsTimeSeconds: 10
   }
 }
 

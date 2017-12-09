@@ -13,6 +13,8 @@ import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
 import { showAlert } from '../../Alert'
 
+import AI from '../../AI'
+
 import clock0 from '../../../images/pz/clock/clock-0.svg'
 import clock4 from '../../../images/pz/clock/clock-4.svg'
 
@@ -70,6 +72,7 @@ class Pz1 extends Component {
       valid: false,
       hints: props.user.pzs[PZ_INDEX].hints,
       userKey: -1,
+      aiStrength: props.user.ai.strength,
       score: {
         max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
         multi: 0 * game.score.mutliplayerMultiplier,
@@ -109,14 +112,16 @@ class Pz1 extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props != nextProps) {
+      let newImage = this.state.selectedImgSrc
       if (this.props.round != nextProps.round) {
         this.updateStateScore()
         this.getMyUserKey(nextProps.round)
+        newImage = ''
       }
       this.setState({
         round: nextProps.round,
         clock: nextProps.clock,
-        selectedImgSrc: '',
+        selectedImgSrc: newImage,
         valid: false
       })
     }
@@ -382,8 +387,19 @@ class Pz1 extends Component {
         return <div key={key}>round:{round}<div>{htmlInner}</div><hr/></div>
     })
 
+    let pipeBoardClassNames = 'clear'
+
+    // AI factor
+    if(this.state.aiStrength === 1) {
+      pipeBoardClassNames += ' ai-throb'
+    } else if(this.state.aiStrength >= 2) {
+      pipeBoardClassNames += ' ai-upsidedown ai-throb'
+    }
+
     return(
       <div className='component-wrapper'>
+        <AI />
+
         {htmlScore}
         <Hints
           hints={HINTS}
@@ -393,7 +409,7 @@ class Pz1 extends Component {
         />
         <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
-        <div id='pipe-board-wrapper' className='clear'>
+        <div id='pipe-board-wrapper' className={pipeBoardClassNames}>
 
           {Object.keys(this.state.rounds).map((row, rowIndex) => {
 
@@ -448,7 +464,7 @@ class Pz1 extends Component {
               clock = clock0
             }
             return (
-              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex) ? { opacity: '1'} : {border: 'none', pointerEvents: 'none', opacity: '.1'}}>
+              <div key={rowIndex} className='pipe-round' style={(this.state.round == rowIndex) ? { opacity: '1'} : {border: 'none', pointerEvents: 'none', opacity: '.3'}}>
                 <img src={clock} width="50px" />
                 {inner}
               </div>

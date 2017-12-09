@@ -3,15 +3,30 @@
 #frequency-board-wrapper {
 
   #radio-message {
-      font: 400 20px/24px monospace;
-      .valid-word {
-        //color: $colorRed;
-        text-decoration: underline;
-      }
+    font: 400 20px/24px monospace;
+    .valid-word {
+      text-decoration: underline;
+    }
+  }
+
+  #radio-message-ending-overlay {
+    background-color: rgba(0, 0, 0, .7);
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+    display: none;
+    font-size: 100px;
+    line-height: 100px;
+    word-wrap: break-word;
   }
 
   #radio-tuner {
-
+    width: 80%;
+    margin: auto;
   }
 
 }

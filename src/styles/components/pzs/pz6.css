@@ -94,6 +94,8 @@
     height: auto;
     position: relative;
     font: 100 50px/70px Avenir, Sans-serif; }
+    #volume-board-wrapper #sliderWrappers .slidecontainer.hint-1 {
+      font-size: 20px; }
     #volume-board-wrapper #sliderWrappers .slidecontainer .slider {
       -webkit-appearance: none;
       width: 250px;

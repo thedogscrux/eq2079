@@ -13,9 +13,12 @@ import { setUserPz } from '../../../actions/userActions'
 
 import PzStart from './PzStart'
 import PzScore from './PzScore'
+
+import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import AI from '../../AI'
 import { showAlert } from '../../Alert'
 
+import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 
 import pz1 from '../../pzs/pz1/Pz1'
@@ -34,6 +37,7 @@ import clock1 from '../../../images/pz/clock/clock-1.svg'
 import clock2 from '../../../images/pz/clock/clock-2.svg'
 import clock3 from '../../../images/pz/clock/clock-3.svg'
 import clock4 from '../../../images/pz/clock/clock-4.svg'
+import clock5 from '../../../images/pz/clock/clock-5.svg'
 
 const pzMap = {
   pz1,
@@ -49,7 +53,7 @@ const pzMap = {
 }
 
 const clockMap = {
-  clock0, clock1, clock2, clock3, clock4
+  clock0, clock1, clock2, clock3, clock4, clock5
 }
 
 const mapStateToProps = (state, props) => {
@@ -115,21 +119,31 @@ class Pz extends Component {
   }
 
   updateStatePz(value) {
-    if (value.round != this.state.pz.round) this.pzAlert('roundChange', value.round)
+    if (value.round != this.state.pz.round) this.pzAlert('roundChange', value)
     this.setState({ pz: value })
   }
 
   pzAlert(action, val) {
     let msg = ''
     let type = 'default'
-    if( action === 'roundChange') {
-      if (val === 0) {
+    let pzProps = propsPzs[this.state.pzIndex]
+    if(action === 'roundChange' && val.players && val.players.indexOf(this.state.userID) >= 0) {
+      if (val.round=== 0) {
         msg = 'First Round'
-      } else if (val < propsPzs[this.state.pzIndex].rounds.numOfRounds - 1 && val >= 0) {
+      } else if (val.round < pzProps.rounds.numOfRounds - 1 && val.round >= 0) {
         msg = 'Next Round'
-      } else if (val >= propsPzs[this.state.pzIndex].rounds.numOfRounds - 1) {
+      } else if (val.round >= pzProps.rounds.numOfRounds - 1) {
         msg = 'Final Round'
       }
+      let delay = (pzProps.alerts && pzProps.alerts.nextRoundDelaySec) ? pzProps.alerts.nextRoundDelaySec : 0
+      if (msg === 'Next Round' && delay > 0) {
+        let timer = setTimeout(() => {
+          showAlert(msg, type)
+        }, delay * 1000)
+      } else {
+        showAlert(msg, type)
+      }
+      return
     }
 
     if (msg !== '') showAlert(msg, type)
@@ -140,6 +154,7 @@ class Pz extends Component {
   endRound(endGame = false) {
     //set the round # and time of next round (if any)
     let newRoundNum = this.state.pz.round+1
+    this.setState({ endGame: endGame })
 
     if (newRoundNum === propsPzs[this.state.pzIndex].rounds.numOfRounds - 1 && !endGame) {
       console.log('*** FINAL ROUND ***');
@@ -148,7 +163,7 @@ class Pz extends Component {
       //newRoundNum = this.state.pz.round // roll back the round counter, since we are not addng a new round
       let update = {
         round: newRoundNum,
-        timeNextRound: timeNextRound.format("kk:mm:ss"),
+        timeNextRound: 'timeNextRound.format("kk:mm:ss")',
         clock: 0
       }
       firebase.database().ref('/pzs/' + this.state.pzIndex).update(update)
@@ -160,7 +175,7 @@ class Pz extends Component {
       timeNextRound.add(propsPzs[this.state.pzIndex].rounds.roundSec, 's')
       let update = {
         round: newRoundNum,
-        timeNextRound: timeNextRound.format("kk:mm:ss"),
+        timeNextRound: 'timeNextRound.format("kk:mm:ss")',
         clock: 0
       }
       firebase.database().ref('/pzs/' + this.state.pzIndex).update(update)
@@ -171,7 +186,8 @@ class Pz extends Component {
       let timeInPast = moment().tz('America/Los_Angeles')
       timeInPast.subtract(1, 's')
       firebase.database().ref('/pzs/' + this.state.pzIndex).update({
-        timeGameEnds: timeInPast.format("kk:mm:ss")
+        timeGameEnds: timeInPast.format("kk:mm:ss"),
+        expired: endGame
       })
     }
   }
@@ -180,27 +196,33 @@ class Pz extends Component {
     console.log('*** END GAME ***');
     let attempts = this.props.user.pzs[this.state.pzIndex].attempts + 1
     let oldScore = this.props.user.pzs[this.state.pzIndex].score
-    let totalScore = this.state.pz.totalScore
-    let rank = (score/totalScore > .50) ? ( (score/totalScore > .85) ? 1 : 2 ) : 3
+    // add user points to base (thanks-for-playing) points
+      let basePoints = game.score.pz - (this.state.pz.rounds.numOfRounds * game.score.round)
+      let scoreUtil = new Score(this.state.pzIndex)
+      let maxScore = scoreUtil.calcMaxScore(this.props.user.pzs[this.state.pzIndex].hints, 1)
+      let newScore = ((basePoints + score) > maxScore) ? maxScore : basePoints + score
+      if (this.state.endGame) newScore = 1 // give them one point for finding the Pz
+    let totalScore = game.score.pz // use method 2 flat score, as opposed to: this.state.pz.totalScore
+    let rank = (newScore/totalScore > .50) ? ( (newScore/totalScore > .85) ? 1 : 2 ) : 3
     let chapter = (attempts === 1) ? this.props.user.chapter + 1 : this.props.user.chapter
     let pzCode = this.state.pzCode
     let refPz = '/users/' + this.props.user.id + '/pzs/' + this.state.pzIndex
     let refUser = '/users/' + this.props.user.id
-    if(attempts > 1 && score <= oldScore) {
-      console.log('You didnt beat your last score of: ' + oldScore)
-      score = oldScore
+    if(attempts > 1 && newScore <= oldScore) {
+      //showAlert('You didnt beat your last score')
+      newScore = oldScore
     }
     let val = {
       attempts: attempts,
       code: pzCode,
-      score: score/totalScore,
+      score: newScore,
       rank: rank
     }
     this.props.setUserPz(this.state.pzIndex, val) // update app state for user pz
     this.forceUpdate() // because new attempts value isnt recognized
     // update the user score
     firebase.database().ref(refPz).update({
-      score: score,
+      score: newScore,
       code: pzCode,
       attempts: attempts,
       rank: rank
@@ -215,7 +237,8 @@ class Pz extends Component {
   htmlPzInfo() {
     return(
       <div>
-        <h1>{this.state.pz.name}</h1>
+        <h1>{propsPzs[this.state.pzIndex].title}</h1>
+        {propsPzs[this.state.pzIndex].site}<br/>
         {propsPzs[this.state.pzIndex].desc}<br/>
         {propsPzs[this.state.pzIndex].instructions}
       </div>
@@ -246,6 +269,7 @@ class Pz extends Component {
         user={this.props.user}
         clock={clockImg}
         numOfUsers={(this.state.pz) ? this.state.pz.players.length : 1}
+        expired={this.state.pz.expired}
       />
     } else {
       content = <PzStart
@@ -254,6 +278,7 @@ class Pz extends Component {
         pzStatus={this.state.pz.status}
         pzPlayerIDs={this.state.pz.players}
         pzAttempts={pzAttempts}
+        history={this.props.history}
       />
     }
 

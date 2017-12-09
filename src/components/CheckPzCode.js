@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from 'react-router-dom'
 
+import { showAlert } from './Alert'
+
 import { propsPzs } from '../data/propsPzs'
 
 class CheckPzCode extends Component {
@@ -8,7 +10,7 @@ class CheckPzCode extends Component {
     super(props)
     this.state = {
       pzCode: 'this.props.match.params.pzCode',
-      checkPzCode: ''
+      checkPzCode: 'pz5'
     }
     this.handleChangeCheckPzCode = this.handleChangeCheckPzCode.bind(this)
   }
@@ -30,15 +32,14 @@ class CheckPzCode extends Component {
     if (pzExists.length >= 1) {
       this.props.history.push('pzs/' + pzCode.toLowerCase())
     } else {
-      alert('Invalid Code')
-      console.log('Pz doesnt exists.')
+      showAlert('Invalid Code', 'error')
     }
   }
 
   render(){
     return(
       <div id='component-check-pz-code' className='component-wrapper'>
-        <input type='text' placeholder='Puzzle Code' value={this.state.checkPzCode} onChange={this.handleChangeCheckPzCode} />
+        <input type='text' placeholder='Puzzle Code' value={this.state.checkPzCode} onChange={this.handleChangeCheckPzCode} maxLength={5} />
         <button onClick={() => this.checkIfPzExists(this.state.checkPzCode)}>Check Code</button>
       </div>
     )

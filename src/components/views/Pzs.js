@@ -32,7 +32,7 @@ class Pzs extends Component {
   render(){
     return(
       <div id='component-pzs' className='component-wrapper'>
-        <Route path={`${this.props.match.url}/:pzCode`} component={Pz}/>
+        <Route path={`${this.props.match.url}/:pzCode`} component={Pz} history={this.props.history} />
         <Route exact path={this.props.match.url} render={() => (
           <div>
             <h1>Pzs</h1>

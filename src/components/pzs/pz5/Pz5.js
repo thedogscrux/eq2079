@@ -8,12 +8,13 @@ import Random from 'random-js'
 import _ from 'underscore'
 import ryb2rgb from 'ryb2rgb'
 
-
 import { shuffleArray, testIfEqualArrays, removeArrayKey } from '../../../utils/Common.js'
 import Score, { calcMaxScore, calcHintCost } from '../../../utils/Score.js'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 import Hints from '../../Hints.js'
+
+import AI from '../../AI'
 
 const PZ_INDEX = 4
 const PZ_PROPS = propsPzs[PZ_INDEX]
@@ -29,6 +30,8 @@ const HINTS = [
     body: '...'
   }
 ]
+
+const SOLUTION_KEYS = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' ]
 
 const GRID_X = 5
 const GRID_Y = 50
@@ -49,6 +52,7 @@ const BLUE = [0, 0, 255]
 
 const ORANGE = [255, 255, 0] // RED + YELLOW
 const GREEN = [0, 255, 255]
+const PURPLE = [255, 0, 255]
 
 let rgbBlue = ryb2rgb([0, 0, 255])
 
@@ -69,6 +73,7 @@ class Pz5 extends Component {
         clock: props.clock,
         valid: false,
         hints: props.user.pzs[PZ_INDEX].hints,
+        aiStrength: props.user.ai.strength,
         score: {
           max: score.calcMaxScore(props.user.pzs[PZ_INDEX].hints, 1),
           multi: 0 * game.score.mutliplayerMultiplier,
@@ -237,6 +242,10 @@ class Pz5 extends Component {
 
   // END GAME
 
+  cancelGame() {
+    this.props.endRound(true)
+  }
+
   endRound() {
     this.props.endRound()
   }
@@ -358,6 +367,8 @@ class Pz5 extends Component {
           // setup table for testing
           let minifiedTable = snapshot.val().table.map( (item, key) => String(item.x) + String(item.y) + '-' + item.color[0] + '-' + item.color[1] + '-' + item.color[2])
           let minifiedSolution = snapshot.val().solution.map( (item, key) => String(item.x) + String(item.y) + '-' + item.color[0] + '-' + item.color[1] + '-' + item.color[2])
+          // console.log('minifiedTable',minifiedTable.sort());
+          // console.log('minifiedSolution',minifiedSolution.sort());
           if(testIfEqualArrays(minifiedTable.sort(), minifiedSolution.sort())) {
             self.endRound()
           }
@@ -411,11 +422,6 @@ class Pz5 extends Component {
       }
     })
 
-  }
-
-  cancelGame() {
-    console.log('cancel game');
-    this.props.endRound(true)
   }
 
   render(){
@@ -514,16 +520,21 @@ class Pz5 extends Component {
     // let rgbBlue = ryb2rgb([0, 0, 255])
     // let cssBlue = 'rgb(' + rgbBlue[0] + ',' + rgbBlue[1] + ',' + rgbBlue[2] + ')'
 
-
+    let solutionKey = ''
+    if(this.state.rounds[this.state.round]) {
+      solutionKey = SOLUTION_KEYS[this.state.rounds[this.state.round].solutionKey]
+    }
 
     return(
       <div id="spots-board-wrapper" className='component-wrapper'>
+        <AI />
+
         {/*}<div className='color-convert'>
           <div style={{ backgroundColor: cssRed }}>rgb red</div>
           <div style={{ backgroundColor: cssYellow }}>rgb yellow</div>
           <div style={{ backgroundColor: cssBlue }}>rgb blue</div>
         </div>*/}
-        <button onClick={() => this.cancelGame()}>cancel game</button>
+
         {htmlScore}
         <Hints
           hints={HINTS}
@@ -531,8 +542,12 @@ class Pz5 extends Component {
           userAttempts={this.props.user.pzs[PZ_INDEX].attempts}
           getHint={() => this.getHint()}
         />
+        <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
         <img src={this.state.clock} width="50px" />
+
+        <div id='solution-key'>{solutionKey}</div>
+
         <div id='spots-wrapper'>{htmlButtons}</div>
       </div>
     )
@@ -545,91 +560,239 @@ const genSettingsPz5 = (props) => {
   let settings = []
   let random = new Random(Random.engines.mt19937().autoSeed())
   // SHUFFLE ITEMS and determine solution
-  let solutionColors = []
+  //let solutionColors = []
   let solution = []
-  let solutionUserItemCount = []
+  let solutionUserItems = []
+
+  const SOLUTION_COLORS = [ RED, YELLOW, BLUE ]
+
+  const SOLUTIONS = [
+    [
+      { x:0, y:1, color:RED },
+      { x:2, y:0, color:YELLOW },
+      { x:1, y:1, color:ORANGE },
+      { x:4, y:1, color:BLUE },
+      { x:3, y:0, color:GREEN },
+      { x:5, y:1, color:PURPLE }
+    ],
+    [
+      { x:4, y:1, color:RED },
+      { x:3, y:0, color:YELLOW },
+      { x:3, y:2, color:ORANGE },
+      { x:2, y:1, color:BLUE },
+      { x:1, y:0, color:GREEN },
+      { x:1, y:2, color:PURPLE }
+    ],
+    [
+      { x:1, y:0, color:RED },
+      { x:4, y:0, color:RED },
+      { x:0, y:1, color:YELLOW },
+      { x:1, y:2, color:ORANGE },
+      { x:4, y:2, color:ORANGE },
+      { x:2, y:2, color:BLUE },
+      { x:3, y:2, color:BLUE },
+      { x:1, y:1, color:GREEN },
+      { x:2, y:0, color:PURPLE },
+      { x:3, y:0, color:PURPLE }
+    ],
+    [
+      { x:3, y:1, color:RED },
+      { x:5, y:2, color:RED },
+      { x:2, y:1, color:YELLOW },
+      { x:2, y:2, color:YELLOW },
+      { x:3, y:3, color:YELLOW },
+      { x:3, y:2, color:ORANGE },
+      { x:5, y:3, color:ORANGE },
+      { x:4, y:0, color:BLUE },
+      { x:3, y:0, color:GREEN },
+      { x:4, y:0, color:GREEN },
+      { x:5, y:1, color:PURPLE }
+    ],
+    [
+      { x:0, y:2, color:RED },
+      { x:1, y:3, color:RED },
+      { x:2, y:4, color:RED },
+      { x:3, y:2, color:YELLOW },
+      { x:0, y:0, color:ORANGE },
+      { x:1, y:1, color:ORANGE },
+      { x:2, y:2, color:ORANGE },
+      { x:4, y:4, color:ORANGE },
+      { x:0, y:4, color:BLUE },
+      { x:2, y:0, color:GREEN },
+      { x:4, y:0, color:PURPLE }
+    ],
+    [
+      { x:0, y:0, color:RED },
+      { x:1, y:1, color:RED },
+      { x:3, y:3, color:RED },
+      { x:2, y:0, color:YELLOW },
+      { x:3, y:1, color:YELLOW },
+      { x:0, y:2, color:YELLOW },
+      { x:1, y:3, color:YELLOW },
+      { x:1, y:0, color:ORANGE },
+      { x:0, y:1, color:ORANGE },
+      { x:2, y:1, color:ORANGE },
+      { x:1, y:2, color:ORANGE },
+      { x:2, y:3, color:ORANGE },
+      { x:4, y:3, color:ORANGE },
+      { x:4, y:0, color:BLUE },
+      { x:5, y:1, color:BLUE },
+      { x:0, y:4, color:BLUE },
+      { x:3, y:0, color:GREEN },
+      { x:4, y:1, color:GREEN },
+      { x:0, y:3, color:GREEN },
+      { x:1, y:4, color:GREEN },
+      { x:5, y:0, color:PURPLE }
+    ],
+    [
+      { x:2, y:0, color:RED },
+      { x:3, y:0, color:RED },
+      { x:2, y:4, color:RED },
+      { x:3, y:4, color:RED },
+      { x:0, y:0, color:YELLOW },
+      { x:5, y:0, color:YELLOW },
+      { x:0, y:4, color:YELLOW },
+      { x:5, y:4, color:YELLOW },
+      { x:3, y:2, color:ORANGE },
+      { x:1, y:1, color:BLUE },
+      { x:1, y:3, color:BLUE },
+      { x:4, y:3, color:BLUE },
+      { x:3, y:3, color:GREEN },
+      { x:1, y:2, color:PURPLE },
+      { x:4, y:2, color:PURPLE }
+    ],
+    [
+      { x:1, y:0, color:RED },
+      { x:1, y:2, color:RED },
+      { x:1, y:4, color:RED },
+      { x:2, y:3, color:YELLOW },
+      { x:3, y:3, color:YELLOW },
+      { x:0, y:0, color:ORANGE },
+      { x:0, y:2, color:ORANGE },
+      { x:0, y:4, color:ORANGE },
+      { x:2, y:2, color:BLUE },
+      { x:3, y:2, color:BLUE },
+      { x:4, y:0, color:GREEN },
+      { x:4, y:2, color:GREEN },
+      { x:4, y:4, color:GREEN }
+    ],
+    [
+      { x:3, y:3, color:RED },
+      { x:3, y:1, color:YELLOW },
+      { x:2, y:3, color:ORANGE },
+      { x:1, y:0, color:BLUE },
+      { x:4, y:0, color:BLUE },
+      { x:1, y:4, color:BLUE },
+      { x:4, y:4, color:BLUE },
+      { x:2, y:1, color:GREEN },
+      { x:2, y:0, color:PURPLE },
+      { x:3, y:0, color:PURPLE },
+      { x:2, y:4, color:PURPLE },
+      { x:3, y:4, color:PURPLE }
+    ],
+
+  ]
+
   if(props.players.length === 1) {
-    solutionColors = [ BLACK ]
-    // how many occurances of each user color
-    // [ 6-BLACK ]
-    // [ 6-BLACK ]
-    solutionUserItemCount = [
-      [ 6 ],
-      [ 6 ]
-    ]
-    solution = [
-      [
-        { x:0, y:0, color:BLACK },
-        { x:1, y:0, color:BLACK },
-        { x:2, y:0, color:BLACK },
-        { x:3, y:0, color:BLACK },
-        { x:4, y:0, color:BLACK },
-        { x:5, y:0, color:BLACK }
-      ],
-      [
-        { x:0, y:0, color:BLACK },
-        { x:1, y:0, color:BLACK },
-        { x:2, y:0, color:BLACK },
-        { x:0, y:1, color:BLACK },
-        { x:1, y:1, color:BLACK },
-        { x:2, y:1, color:BLACK }
-      ]
+    solutionUserItems = [
+      // RED
+      [ 10 ],
+      [ 10 ],
+      [ 10 ],
     ]
   } else if (props.players.length === 2) {
-    solutionColors = [ RED, YELLOW ]
-    // how many occurances of each user color
-    // [ 4-RED, 4-YELLOW ]
-    // [ 4-RED, 4-YELLOW ]
-    solutionUserItemCount = [
-      [ 4, 4 ],
-      [ 4, 4 ]
+    // RED, YELLOW
+    solutionUserItems = [
+      [ 10, 10 ],
+      [ 10, 10 ],
+      [ 10, 10 ],
     ]
-    solution = [
-      [
-        { x:0, y:0, color:RED },
-        { x:1, y:0, color:RED },
-        { x:2, y:0, color:YELLOW },
-        { x:3, y:0, color:YELLOW },
-        { x:4, y:0, color:ORANGE },
-        { x:5, y:0, color:ORANGE }
-      ],
-      [
-        { x:0, y:1, color:RED },
-        { x:1, y:1, color:RED },
-        { x:2, y:1, color:YELLOW },
-        { x:3, y:1, color:YELLOW },
-        { x:4, y:1, color:ORANGE },
-        { x:5, y:1, color:ORANGE }
-      ],
+  } else if (props.players.length === 3) {
+    // RED, YELLOW, BLUE
+    solutionUserItems = [
+      [ 10, 10, 10 ],
+      [ 10, 10, 10 ],
+      [ 10, 10, 10 ],
+    ]
+  } else if (props.players.length === 4) {
+    solutionUserItems = [
+      [ 5, 10, 10,
+        5 ],
+      [ 5, 10, 10,
+        5 ],
+      [ 5, 10, 10,
+        5 ],
+    ]
+  } else if (props.players.length === 5) {
+    solutionUserItems = [
+      [ 5, 5, 10,
+        5, 5 ],
+      [ 5, 5, 10,
+        5, 5 ],
+      [ 5, 5, 10,
+        5, 5 ],
+    ]
+  } else if (props.players.length === 5) {
+    solutionUserItems = [
+      [ 5, 5, 5,
+        5, 5, 5 ],
+      [ 5, 5, 5,
+        5, 5, 5 ],
+      [ 5, 5, 5,
+        5, 5, 5 ],
     ]
   }
+
+  let solutionIndexes = [ 0 ] // always start with teh esiest Pz
+  let solutions = [ SOLUTIONS[0] ] // always start with teh esiest Pz
+  //get solutions
+  for(let i=1; i<PZ_PROPS.rounds.numOfRounds;) {
+    let index = random.integer(1, SOLUTIONS.length-1)
+    // keep track of each solution you are using so you dont use the same one twice in a game
+    if(solutionIndexes.indexOf(index) === -1) {
+      solutionIndexes.push(index)
+      solutions.push(SOLUTIONS[index])
+      ++i;
+    }
+  }
+
   // setup each user for each round
   for(let round=0; round<PZ_PROPS.rounds.numOfRounds; round++){
+    let solution = []
+    let solutionMax = (props.players.length === 1) ? 1 : (props.players.length === 2) ? 3 : 6
+    Object.keys(solutions[round]).forEach( (sol, key) => {
+      if(key < solutionMax) solution.push(solutions[round][key])
+    })
     // ADD USERS to pz - create an empty obj for each user
     let settingsUsers = []
+    let colorIndex = 0
     props.players.forEach( (user,key) => {
       settingsUsers.push(
         {
           userId: user,
-          items: solution[round].length,
-          color: 0,
-          solutionItemCount: solutionUserItemCount[round]
+          items: solutionUserItems[round][key],
+          color: SOLUTION_COLORS[colorIndex],
+          solutionItemCount: solutionUserItems[round]
         }
       )
+      colorIndex = (colorIndex >= SOLUTION_COLORS.length - 1) ? 0 : colorIndex + 1
     })
     // settings = rounds[#][users][#] (without user data)
     // DEAL colors to users
-    let userIndex = 0
-    solutionColors.forEach((color, key) => {
-      settingsUsers[userIndex].color = color
-      userIndex ++
-    })
+    // let userIndex = 0
+    // SOLUTION_COLORS.some((color, key) => {
+    //   settingsUsers[userIndex].color = SOLUTION_COLORS[key]
+    //   //userIndex = (userIndex >= prop.players.length) ? 0 :
+    //   userIndex ++
+    //   return key+1 >= props.players.length
+    // })
     // settings = rounds[#][users][#] (with user data)
     // STORE settings
     settings.push({
       users: settingsUsers,
       table: [],
-      solution: solution[round]
+      solution: solution,
+      solutionKey: solutionIndexes[round]
     })
   }
   // calc total score

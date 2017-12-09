@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 163.4 163.4" style="enable-background:new 0 0 163.4 163.4;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:10;}
+	.st1{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
+</style>
+<g id="Layer_1">
+	<title>clock-12</title>
+	<g id="Layer_2">
+		<g id="Pz">
+			<path d="M79,79V9.6C41.3,11,11,41.3,9.6,79H79z"/>
+			<path d="M84.3,79h69.4c-1.4-37.7-31.7-68-69.4-69.4V79z"/>
+			<path d="M79,84.3H9.6c1.4,37.7,31.7,68,69.4,69.4V84.3z"/>
+			<path d="M84.3,84.3v69.4c37.8-1.4,68.1-31.7,69.4-69.4L84.3,84.3z"/>
+			<circle class="st0" cx="81.7" cy="81.7" r="79.2"/>
+		</g>
+	</g>
+</g>
+<g id="Layer_2_1_">
+	<circle class="st1" cx="82" cy="81" r="40"/>
+</g>
+</svg>

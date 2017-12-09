@@ -15,6 +15,11 @@ $mapWidth: 90vw;
     &:hover {
       background-color: $colorWhiteAlpha;
     }
+    .location {
+      background-color: yellow;
+      position: absolute;
+      padding: 0;
+    }
     .pz {
       // height and width set dynamically
       border: solid 1px $colorBlack;
@@ -27,5 +32,19 @@ $mapWidth: 90vw;
         background-color: $colorWhite;
       }
     }
+    #uranium {
+      background-color: red;
+      border-radius: 15px;
+      position: absolute;
+      transition-duration: .5s;
+      padding: 0;
+    }
+    #location-mk {
+      
+    }
+    #location-ub {
+
+    }
+
   }
 }
