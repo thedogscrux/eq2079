@@ -602,6 +602,8 @@ class Pz6 extends Component {
         />
         <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
 
+        <img src={this.state.clock} width="50px" /><br/>
+
         {/*difficulty: {difficulty}<br/>
         slider Value: {this.state.sliderValue}<br/>
         db val: {myVal}<br/>

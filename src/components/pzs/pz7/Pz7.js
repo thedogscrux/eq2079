@@ -628,6 +628,8 @@ class Pz7 extends Component {
           getHint={() => this.getHint()}
         />
         <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
+        
+        <img src={this.state.clock} width="50px" /><br/>
 
         <div id='controls-wrapper'>
           {htmlControls}

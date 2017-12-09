@@ -481,8 +481,8 @@ const genSettingsPz10 = (props) => {
     // settings = rounds[#][users][#] { } without user data
     // SHUFFLE ITEMS and determine solution
     let solution = [
-      [ 'G', 'O', 'O', 'D', 'B', 'Y', 'E', ' ', 'W', 'O', 'R', 'L', 'D' ],
-      [ 'G', 'O', 'O', 'D', 'B', 'Y', 'E', ' ', 'W', 'O', 'R', 'L', 'D' ],
+      [ 'G', 'O', 'O', 'D', 'B', 'Y', 'E', ' ', 'Q', 'W', 'E', 'R', 'T', 'Y' ],
+      [ 'H', 'E', 'L', 'L', 'O', ' ', 'W', 'O', 'R', 'L', 'D' ],
       [ 'G', 'O', 'O', 'D', 'B', 'Y', 'E', ' ', 'W', 'O', 'R', 'L', 'D' ]
     ]
     // DEAL ITEMS to users

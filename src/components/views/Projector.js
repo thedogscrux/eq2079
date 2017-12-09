@@ -12,12 +12,27 @@ import video00 from '../../video/00.mp4'
 import video01 from '../../video/01.mp4'
 import video02 from '../../video/02.mp4'
 import video03 from '../../video/03.mp4'
+import video04 from '../../video/04.mp4'
+import video05 from '../../video/05.mp4'
+import video06 from '../../video/06.mp4'
+import video07 from '../../video/07.mp4'
+import video08 from '../../video/08.mp4'
+import video09 from '../../video/09.mp4'
+import video10 from '../../video/10.mp4'
+import videoLaunch from '../../video/launch.mp4'
 
 const VIDEO_CHAPTERS = [
   video00,
   video01,
   video02,
-  video03
+  video03,
+  video04,
+  video05,
+  video06,
+  video07,
+  video08,
+  video09,
+  video10
 ]
 
 const LEADERBAR_COLORS = [

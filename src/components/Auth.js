@@ -186,7 +186,8 @@ class Auth extends Component {
               code: pz.code,
               attempts: 0,
               score: 0.00,
-              hints: 0
+              hints: 0,
+              lastAttempt: '00:00:00'
             })
           })
           user.pzs = pzs

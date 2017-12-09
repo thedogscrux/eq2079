@@ -37,6 +37,7 @@ import clock1 from '../../../images/pz/clock/clock-1.svg'
 import clock2 from '../../../images/pz/clock/clock-2.svg'
 import clock3 from '../../../images/pz/clock/clock-3.svg'
 import clock4 from '../../../images/pz/clock/clock-4.svg'
+import clock5 from '../../../images/pz/clock/clock-5.svg'
 
 const pzMap = {
   pz1,
@@ -52,7 +53,7 @@ const pzMap = {
 }
 
 const clockMap = {
-  clock0, clock1, clock2, clock3, clock4
+  clock0, clock1, clock2, clock3, clock4, clock5
 }
 
 const mapStateToProps = (state, props) => {
@@ -162,7 +163,7 @@ class Pz extends Component {
       //newRoundNum = this.state.pz.round // roll back the round counter, since we are not addng a new round
       let update = {
         round: newRoundNum,
-        timeNextRound: timeNextRound.format("kk:mm:ss"),
+        timeNextRound: 'timeNextRound.format("kk:mm:ss")',
         clock: 0
       }
       firebase.database().ref('/pzs/' + this.state.pzIndex).update(update)
@@ -174,7 +175,7 @@ class Pz extends Component {
       timeNextRound.add(propsPzs[this.state.pzIndex].rounds.roundSec, 's')
       let update = {
         round: newRoundNum,
-        timeNextRound: timeNextRound.format("kk:mm:ss"),
+        timeNextRound: 'timeNextRound.format("kk:mm:ss")',
         clock: 0
       }
       firebase.database().ref('/pzs/' + this.state.pzIndex).update(update)

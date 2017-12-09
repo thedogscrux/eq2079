@@ -16,7 +16,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 60
+      roundSec: 10
     },
     desc: 'KN The Pipes in the water treatment system are out of control. Lets get the pipes in order so people can survive on their mission to Callisto.',
     instructions: 'KN/LX Enter the correct number that is listed below....................',
@@ -55,6 +55,7 @@ const propsPzs = [
   },
   {
     name: 'Pz Three Soduko',
+    title: 'title Kn',
     code: 'pz3',
     site: 'Electrical Room',
     maxPlayers: 9,
@@ -82,7 +83,7 @@ const propsPzs = [
   {
     name: 'Pz Four Shape',
     title: 'Engine room',
-	code: 'pz4',
+	  code: 'pz4',
     site: 'w',
     maxPlayers: 6,
     location: {
@@ -108,6 +109,7 @@ const propsPzs = [
   },
   {
     name: 'Pz 5 Spots',
+    title: 'title Kn',
     code: 'pz5',
     site: 'Living Quarters',
     maxPlayers: 6,
@@ -121,7 +123,7 @@ const propsPzs = [
       left: '10%'
     },
     rounds: {
-      numOfRounds: 2,
+      numOfRounds: 3,
       roundSec: 60
     },
     desc: 'Everyone needs to sleep on the spaceship but there\'s a problem getting in to the living quarters. Solve the puzzle so the crew can get some rest.',
@@ -134,6 +136,7 @@ const propsPzs = [
   },
   {
     name: 'Pz 6 Volume',
+    title: 'title Kn',
     code: 'pz6',
     site: 'The Bar',
     maxPlayers: 5,
@@ -148,7 +151,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 60
+      roundSec: 12
     },
     desc: 'Have a drink or two? With all this stress with the mission, it\'s time to relax and have a drink at the bar. Amidst all the chaos, you get too drunk and now you run into another issue. Let\'s figure this out before you get too trashed.',
     instructions: 'instructions....',
@@ -160,6 +163,7 @@ const propsPzs = [
   },
   {
     name: 'Pz 7 Arm',
+    title: 'title Kn',
     code: 'pz7',
     site: 'Mission Kontrol',
     maxPlayers: 6,
@@ -174,7 +178,7 @@ const propsPzs = [
     },
     rounds: {
       numOfRounds: 3,
-      roundSec: 60
+      roundSec: 600
     },
     desc: 'Welcome to Mission Kontrol. You need to get all the items from the warehouse into the spaceship as soon as possible. Let\'s begin.  ',
     instructions: 'instructions....',
@@ -186,6 +190,7 @@ const propsPzs = [
   },
   {
     name: 'Pz 8 Frequency',
+    title: 'title Kn',
     code: 'pz8',
     site: 'Communications Room',
     maxPlayers: 6,
@@ -215,6 +220,7 @@ const propsPzs = [
   },
   {
     name: 'Pz 9 Controls',
+    title: 'title Kn',
     code: 'pz9',
     site: 'Flight Deck',
     maxPlayers: 6,
@@ -241,6 +247,7 @@ const propsPzs = [
   },
   {
     name: 'Pz 10 Code',
+    title: 'title Kn',
     code: 'pz10',
     site: 'Diner',
     location: {
