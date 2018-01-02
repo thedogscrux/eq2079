@@ -40,16 +40,15 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: '...'
+    body: 'You must enter in the correct codes for each pipe.'
   },
   {
     title: 'Hint Two',
-    subTitle: 'Subtitle',
-    body: '...'
+    body: 'Look at your teammates phones or on the wall art, to find the pipe codes.'
   }
 ]
 
-const WALLART_CODES = [ 123, 456, 789 ]
+const WALLART_CODES = [ 466, 314, 365 ]
 
 const itemMap = {
   item00, item01, item02, item03, item04,

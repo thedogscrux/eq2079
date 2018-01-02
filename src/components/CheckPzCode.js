@@ -10,7 +10,7 @@ class CheckPzCode extends Component {
     super(props)
     this.state = {
       pzCode: 'this.props.match.params.pzCode',
-      checkPzCode: 'pz5'
+      checkPzCode: ''
     }
     this.handleChangeCheckPzCode = this.handleChangeCheckPzCode.bind(this)
   }
@@ -29,7 +29,9 @@ class CheckPzCode extends Component {
 
   checkIfPzExists(pzCode) {
     let pzExists = propsPzs.filter( pz => pz.code.toLowerCase() === pzCode.toLowerCase())
-    if (pzExists.length >= 1) {
+    if (pzCode.toLowerCase() === '1gl') pzCode = '1gl'
+    if (pzExists.length >= 1 || pzCode === '1gl') {
+      if (pzCode === '1gl') pzCode = 'onegl'
       this.props.history.push('pzs/' + pzCode.toLowerCase())
     } else {
       showAlert('Invalid Code', 'error')
@@ -39,7 +41,7 @@ class CheckPzCode extends Component {
   render(){
     return(
       <div id='component-check-pz-code' className='component-wrapper'>
-        <input type='text' placeholder='Puzzle Code' value={this.state.checkPzCode} onChange={this.handleChangeCheckPzCode} maxLength={5} />
+        <input type='text' placeholder='Puzzle Code' value={this.state.checkPzCode} onChange={this.handleChangeCheckPzCode} maxLength={7} />
         <button onClick={() => this.checkIfPzExists(this.state.checkPzCode)}>Check Code</button>
       </div>
     )

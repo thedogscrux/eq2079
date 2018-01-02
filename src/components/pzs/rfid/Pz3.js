@@ -29,12 +29,12 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: 'Soduko.'
+    body: 'Do not mix your shapes and colors in rows and columns.'
   },
   {
     title: 'Hint Two',
     subTitle: 'Subtitle',
-    body: '...'
+    body: 'It is soduko, with shapes and colors. If you are playing with other people, their pieces affect yours and vice versa.'
   }
 ]
 

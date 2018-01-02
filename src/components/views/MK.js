@@ -14,16 +14,16 @@ import { staticPzs, staticLaunches, staticUsers } from '../../data/static.js'
 import { schemaLaunch, schemaUser, schemaPz } from '../../data/schemas.js'
 import { propsPzs } from '../../data/propsPzs.js'
 
-import { genSettingsPz1 } from '../pzs/pz1/Pz1'
-import { genSettingsPz2 } from '../pzs/pz2/Pz2'
-import { genSettingsPz3} from '../pzs/pz3/Pz3'
-import { genSettingsPz4 } from '../pzs/pz4/Pz4'
-import { genSettingsPz5 } from '../pzs/pz5/Pz5'
-import { genSettingsPz6 } from '../pzs/pz6/Pz6'
-import { genSettingsPz7 } from '../pzs/pz7/Pz7'
-import { genSettingsPz8 } from '../pzs/pz8/Pz8'
-import { genSettingsPz9 } from '../pzs/pz9/Pz9'
-import { genSettingsPz10 } from '../pzs/pz10/Pz10'
+import { genSettingsPz1 } from '../pzs/sms/Pz1'
+import { genSettingsPz2 } from '../pzs/oop/Pz2'
+import { genSettingsPz3} from '../pzs/rfid/Pz3'
+import { genSettingsPz4 } from '../pzs/asimo/Pz4'
+import { genSettingsPz5 } from '../pzs/rgba/Pz5'
+import { genSettingsPz6 } from '../pzs/foss/Pz6'
+import { genSettingsPz7 } from '../pzs/gwbasic/Pz7'
+import { genSettingsPz8 } from '../pzs/nan/Pz8'
+import { genSettingsPz9 } from '../pzs/oom/Pz9'
+import { genSettingsPz10 } from '../pzs/onegl/Pz10'
 
 const pzSettingsMap = {
   genSettingsPz1,
@@ -591,6 +591,8 @@ class MK extends Component {
         totalScore: 0
       }
       pz.name = pzProps.name
+      pz.title = pzProps.title
+      pz.site = pzProps.site
       pz.code = pzProps.code
       pz.location = pzProps.location
       pz.mapPos = pzProps.mapPos

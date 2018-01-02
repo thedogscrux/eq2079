@@ -137,7 +137,6 @@ class Projector extends Component {
     let launchId = ''
     return(
       <div id='active-launch-stats'>
-        Start: {this.state.activeLaunch.start}<br/>
         Players: {this.state.activeLaunch.players}<br/>
         Total Score: {this.state.activeLaunch.totalScore} / {game.score.launch}<br/>
       </div>

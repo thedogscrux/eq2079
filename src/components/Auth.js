@@ -119,15 +119,15 @@ class Auth extends Component {
     let self = this
     let userNameAttempt = this.state.userNameInput
     let userPinAttempt = this.state.userPinInput
-    if(!userNameAttempt && !userPinAttempt || userNameAttempt.toLowerCase() === 'lx') {
-      console.log('******************');
-      console.log('*** Goodbye Lx ***');
-      console.log('******************');
-      userNameAttempt = 'Lx'
-      userPinAttempt = '1111'
-    } else if (!userPinAttempt) {
-      userPinAttempt = '1111'
-    }
+    // if(!userNameAttempt && !userPinAttempt || userNameAttempt.toLowerCase() === 'lx') {
+    //   console.log('******************');
+    //   console.log('*** Goodbye Lx ***');
+    //   console.log('******************');
+    //   userNameAttempt = 'Lx'
+    //   userPinAttempt = '1111'
+    // } else if (!userPinAttempt) {
+    //   userPinAttempt = '1111'
+    // }
     // get all users from db
     let dbUsers = firebase.database().ref('/users').once('value').then(function(snapshot){
       //check if name matches
@@ -229,10 +229,10 @@ class Auth extends Component {
     switch(this.state.display) {
       case 'userInfo':
         if (!this.props.debug) {
-          html =
+          /*html =
             <div>
               {(this.state.user.name) ? 'Code Name: ' + this.state.user.name : ''} {(this.state.user.status == 'inactive') ? '  (inactive)' : ''}
-            </div>
+            </div>*/
         } else {
           html =
             <div>
@@ -245,8 +245,8 @@ class Auth extends Component {
         html =
           <div>
             <input id='login-name' className='login-input' type='text' value={this.state.userNameInput} onChange={this.handleChangeUserName} placeholder='Code Name'/>
-            <input id='login-pin' className='login-input' type='password' value={this.state.userPinInput} onChange={this.handleChangeUserPin} min='0000' max='9999' step='1' maxLength='4' placeholder='Secret Pin'/>
-            <button id='login-button' className='login-input' onClick={() => this.login()}>Login/Start</button>
+            <input id='login-pin' className='login-input' type='password' value={this.state.userPinInput} onChange={this.handleChangeUserPin} min='0000' max='9999' step='1' maxLength='4' placeholder='Pin'/>
+            <button id='login-button' className='login-input' onClick={() => this.login()}>Start</button>
             <div style={{color: 'red'}}>{this.state.msg}</div>
           </div>
         break

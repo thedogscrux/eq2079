@@ -28,6 +28,7 @@ import 'firebase/storage'
 import firebaseConfig from './config/firebase.config.json'
 
 firebase.initializeApp(firebaseConfig)
+console.disableYellowBox = true;
 
 const App = () => (
   <Router>

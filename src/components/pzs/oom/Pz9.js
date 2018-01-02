@@ -37,17 +37,16 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: '...'
+    body: 'Use the wall art to determine which direction is ON. Lights out!'
   },
   {
     title: 'Hint Two',
-    subTitle: 'Subtitle',
-    body: '...'
+    body: 'If playing with others, figure out who affects who and standside by side when flipping switches.'
   }
 ]
 
 const CONTROL_STYLES = [
-  'toggle', 'knob', 'slider', 'dialB', 'dialC', 'knobB', 'button'
+  'toggle', 'knob', 'slider', 'dialB', 'dialC', 'button'
 ]
 
 const CONTROL_IMAGE_MAP = new Map([
@@ -61,8 +60,6 @@ const CONTROL_IMAGE_MAP = new Map([
     [ 'dialB1', dialB1 ],
     [ 'dialC0', dialC0 ],
     [ 'dialC1', dialC1 ],
-    [ 'knobB0', knobB0 ],
-    [ 'knobB1', knobB1 ],
     [ 'button0', button0 ],
     [ 'button1', button1 ],
 ]);

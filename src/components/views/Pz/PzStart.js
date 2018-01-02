@@ -143,7 +143,7 @@ class PzStart extends Component {
     let players = this.state.pzPlayers.map(player => player + ', ')
     return (
       <div>
-        pz players: {players}
+        Players: {players}
       </div>
     )
   }

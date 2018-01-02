@@ -59,7 +59,8 @@ class Status extends Component {
   getLaunchStatus() {
     return(
       <div>
-        Launch Status: {this.state.launch.totalScore}/{game.score.launch}
+        <br/>Launch Status: {this.state.launch.totalScore}/{game.score.launch}
+        <br/>You can see a video of the shuttle being build projected in the street on the factory.
       </div>
     )
   }

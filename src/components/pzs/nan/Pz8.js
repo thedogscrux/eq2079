@@ -29,7 +29,6 @@ const HINTS = [
   },
   {
     title: 'Hint Two',
-    subTitle: 'Subtitle',
     body: 'Everyone has to tune in to the same frequency. Unless you have been hacked by the A.I...'
   }
 ]
@@ -55,23 +54,16 @@ let START_PHRASE = [
 
 let PHRASE = [
   [
-    [ 'Do', 'not', 'trust', 'the', 'AI' ],
-    [ 'Find', 'out', 'where', 'the', 'plutonium', 'is' ],
-    [ 'In', 'space', 'no', 'one', 'can', 'hear', 'you', 'scream' ]
+    [ 'Personal', 'AIs', 'have', 'become', 'the', 'most', 'enslaving', 'tool', 'weve', 'ever', 'created.', 'They', 'are', 'tools', 'of', 'human', 'separation,', 'isolation,', 'they', 'are', 'tools', 'of', 'destruction' ],
+    [ 'We', 'choose', 'to', 'build', 'the', 'A.I.', 'in', 'this', 'century', 'and', 'do', 'the', 'other', 'things,', 'not', 'because', 'we', 'fear', 'them,', 'but', 'the', 'lack', 'of', 'them.' ],
+    [ 'Man', 'was', 'once', 'the', 'most', 'extraordinary', 'computer', 'of', 'them', 'all', 'decades', 'ago.' ],
+
   ],
   [
-    [ 'Always', 'trust', 'in', 'the', 'AI' ],
-    [ 'Do', 'not', 'touch', 'the', 'plutonium'],
-    [ 'On', 'Calisto', 'no', 'one', 'wants', 'to', 'hear', 'you', 'scream' ]
+    [ 'At', 'first', 'it', 'was', 'the', 'A.I.', 'that', 'regretted', 'it’s', 'existance.', '', 'And', 'then', 'it', 'was', 'man’s', 'regret.'],
+    [ 'A.I.’s', 'are', 'incredibly', 'fast,', 'accurate', 'and', 'deadly;', 'humans', 'are', 'incredibly', 'slow,', 'inaccurate', 'and', 'fearful', 'together', 'they', 'have', 'created', 'a', 'planet', 'of', 'sheet', 'terror']
   ],
   [
-    [ 'Always', 'trust', 'in', 'the', 'AI' ],
-    [ 'Do', 'not', 'touch', 'the', 'plutonium'],
-    [ 'On', 'Calisto', 'no', 'one', 'wants', 'to', 'hear', 'you', 'scream' ]
-  ],
-  [
-    [ 'Always', 'trust', 'in', 'the', 'AI' ],
-    [ 'Do', 'not', 'touch', 'the', 'plutonium'],
     [ 'On', 'Calisto', 'no', 'one', 'wants', 'to', 'hear', 'you', 'scream' ]
   ]
 ]

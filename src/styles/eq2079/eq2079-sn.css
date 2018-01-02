@@ -1,0 +1,496 @@
+#component-welcome {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 0 auto;
+  height: 100vh;
+  background: url("../images/starfield.jpg") no-repeat;
+  background-size: cover; }
+
+.welcome-hero {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 1px; }
+  .welcome-hero > .hero-planet {
+    position: absolute;
+    width: 100%;
+    height: 375px;
+    background: url("../images/planet.png") no-repeat;
+    background-size: 100% auto; }
+  .welcome-hero > .hero-ship {
+    position: absolute;
+    right: 0;
+    width: 35%;
+    height: 480px;
+    background: url("../images/structure.png") no-repeat;
+    background-size: contain;
+    background-position: right top; }
+  .welcome-hero > .hero-human {
+    position: absolute;
+    right: 0;
+    width: 100%;
+    height: 415px;
+    background: url("../images/human.png") no-repeat;
+    background-size: 35% auto;
+    background-position: right 30px; }
+
+.intro-block {
+  position: relative;
+  padding-top: 80%; }
+
+.intro-copy {
+  font-family: 'Vanadine Bold',Helvetica,Arial,sans-serif;
+  color: #efefef;
+  margin: 0 auto;
+  padding: 5px 20px;
+  font-size: 24px;
+  line-height: 30px;
+  letter-spacing: 2px;
+  font-variant: small-caps; }
+  .intro-copy.-white {
+    color: #ffffff; }
+
+.team-block {
+  width: 50%;
+  height: auto;
+  margin: 20px 0 0 0;
+  display: inline-block; }
+  .team-block > .team-tile {
+    position: relative;
+    width: 145px;
+    height: 145px;
+    margin: 0 auto;
+    text-align: center;
+    background: #3c9bc8; }
+    .team-block > .team-tile > .team-title,
+    .team-block > .team-tile .team-title a {
+      position: absolute;
+      bottom: 30px;
+      width: 100%;
+      font-size: 12px;
+      line-height: 35px;
+      color: #000000;
+      background: #ffffff;
+      text-align: center;
+      text-decoration: none;
+      font-family: Avenir, Segoe UI, Helvetica, Arial, sans-serif;
+      letter-spacing: 6px;
+      text-transform: uppercase; }
+
+.optOut,
+.optOut a {
+  padding: 20px 0 10px 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 900;
+  font-variant: small-caps;
+  color: #999; }
+
+.welcome-lower {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 1px;
+  padding-top: 55%; }
+  .welcome-lower > .lower-city {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 190px;
+    margin-bottom: 20%;
+    background: url("../images/lower-city.png") no-repeat center bottom;
+    background-size: 100% auto; }
+  .welcome-lower > .lower-launch {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 200px;
+    background: url("../images/lower-launch.png") no-repeat center bottom;
+    background-size: 100% auto;
+    margin-bottom: 22%; }
+  .welcome-lower > .lower-people {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 160px;
+    background: url("../images/lower-people.png") no-repeat center bottom;
+    background-size: 100% auto; }
+
+button {
+  font-size: 16px;
+  line-height: 20px;
+  font-family: Avenir, Segoe UI, Helvetica, Arial, sans-serif;
+  border: solid 1px white;
+  border-radius: 0px;
+  display: block;
+  margin: 1vh 0;
+  padding: 15px 30px;
+  cursor: pointer; }
+
+#component-login {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 0 auto;
+  height: 100vh;
+  text-align: center;
+  background: url("../images/black-metal.jpg") no-repeat center center;
+  background-size: cover; }
+
+.team-gate-wrapper > h2 {
+  padding: 20px;
+  font-size: 20px;
+  line-height: 30px;
+  font-family: Avenir Heavy, Segoe UI, Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 8px; }
+
+.team-gate-wrapper > p {
+  padding: 20px;
+  font-size: 20px;
+  line-height: 30px;
+  font-family: Avenir Heavy, Segoe UI, Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 8px; }
+
+#login-button {
+  margin: 50px auto !important; }
+
+.team-image {
+  width: 100%;
+  max-width: 480px;
+  height: 480px;
+  background-size: cover; }
+  .team-image.-grunt {
+    background: url("../images/team-grunt.png") no-repeat top center; }
+  .team-image.-science {
+    background: url("../images/team-science.png") no-repeat top center; }
+  .team-image.-engineer {
+    background: url("../images/team-engineer.png") no-repeat top center; }
+
+#component-start {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 0 auto;
+  height: 200vh;
+  position: relative;
+  text-align: center;
+  background: url("../images/black-paper.jpg") no-repeat center center;
+  background-size: cover; }
+  #component-start > h1 {
+    padding: 20px;
+    font-size: 20px;
+    line-height: 30px;
+    font-family: Avenir Heavy, Segoe UI, Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 8px; }
+  #component-start > p {
+    padding: 5px 10px;
+    font-size: 16px;
+    line-height: 26px;
+    font-family: Avenir, Segoe UI, Helvetica, Arial, sans-serif; }
+
+.start-hero {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 205px;
+  background: url("../images/start-hero.png") no-repeat center center;
+  background: contain; }
+
+.console-wrapper {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0; }
+
+#component-story {
+  position: relative;
+  padding: 10px 0;
+  font-size: 20px;
+  line-height: 26px;
+  font-family: Data Latin, Segoe UI, Helvetica, Arial, sans-serif;
+  background: #000000;
+  color: #efefef;
+  text-shadow: 0px 0px 10px #ffffff;
+  background: cover;
+  border-right: 25px solid #000;
+  border-left: 25px solid #000; }
+
+.story-top {
+  width: 100%;
+  max-width: 480px;
+  height: 125px;
+  margin: 0 auto;
+  background: url("../images/story-console-top.jpg") no-repeat center center;
+  background-size: contain; }
+
+.story-bottom {
+  width: 100%;
+  max-width: 480px;
+  height: 57px;
+  margin: 0 auto;
+  background: url("../images/story-console-bottom.jpg") no-repeat center center;
+  background-size: contain; }
+
+#component-status {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 50px 0px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 26px;
+  font-family: Data Latin, Segoe UI, Helvetica, Arial, sans-serif;
+  color: #efefef;
+  text-shadow: 0px 0px 10px #ffffff;
+  background: #000000; }
+
+.launch-top {
+  width: 100%;
+  max-width: 480px;
+  height: 133px;
+  margin: 0 auto;
+  background: url("../images/launch-console-top.jpg") no-repeat top center;
+  background-size: contain; }
+
+.launch-bottom {
+  width: 100%;
+  max-width: 480px;
+  height: 111px;
+  margin: 0 auto;
+  background: url("../images/launch-console-bottom.jpg") no-repeat bottom center;
+  background-size: contain; }
+
+#component-check-pz-code {
+  width: 100%;
+  max-width: 480px;
+  padding: 0;
+  margin: 0 auto;
+  background: #000000; }
+  #component-check-pz-code > input[type='text'] {
+    position: relative;
+    top: 5px;
+    margin: 0 auto;
+    width: calc(70%);
+    color: #000000;
+    text-align: center;
+    padding: 20px 10px;
+    background: url("../images/white-metal.jpg") no-repeat;
+    font-size: 18px;
+    line-height: 24px;
+    font-family: Avenir Heavy, Segoe UI, Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 6px; }
+  #component-check-pz-code > button {
+    position: relative;
+    top: 25px;
+    width: calc(75%);
+    color: #cccccc;
+    text-align: center;
+    margin: 0 auto;
+    padding: 10px;
+    background: url("../images/black-metal.jpg") no-repeat;
+    font-size: 18px;
+    line-height: 24px;
+    font-family: Avenir Heavy, Segoe UI, Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    border: 0;
+    border: 1px solid #cccccc; }
+
+.puzzle-top {
+  width: 100%;
+  max-width: 480px;
+  height: 106px;
+  margin: 0 auto;
+  background: url("../images/puzzle-console-top.jpg") no-repeat top center;
+  background-size: contain; }
+
+.puzzle-bottom {
+  width: 100%;
+  max-width: 480px;
+  height: 125px;
+  margin: 0 auto;
+  background: url("../images/puzzle-console-bottom.jpg") no-repeat bottom center;
+  background-size: contain; }
+
+#component-map {
+  width: 100%;
+  max-width: 480px;
+  padding: 0;
+  margin: 0 auto;
+  background: #000000; }
+
+#selected-pz {
+  position: relative;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 20px;
+  line-height: 26px;
+  font-family: Data Latin, Segoe UI, Helvetica, Arial, sans-serif;
+  background: #000000;
+  color: #efefef;
+  text-shadow: 0px 0px 10px #ffffff; }
+
+.map-top {
+  width: 100%;
+  max-width: 480px;
+  height: 70px;
+  margin: 0 auto;
+  background: url("../images/map-console-top.jpg") no-repeat top center;
+  background-size: contain; }
+
+.map-bottom {
+  width: 100%;
+  max-width: 480px;
+  height: 156px;
+  margin: 0 auto;
+  background: url("../images/map-console-bottom.jpg") no-repeat top center;
+  background-size: contain; }
+
+#component-pz {
+  width: 100%;
+  max-width: 480px;
+  padding: 0;
+  margin: 0 auto;
+  background: #000000; }
+
+.-white-metal {
+  color: #000000;
+  background: url("../images/white-metal.jpg") no-repeat;
+  background-size: cover;
+  border: 0; }
+
+.-white {
+  color: white; }
+
+.-black {
+  color: black; }
+
+.-blue {
+  color: #3c9bc8; }
+
+.-spaced-copy {
+  font-size: 16px;
+  line-height: 22px;
+  font-family: Avenir Heavy, Segoe UI, Helvetica, Arial, sans-serif;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 8px; }
+
+.-center {
+  text-align: center; }
+
+input[type='text'],
+input[type='password'] {
+  width: calc(100% - 20px);
+  color: #000000;
+  text-align: center;
+  padding: 20px 10px;
+  background: url("../images/white-paper.jpg") no-repeat;
+  font-size: 20px;
+  line-height: 30px;
+  font-family: Avenir Heavy, Segoe UI, Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  border: 0; }
+
+button {
+  width: calc(100% - 20px);
+  color: #ffffff;
+  text-align: center;
+  margin: 0 auto;
+  padding: 20px 10px;
+  background: url("../images/black-paper.jpg") no-repeat;
+  font-size: 20px;
+  line-height: 30px;
+  font-family: Avenir Heavy, Segoe UI, Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 6px; }
+
+@font-face {
+  font-family: Avenir;
+  src: url(../fonts/Avenir-Book.otf) format("OpenType"); }
+
+@font-face {
+  font-family: Avenir Heavy;
+  src: url(../fonts/Avenir-Heavy.otf) format("OpenType"); }
+
+@font-face {
+  font-family: Avenir Medium;
+  src: url(../fonts/Avenir-Medium.otf) format("OpenType"); }
+
+@font-face {
+  font-family: Avenir Light;
+  src: url(../fonts/Avenir-Light.otf) format("OpenType"); }
+
+@font-face {
+  font-family: Avenir Roman;
+  src: url(../fonts/Avenir-Roman.otf) format("OpenType"); }
+
+@font-face {
+  font-family: Data Latin;
+  src: url(../fonts/data-latin.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Data Uni;
+  src: url(../fonts/data-unifon.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Dovahkiin;
+  src: url(../fonts/dovahkiin.otf) format("OpenType"); }
+
+@font-face {
+  font-family: Machine;
+  src: url(../fonts/machine.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Seven;
+  src: url(../fonts/digital-7.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Seven Itl;
+  src: url(../fonts/digital-7-it.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Seven Mono;
+  src: url(../fonts/digital-7-mono.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Seven Mono Itl;
+  src: url(../fonts/digital-7-mono-it.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Starlight;
+  src: url(../fonts/Starlight.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Tech Mono;
+  src: url(../fonts/ShareTechMono-Regular.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Ultra Bold;
+  src: url(../fonts/ultramagnetic_bold.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Ultra Light;
+  src: url(../fonts/ultramagnetic_light.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Vanadine;
+  src: url(../fonts/Vanadine-Regular.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Vanadine Bold;
+  src: url(../fonts/Vanadine-Bold.ttf) format("TrueType"); }
+
+@font-face {
+  font-family: Keys;
+  src: url(../fonts/Where-My-Keys.otf) format("OpenType"); }
+
+@font-face {
+  font-family: Zephyr;
+  src: url(../fonts/zephyr.ttf) format("TrueType"); }

@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
 import { Link, Redirect } from 'react-router-dom'
 
+const mapStateToProps = (state, props) => {
+  return {
+    userName: state.user.name
+  }
+}
+
 class Start extends Component {
+
   render(){
     return(
       <div id='component-start'>
@@ -14,5 +23,9 @@ class Start extends Component {
     )
   }
 }
+
+const StartContainer = connect(
+  mapStateToProps
+)(Start)
 
 export default Start

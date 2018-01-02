@@ -67,7 +67,8 @@ class Score {
     return(
       <div id='component-score'>
         {htmlAdmin}
-        Score: {score.round}/{score.total}/{score.max} [round/total/max]
+        {/*Score: {score.round}/{score.total}/{score.max} [round/total/max]*/}
+        Score: {score.round}
       </div>
     )
   }

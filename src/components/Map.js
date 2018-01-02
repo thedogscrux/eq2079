@@ -389,16 +389,18 @@ class Map extends Component {
       let htmlButton = (this.state.uranium.enabled && this.state.uranium.status === 'free') ? <button onClick={ () => this.handleUranium() }>Pick up Uranium</button> : ''
       htmlSelectedPoint =
         <div>
-          <div>uranium status:{this.state.uranium.status}</div>
+          {/*}<div>Status:{this.state.uranium.status}</div>*/}
+          I am uranium. When standing above me, you can pick me up and carry me to the sqaure yellow bay in the bottom right corner of the map by She Metal.  You can only hold me for ten minutes. I will drop in the bay automatically.
           {htmlButton}
         </div>
     } else if (this.state.pzs && this.state.selectedPzID >= 0 ){
       let selectedPz = this.state.pzs[parseInt(this.state.selectedPzID)]
       htmlSelectedPoint =
         <div>
-          <div>Name: {selectedPz.name}</div>
-          <div>Status: {selectedPz.status}</div>
-          <div>Players: {selectedPz.players}</div>
+          <div>{selectedPz.name}</div>
+          <div>Location: {selectedPz.mapPos.floor}</div>
+          {/*<div>Status: {selectedPz.status}</div>
+          <div>Players: {selectedPz.players}</div>*/}
         </div>
     } else if (this.state.selectedPzID === 'MK') {
       htmlSelectedPoint =

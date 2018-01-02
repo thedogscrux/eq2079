@@ -20,7 +20,7 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: 'Showing your teammates names.'
+    body: 'After round one, your vials affect each others.'
   },
   {
     title: 'Hint Two',

@@ -96,7 +96,7 @@ class Story extends Component {
 
     return(
       <div id='component-story' className='component-wrapper'>
-        {welcome}
+        {/*welcome*/}
         { (rankMsg) ? rankMsg + '/<br/>' : '' }
         {story}
       </div>

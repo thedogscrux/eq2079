@@ -15,6 +15,9 @@ $mapWidth: 90vw;
     &:hover {
       background-color: $colorWhiteAlpha;
     }
+    button {
+      background: none;
+    }
     .location {
       background-color: yellow;
       position: absolute;
@@ -40,11 +43,19 @@ $mapWidth: 90vw;
       padding: 0;
     }
     #location-mk {
-      
+
     }
     #location-ub {
 
     }
 
+  }
+
+  #selected-pz {
+    position: fixed;
+    bottom: 0;
+    z-index: 100;
+    width: 100%;
+    opacity: .8;
   }
 }

@@ -21,16 +21,16 @@ import { showAlert } from '../../Alert'
 import game from '../../../Settings.js'
 import { propsPzs } from '../../../data/propsPzs.js'
 
-import pz1 from '../../pzs/pz1/Pz1'
-import pz2 from '../../pzs/pz2/Pz2'
-import pz3 from '../../pzs/pz3/Pz3'
-import pz4 from '../../pzs/pz4/Pz4'
-import pz5 from '../../pzs/pz5/Pz5'
-import pz6 from '../../pzs/pz6/Pz6'
-import pz7 from '../../pzs/pz7/Pz7'
-import pz8 from '../../pzs/pz8/Pz8'
-import pz9 from '../../pzs/pz9/Pz9'
-import pz10 from '../../pzs/pz10/Pz10'
+import sms from '../../pzs/sms/Pz1'
+import oop from '../../pzs/oop/Pz2'
+import rfid from '../../pzs/rfid/Pz3'
+import asimo from '../../pzs/asimo/Pz4'
+import rgba from '../../pzs/rgba/Pz5'
+import foss from '../../pzs/foss/Pz6'
+import gwbasic from '../../pzs/gwbasic/Pz7'
+import nan from '../../pzs/nan/Pz8'
+import oom from '../../pzs/oom/Pz9'
+import onegl from '../../pzs/onegl/Pz10'
 
 import clock0 from '../../../images/pz/clock/clock-0.svg'
 import clock1 from '../../../images/pz/clock/clock-1.svg'
@@ -40,16 +40,16 @@ import clock4 from '../../../images/pz/clock/clock-4.svg'
 import clock5 from '../../../images/pz/clock/clock-5.svg'
 
 const pzMap = {
-  pz1,
-  pz2,
-  pz3,
-  pz4,
-  pz5,
-  pz6,
-  pz7,
-  pz8,
-  pz9,
-  pz10
+  sms,
+  oop,
+  rfid,
+  asimo,
+  rgba,
+  foss,
+  gwbasic,
+  nan,
+  oom,
+  onegl
 }
 
 const clockMap = {
@@ -238,9 +238,8 @@ class Pz extends Component {
     return(
       <div>
         <h1>{propsPzs[this.state.pzIndex].title}</h1>
-        {propsPzs[this.state.pzIndex].site}<br/>
-        {propsPzs[this.state.pzIndex].desc}<br/>
-        {propsPzs[this.state.pzIndex].instructions}
+        <p>{propsPzs[this.state.pzIndex].desc}</p>
+        <p>{propsPzs[this.state.pzIndex].instructions}</p>
       </div>
     )
   }

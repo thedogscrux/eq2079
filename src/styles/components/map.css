@@ -72,6 +72,8 @@
   background-size: contain; }
   #component-map .map-wrapper:hover {
     background-color: rgba(255, 255, 255, 0.2); }
+  #component-map .map-wrapper button {
+    background: none; }
   #component-map .map-wrapper .location {
     background-color: yellow;
     position: absolute;
@@ -91,3 +93,10 @@
     position: absolute;
     transition-duration: .5s;
     padding: 0; }
+
+#component-map #selected-pz {
+  position: fixed;
+  bottom: 0;
+  z-index: 100;
+  width: 100%;
+  opacity: .8; }

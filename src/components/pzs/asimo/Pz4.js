@@ -28,12 +28,11 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: 'Use pattern X. Always use pattern X.'
+    body: 'Use the shape that matches your icon'
   },
   {
     title: 'Hint Two',
-    subTitle: 'Subtitle',
-    body: '...'
+    body: 'Use pattern X. Always use pattern X.'
   }
 ]
 

@@ -23,12 +23,11 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: 'Move your circle over the red dot. OPEN and CLOSE while above the red dot.  Then bring it back to the bay.  When above the bay, OPEN to drop the dot in the bay.'
+    body: 'Move your gray circle over the dots. OPEN and CLOSE while above the dot.  Then bring it back to the bay.  When above the bay, OPEN to drop the dot in the bay.'
   },
   {
     title: 'Hint Two',
-    subTitle: 'Subtitle',
-    body: '...'
+    body: 'Blue is the right color to bring back, ignore all other colors.'
   }
 ]
 
@@ -628,7 +627,7 @@ class Pz7 extends Component {
           getHint={() => this.getHint()}
         />
         <button onClick={() => this.cancelGame()} className='cancel-button'>cancel game</button>
-        
+
         <img src={this.state.clock} width="50px" /><br/>
 
         <div id='controls-wrapper'>

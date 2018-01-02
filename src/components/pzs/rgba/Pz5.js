@@ -22,12 +22,11 @@ const PZ_PROPS = propsPzs[PZ_INDEX]
 const HINTS = [
   {
     title: 'Hint One',
-    body: '...'
+    body: 'Use the pattern that matches your letter and work together to create new colors.'
   },
   {
     title: 'Hint Two',
-    subTitle: 'Subtitle',
-    body: '...'
+    body: 'Red + Yellow = Orange, Yellow + Blue = Green, Blue + Red = Purple'
   }
 ]
 
